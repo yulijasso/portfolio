@@ -15,9 +15,9 @@ type Project = {
 const projects: Project[] = [
   {
     id: 1,
-    name: "Grow Up",
-    description: "A gamified career tracker with Tamagotchi mechanics.",
-    technologies: ["React", "Next.js", "TypeScript", "Vercel", "MongoDB"],
+    name: "AI Tutoring System",
+    description: "AI Tutoring System, developed during Hack Research 2023 and took the 1st place win in AI Healthcare, is an innovative app that uses GPT-4 and advanced data extraction techniques to enhance healthcare education. By combining web scraping, embeddings, and retrieval-augmented generation, it sets a new standard for AI-driven learning tools in the medical field.",
+    technologies: ["React", "Next.js"],
     experience: 60,
     demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     githubUrl: "https://github.com/yjasso/grow-up"
@@ -85,42 +85,7 @@ const projects: Project[] = [
     demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     githubUrl: "https://github.com/yjasso/openresume"
   },
-  {
-    id: 9,
-    name: "Tamagotchi CLI",
-    description: "Tamagotchi game in the terminal.",
-    technologies: ["Node.js", "Inquirer.js"],
-    experience: 28,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/tamagotchi-cli"
-  },
-  {
-    id: 10,
-    name: "Neon Notes",
-    description: "Minimal note-taking app.",
-    technologies: ["React", "TypeScript", "Firebase"],
-    experience: 25,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/neon-notes"
-  },
-  {
-    id: 11,
-    name: "Retro Weather",
-    description: "Weather app with retro UI.",
-    technologies: ["React", "OpenWeatherMap API"],
-    experience: 22,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/retro-weather"
-  },
-  {
-    id: 12,
-    name: "Synthwave Timer",
-    description: "Pomodoro timer with synthwave theme.",
-    technologies: ["React", "Styled Components"],
-    experience: 20,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/synthwave-timer"
-  }
+
 ];
 
 function ProjectCard({ project }: { project: Project }) {

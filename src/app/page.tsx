@@ -71,48 +71,8 @@ export default function Home() {
       technologies: ["React", "Canvas", "TypeScript"],
       experience: 35
     },
-    {
-      id: 7,
-      name: "Y2K Blog",
-      description: "Blog with Y2K/retro design.",
-      technologies: ["Next.js", "MDX", "Tailwind"],
-      experience: 32
-    },
-    {
-      id: 8,
-      name: "OpenResume",
-      description: "Free resume builder.",
-      technologies: ["React", "Next.js", "Chakra UI"],
-      experience: 30
-    },
-    {
-      id: 9,
-      name: "Tamagotchi CLI",
-      description: "Tamagotchi game in the terminal.",
-      technologies: ["Node.js", "Inquirer.js"],
-      experience: 28
-    },
-    {
-      id: 10,
-      name: "Neon Notes",
-      description: "Minimal note-taking app.",
-      technologies: ["React", "TypeScript", "Firebase"],
-      experience: 25
-    },
-    {
-      id: 11,
-      name: "Retro Weather",
-      description: "Weather app with retro UI.",
-      technologies: ["React", "OpenWeatherMap API"],
-      experience: 22
-    },
-    {
-      id: 12,
-      name: "Synthwave Timer",
-      description: "Pomodoro timer with synthwave theme.",
-      technologies: ["React", "Styled Components"],
-      experience: 20
-    }
+
+
   ])
   const [showNotification, setShowNotification] = useState(false)
   const [notificationMessage, setNotificationMessage] = useState('')
@@ -456,17 +416,6 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="portfolio-section">
-        <div className="portfolio-title">Skills</div>
-        <div>
-          <span className="skill-item">React</span>
-          <span className="skill-item">TypeScript</span>
-          <span className="skill-item">Node.js</span>
-          <span className="skill-item">Python</span>
-          <span className="skill-item">MongoDB</span>
-          <span className="skill-item">PostgreSQL</span>
-        </div>
-      </div>
 
       <div className="portfolio-section">
         <div className="portfolio-title">Projects ({projects.length})</div>
@@ -479,14 +428,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="portfolio-section">
-        <div className="portfolio-title">About</div>
-        <div style={{ fontSize: '11px', lineHeight: '1.4' }}>
-          Full Stack Developer with {totalExperience} years of experience.
-          Specializing in React, Node.js, and modern web technologies.
-          Available for hire and always learning new skills!
-        </div>
-      </div>
+
     </div>
   )
 
@@ -508,8 +450,8 @@ export default function Home() {
       <div className="portfolio-section">
         <div className="portfolio-title">Contact</div>
         <div style={{ fontSize: '11px', lineHeight: '1.4' }}>
-          📧 john.doe@email.com<br/>
-          🐙 github.com/johndoe<br/>
+          📧 yulianadenissejasso@gmail.com<br/>
+          🐙 github.com/yuyi444<br/>
           💼 linkedin.com/in/johndoe<br/>
           📱 (555) 123-4567
         </div>
@@ -605,7 +547,7 @@ export default function Home() {
           </button>
           <button 
             className="tamagotchi-button"
-            onClick={() => setCurrentScreen('portfolio')}
+            onClick={() => router.push('/portfolio')}
             title="Portfolio"
           >
             📁
@@ -624,7 +566,7 @@ export default function Home() {
       <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '12px', color: '#666' }}>
         <div>🎮 Use the buttons to navigate and interact with your career pet!</div>
         <div>🍽️ Feed it projects to help it grow and evolve</div>
-        <div>📁 View your portfolio and skills</div>
+        <div>📁 View Yuli's portfolio and skills</div>
         <div>📊 Check your career statistics</div>
       </div>
     </div>
