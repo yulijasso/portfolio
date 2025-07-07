@@ -114,7 +114,6 @@ export default function Home() {
       experience: 20
     }
   ])
-  const [gameScore, setGameScore] = useState(0)
   const [showNotification, setShowNotification] = useState(false)
   const [notificationMessage, setNotificationMessage] = useState('')
   const [petLevel, setPetLevel] = useState(1)
@@ -130,6 +129,12 @@ export default function Home() {
   const router = useRouter();
   const [petDead, setPetDead] = useState(false);
   const [lastFed, setLastFed] = useState(Date.now());
+  const [leetQuestionName, setLeetQuestionName] = useState('')
+  const [showIntro, setShowIntro] = useState(true)
+  // Typewriter effect state
+  const typewriterText = `Welcome to My Portfolio!\nSoftware/AI Engineer & Creative Coder\nHi! I'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique Tamagotchi-style interface.`
+  const [typed, setTyped] = useState('')
+  const [typingDone, setTypingDone] = useState(false)
 
   const totalExperience = projects.reduce((sum, project) => sum + project.experience, 0)
 
@@ -154,6 +159,24 @@ export default function Home() {
       return () => clearInterval(interval);
     }
   }, [lastFed, petDead]);
+
+  useEffect(() => {
+    if (!showIntro) return;
+    setTyped('');
+    setTypingDone(false);
+    let i = 0;
+    const type = () => {
+      if (i <= typewriterText.length) {
+        setTyped(typewriterText.slice(0, i))
+        i++
+        setTimeout(type, 18)
+      } else {
+        setTypingDone(true)
+      }
+    }
+    type()
+    // eslint-disable-next-line
+  }, [showIntro])
 
   const feedProject = () => {
     if (newProject.trim()) {
@@ -190,16 +213,6 @@ export default function Home() {
       setShowNotification(true)
       setNotificationMessage(`Fed ${project.name} to your pet! +${project.experience} XP`)
     }
-  }
-
-  const playGame = () => {
-    const newScore = Math.floor(Math.random() * 50) + 10
-    setGameScore(prev => prev + newScore)
-    setPetHappiness(prev => Math.min(100, prev + 25))
-    setPetEnergy(prev => Math.max(0, prev - 10))
-    
-    setShowNotification(true)
-    setNotificationMessage(`Game score: ${newScore}! Happiness +25`)
   }
 
   const showNotificationMessage = (message: string) => {
@@ -261,6 +274,15 @@ export default function Home() {
     setPetDead(false);
     setLastFed(Date.now());
   };
+
+  const submitLeetQuestion = () => {
+    if (leetQuestionName.trim()) {
+      setPetHappiness(prev => Math.min(100, prev + 10))
+      setShowNotification(true)
+      setNotificationMessage(`LeetCode: +10 Happiness for "${leetQuestionName.trim()}"!`)
+      setLeetQuestionName('')
+    }
+  }
 
   const renderMainScreen = () => (
     <div className="screen-content" style={{ position: 'relative' }}>
@@ -378,33 +400,33 @@ export default function Home() {
 
   const renderGamesScreen = () => (
     <div className="screen-content">
-      <div className="portfolio-title">Mini Games</div>
-      
+      <div className="portfolio-title">Games</div>
       <div className="mini-game">
-        <div className="game-area">
+        <div className="game-area" style={{ flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ fontSize: '32px', marginBottom: '10px' }}>😊</div>
           <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Skill Challenge
+            Add Completed LeetCode Question
           </div>
-          <div style={{ fontSize: '24px', marginBottom: '10px' }}>
-            🎯
-          </div>
-          <div style={{ fontSize: '12px' }}>
-            Test your coding skills!
-          </div>
-        </div>
-        
-        <div className="game-controls">
-          <button 
-            className="tamagotchi-button" 
-            onClick={playGame}
-            style={{ width: 'auto', padding: '8px 16px' }}
+          <input
+            type="text"
+            value={leetQuestionName}
+            onChange={e => setLeetQuestionName(e.target.value)}
+            className="feed-input"
+            style={{ width: 220, textAlign: 'center', fontSize: 16, marginBottom: 10 }}
+            placeholder="Question name (e.g. Two Sum)"
+            onKeyDown={e => { if (e.key === 'Enter') submitLeetQuestion() }}
+          />
+          <button
+            className="tamagotchi-button"
+            onClick={submitLeetQuestion}
+            style={{ width: 'auto', padding: '8px 16px', marginTop: 10 }}
+            disabled={!leetQuestionName.trim()}
           >
-            Play Game
+            Add
           </button>
         </div>
-        
-        <div style={{ textAlign: 'center', marginTop: '15px' }}>
-          <div style={{ fontSize: '12px' }}>High Score: {gameScore}</div>
+        <div style={{ fontSize: '12px', color: '#888', marginTop: 16 }}>
+          Each completed LeetCode question gives your pet +10 happiness!
         </div>
       </div>
     </div>
@@ -481,10 +503,6 @@ export default function Home() {
           <div className="stat-value">{projects.length}</div>
           <div>Projects</div>
         </div>
-        <div className="stat-item">
-          <div className="stat-value">{gameScore}</div>
-          <div>Game Score</div>
-        </div>
       </div>
 
       <div className="portfolio-section">
@@ -499,6 +517,47 @@ export default function Home() {
     </div>
   )
 
+  // Add intro screen
+  const renderIntroScreen = () => {
+    // Split the typed text by lines
+    const lines = typed.split('\n')
+    return (
+      <div style={{
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        height: '100%', minHeight: 520, width: '100%', background: '#fff0fa', borderRadius: 24, border: '2px solid #ffb3d6', boxShadow: 'none', position: 'relative', padding: 0, fontFamily: 'VT323, monospace',
+      }}>
+        <div style={{ fontSize: 44, marginBottom: 16, color: '#ff69b4', textShadow: 'none' }}>💖</div>
+        <div style={{
+          fontSize: 15,
+          color: '#d72660',
+          marginBottom: 18,
+          textAlign: 'center',
+          maxWidth: 340,
+          fontFamily: 'inherit',
+          whiteSpace: 'pre-line',
+          minHeight: 120,
+          letterSpacing: 1
+        }}>
+          <div style={{ fontSize: 20, color: '#ff69b4', fontWeight: 700, marginBottom: 14, textAlign: 'center' }}>{lines[0]}</div>
+          {lines.length > 1 && <div style={{ fontSize: 14, color: '#00bcd4', fontWeight: 700, marginBottom: 16, textAlign: 'center' }}>{lines[1]}</div>}
+          {lines.length > 2 && <div style={{ fontSize: 11, color: '#d72660', fontWeight: 400, marginTop: 8, textAlign: 'center' }}>{lines.slice(2).join('\n')}</div>}
+        </div>
+        {typingDone && (
+          <button
+            className="tamagotchi-button"
+            style={{ fontSize: 15, padding: '10px 28px', background: '#ff69b4', color: '#fff', borderRadius: 12, boxShadow: 'none', marginTop: 8, fontFamily: 'inherit', border: 'none' }}
+            onClick={() => setShowIntro(false)}
+          >
+            Start
+          </button>
+        )}
+        <div style={{ position: 'absolute', bottom: 12, right: 0, left: 0, textAlign: 'center', fontSize: 9, color: '#bbb', letterSpacing: 1, fontFamily: 'inherit' }}>
+          © 2024 Yuli's Portfolio
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen p-4">
       {/* Notification */}
@@ -510,11 +569,15 @@ export default function Home() {
       <div className="tamagotchi-device">
         {/* Screen */}
         <div className="tamagotchi-screen">
-          {currentScreen === 'main' && renderMainScreen()}
-          {currentScreen === 'feed' && renderFeedScreen()}
-          {currentScreen === 'games' && renderGamesScreen()}
-          {currentScreen === 'portfolio' && renderPortfolioScreen()}
-          {currentScreen === 'stats' && renderStatsScreen()}
+          {showIntro ? renderIntroScreen() : (
+            <>
+              {currentScreen === 'main' && renderMainScreen()}
+              {currentScreen === 'feed' && renderFeedScreen()}
+              {currentScreen === 'games' && renderGamesScreen()}
+              {currentScreen === 'portfolio' && renderPortfolioScreen()}
+              {currentScreen === 'stats' && renderStatsScreen()}
+            </>
+          )}
         </div>
 
         {/* Buttons */}
@@ -531,7 +594,14 @@ export default function Home() {
             onClick={() => setCurrentScreen('games')}
             title="Games"
           >
-            🎮
+            😊
+          </button>
+          <button 
+            className="tamagotchi-button"
+            onClick={() => setCurrentScreen('main')}
+            title="Home"
+          >
+            🏠
           </button>
           <button 
             className="tamagotchi-button"
@@ -545,21 +615,7 @@ export default function Home() {
             onClick={() => setCurrentScreen('stats')}
             title="Stats"
           >
-            📊
-          </button>
-          <button 
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('main')}
-            title="Home"
-          >
-            🏠
-          </button>
-          <button 
-            className="tamagotchi-button"
-            onClick={() => showNotificationMessage('Pet is sleeping... Zzz')}
-            title="Sleep"
-          >
-            😴
+            ✉️
           </button>
         </div>
       </div>
