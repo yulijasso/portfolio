@@ -1,468 +1,355 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import TamagotchiGif from './components/TamagotchiGif'
-import { useRouter } from 'next/navigation'
+import { Box, Button, Flex, VStack, HStack, Text } from '@chakra-ui/react'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
+import TamagotchiGif from './components/TamagotchiGif'
 
-interface Project {
-  id: number
-  name: string
-  description: string
-  technologies: string[]
-  experience: number
-}
+const blind75Questions = [
+  {
+    id: 1,
+    title: "Two Sum",
+    difficulty: "Easy",
+    link: "https://leetcode.com/problems/two-sum/",
+  },
+  {
+    id: 2,
+    title: "Longest Substring Without Repeating Characters",
+    difficulty: "Medium",
+    link: "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+  },
+  {
+    id: 3,
+    title: "Median of Two Sorted Arrays",
+    difficulty: "Hard",
+    link: "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+  },
+  // Add more as needed
+]
+
+const DeviceWrapper = ({ children }: { children: React.ReactNode }) => (
+  <Box
+    w="400px"
+    p={6}
+    bg="#F5E1FF"
+    border="5px solid #000"
+    borderRadius="lg"
+    boxShadow="6px 6px 0 #000"
+    fontFamily="'VT323', monospace"
+  >
+    {children}
+  </Box>
+)
+
+const DeviceScreen = ({ children }: { children: React.ReactNode }) => (
+  <Box
+    h="400px"
+    bg="#FFF0FB"
+    border="3px solid #FF69B4"
+    borderRadius="lg"
+    p={8}
+    textAlign="center"
+    overflowY="auto"
+  >
+    {children}
+  </Box>
+)
 
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState<'main' | 'feed' | 'games' | 'portfolio' | 'stats'>('main')
-  const [petExperience, setPetExperience] = useState(0)
   const [petHappiness, setPetHappiness] = useState(100)
-  const [isEvolving, setIsEvolving] = useState(false)
-  const [newProject, setNewProject] = useState('')
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: 1,
-      name: "Grow Up",
-      description: "A gamified career tracker with Tamagotchi mechanics.",
-      technologies: ["React", "Next.js", "TypeScript", "Vercel", "MongoDB"],
-      experience: 60
-    },
-    {
-      id: 2,
-      name: "Portfolio v2",
-      description: "Personal portfolio with Y2K/retro vibes.",
-      technologies: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-      experience: 50
-    },
-    {
-      id: 3,
-      name: "DevDeck",
-      description: "Flashcard app for developers.",
-      technologies: ["React", "Next.js", "TypeScript", "MongoDB"],
-      experience: 45
-    },
-    {
-      id: 4,
-      name: "LeetHub",
-      description: "Chrome extension to sync LeetCode with GitHub.",
-      technologies: ["JavaScript", "Chrome Extension", "GitHub API"],
-      experience: 40
-    },
-    {
-      id: 5,
-      name: "CodeConnect",
-      description: "Social platform for developers to share code.",
-      technologies: ["React", "Node.js", "Express", "MongoDB"],
-      experience: 38
-    },
-    {
-      id: 6,
-      name: "Pixel Pets",
-      description: "Virtual pet game with pixel art.",
-      technologies: ["React", "Canvas", "TypeScript"],
-      experience: 35
-    },
-  ])
-  const [showNotification, setShowNotification] = useState(false)
-  const [notificationMessage, setNotificationMessage] = useState('')
-  const [interactionCooldown, setInteractionCooldown] = useState(0)
-  const [showPetMessage, setShowPetMessage] = useState(false)
-  const [currentPetMessage, setCurrentPetMessage] = useState('')
-  const router = useRouter()
-  const [petDead, setPetDead] = useState(false)
-  const [lastFed, setLastFed] = useState(Date.now())
-  const [leetQuestionName, setLeetQuestionName] = useState('')
   const [showIntro, setShowIntro] = useState(true)
-
-  // Typewriter effect state
-  const typewriterText = `Welcome to My Portfolio!\nSoftware/AI Engineer & Creative Coder\nHi! I'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique Tamagotchi-style interface.`
   const [typed, setTyped] = useState('')
   const [typingDone, setTypingDone] = useState(false)
+  const [codingTime, setCodingTime] = useState(0)
+  const [points, setPoints] = useState(0)
+  const [timerRunning, setTimerRunning] = useState(false)
+  const [currentQuestion, setCurrentQuestion] = useState<typeof blind75Questions[0] | null>(null)
+  const [completedQuestions, setCompletedQuestions] = useState<number[]>([])
 
-  const totalExperience = projects.reduce((sum, project) => sum + project.experience, 0)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
 
-  useEffect(() => {
-    // Decrease happiness over time
-    const interval = setInterval(() => {
-      setPetHappiness(prev => Math.max(0, prev - 0.5))
-    }, 30000) // Every 30 seconds
-
-    return () => clearInterval(interval)
-  }, [])
+  const typewriterText = `Welcome to My Portfolio\n\nI’m Yuli — Full‑Stack/AI Developer & Creative Coder\n\nI'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique Tamagotchi-style interface.`
 
   useEffect(() => {
-    if (!petDead) {
-      const interval = setInterval(() => {
-        if (Date.now() - lastFed > 24 * 60 * 60 * 1000) {
-          setPetDead(true)
-        }
-      }, 60000) // check every minute
-      return () => clearInterval(interval)
-    }
-  }, [lastFed, petDead])
-
-  useEffect(() => {
-    if (!showIntro) return
-    setTyped('')
-    setTypingDone(false)
     let i = 0
     const type = () => {
       if (i <= typewriterText.length) {
         setTyped(typewriterText.slice(0, i))
         i++
-        setTimeout(type, 18)
+        setTimeout(type, 20)
       } else {
         setTypingDone(true)
       }
     }
-    type()
-    // eslint-disable-next-line
+    if (showIntro) type()
   }, [showIntro])
 
-  const feedProject = () => {
-    if (newProject.trim()) {
-      const baseExp = Math.floor(newProject.length / 2) + 10
-      const randomBonus = Math.floor(Math.random() * 15)
-      const experience = Math.min(50, baseExp + randomBonus)
-
-      const techOptions = [
-        ["React", "TypeScript", "Tailwind"],
-        ["Node.js", "Express", "MongoDB"],
-        ["Python", "Django", "PostgreSQL"],
-        ["Vue.js", "Vite", "Pinia"],
-        ["Next.js", "Prisma", "Vercel"],
-        ["Flutter", "Dart", "Firebase"]
-      ]
-      const randomTech = techOptions[Math.floor(Math.random() * techOptions.length)]
-
-      const project: Project = {
-        id: Date.now(),
-        name: newProject,
-        description: `A ${newProject.toLowerCase()} project!`,
-        technologies: randomTech,
-        experience: experience
+  // Timer for coding points
+  useEffect(() => {
+    if (currentScreen === 'feed' && timerRunning) {
+      if (!timerRef.current) {
+        timerRef.current = setInterval(() => {
+          setCodingTime((time) => {
+            const newTime = time + 1
+            if (newTime % 60 === 0) {
+              setPoints((p) => p + 60)
+              setPetHappiness((h) => Math.min(100, h + 5))
+            }
+            return newTime
+          })
+        }, 1000)
       }
-
-      setProjects([project, ...projects])
-      setPetExperience(prev => prev + project.experience)
-      setPetHappiness(prev => Math.min(100, prev + 15))
-      setNewProject('')
-
-      setShowNotification(true)
-      setNotificationMessage(`Fed ${project.name} to your pet! +${project.experience} XP`)
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        timerRef.current = null
+      }
+      if (currentScreen !== 'feed') {
+        setCodingTime(0)
+        setPoints(0)
+        setTimerRunning(false)
+      }
     }
-  }
+  }, [currentScreen, timerRunning])
 
-  const showNotificationMessage = (message: string) => {
-    setNotificationMessage(message)
-    setShowNotification(true)
-    setTimeout(() => setShowNotification(false), 3000)
-  }
+  // Decay pet happiness
+  useEffect(() => {
+    const decay = setInterval(() => {
+      setPetHappiness((h) => Math.max(0, h - 1))
+    }, 30000)
+    return () => clearInterval(decay)
+  }, [])
 
-  const interactWithPet = () => {
-    if (petDead || interactionCooldown > 0) return
-
-    setInteractionCooldown(2)
-    setPetHappiness(prev => Math.min(100, prev + 10))
-
-    const messages = [
-      'Yay! 🎉',
-      'Love you! 💕',
-      'Play time! 🎮',
-      'So happy! 😊',
-      'Best friend! 🐾'
-    ]
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)]
-
-    setCurrentPetMessage(randomMessage)
-    setShowPetMessage(true)
-
-    setTimeout(() => setShowPetMessage(false), 2000)
-    setTimeout(() => {
-      setInteractionCooldown(0)
-    }, 2000)
-  }
-
-  const revivePet = () => {
-    setPetHappiness(100)
-    setPetDead(false)
-    setLastFed(Date.now())
-  }
-
-  const submitLeetQuestion = () => {
-    if (leetQuestionName.trim()) {
-      setPetHappiness(prev => Math.min(100, prev + 10))
-      setShowNotification(true)
-      setNotificationMessage(`LeetCode: +10 Happiness for "${leetQuestionName.trim()}"!`)
-      setLeetQuestionName('')
+  // Load LeetCode question
+  useEffect(() => {
+    if (currentScreen === 'games' && !currentQuestion) {
+      const unanswered = blind75Questions.filter(q => !completedQuestions.includes(q.id))
+      const random = unanswered[Math.floor(Math.random() * unanswered.length)]
+      setCurrentQuestion(random || null)
     }
-  }
+  }, [currentScreen, currentQuestion, completedQuestions])
 
-  const pastelColors = [
-    '#FFB3BA', // pastel pink
-    '#BAE1FF', // pastel blue
-    '#BAFFC9', // pastel green
-    '#FFFFBA', // pastel yellow
-    '#FFCBA4', // pastel peach
-  ]
+  const pastelColors = ['#FFB3BA', '#BAE1FF', '#BAFFC9', '#FFFFBA', '#FFCBA4']
 
   const renderHearts = () => {
     const heartsCount = 5
-    const heartsFilled = Math.round((petHappiness / 100) * heartsCount)
-
+    const filled = Math.round((petHappiness / 100) * heartsCount)
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 18 }}>
-        {[...Array(heartsCount)].map((_, idx) => {
-          const color = pastelColors[idx % pastelColors.length]
-          const filled = idx < heartsFilled
-
-          return filled ? (
+      <HStack spacing={2} mt={4} justify="center">
+        {Array.from({ length: heartsCount }).map((_, i) =>
+          i < filled ? (
             <FaHeart
-              key={idx}
-              color={color}
+              key={i}
+              color={pastelColors[i]}
               size={32}
-              style={{
-                filter: `drop-shadow(0 0 3px ${color})`,
-                imageRendering: 'pixelated',
-                stroke: '#fff',
-                strokeWidth: 1,
-                transition: 'color 0.3s ease',
-              }}
-              className="pixel-heart"
+              style={{ filter: `drop-shadow(0 0 4px ${pastelColors[i]})` }}
             />
           ) : (
             <FaRegHeart
-              key={idx}
-              color={color}
+              key={i}
+              color={pastelColors[i]}
               size={32}
-              style={{
-                filter: `drop-shadow(0 0 2px ${color})`,
-                imageRendering: 'pixelated',
-                transition: 'color 0.3s ease',
-              }}
-              className="pixel-heart-outline"
+              style={{ filter: `drop-shadow(0 0 4px ${pastelColors[i]})` }}
             />
           )
-        })}
-        <style jsx>{`
-          .pixel-heart, .pixel-heart-outline {
-            user-select: none;
-            cursor: default;
-            image-rendering: crisp-edges;
-            image-rendering: pixelated;
-            text-shadow:
-              -1px -1px 0 #fff,
-              1px -1px 0 #fff,
-              -1px 1px 0 #fff,
-              1px 1px 0 #fff;
-          }
-        `}</style>
-      </div>
+        )}
+      </HStack>
     )
   }
 
-  const renderMainScreen = () => (
-    <div className="screen-content" style={{ position: 'relative' }}>
-      <div className="pet-container" style={{ opacity: petDead ? 0.3 : 1, position: 'relative' }}>
-        <TamagotchiGif
-          postId="24127301"
-          width="200px"
-          height="200px"
-          className="tamagotchi-pet-gif"
-        />
-        {showPetMessage && (
-          <div className="pet-message" style={{
-            position: 'absolute',
-            top: '-30px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: '#ff69b4',
-            color: '#fff',
-            padding: '4px 8px',
-            borderRadius: '8px',
-            fontSize: '8px',
-            whiteSpace: 'nowrap',
-            zIndex: 10,
-            animation: 'bounce 0.5s ease-in-out'
-          }}>
-            {currentPetMessage}
-          </div>
-        )}
-        {petDead && (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'rgba(0,0,0,0.7)',
-            color: '#fff',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '16px',
-            textAlign: 'center',
-            fontSize: 20,
-            zIndex: 100
-          }}>
-            <div style={{ marginBottom: 16 }}>💀 Your pet has died.</div>
-            <button className="tamagotchi-button" onClick={revivePet} style={{ fontSize: 16, background: '#ff00cc' }}>
-              Revive Pet
-            </button>
-          </div>
-        )}
-      </div>
+  const DeviceButtons = () => (
+    <HStack spacing={3} mt={5} justify="center">
+      {['feed', 'games', 'main', 'portfolio', 'stats'].map((btn) => (
+        <Button
+          key={btn}
+          size="sm"
+          bg="#FFB3D6"
+          color="white"
+          border="2px solid #000"
+          borderRadius="md"
+          fontFamily="'Press Start 2P'"
+          fontSize="10px"
+          boxShadow="2px 2px 0 #000"
+          _hover={{ bg: '#FF85C1' }}
+          onClick={() => {
+            if (btn === 'portfolio') window.location.href = '/portfolio'
+            else {
+              setCurrentScreen(btn as any)
+              if (btn !== 'games') setCurrentQuestion(null)
+            }
+          }}
+        >
+          {btn === 'feed' ? '🍽' : btn === 'games' ? '🎮' : btn === 'main' ? '🏠' : btn === 'portfolio' ? '📁' : '💌'}
+        </Button>
+      ))}
+    </HStack>
+  )
 
-      {/* Only Happiness Hearts Status */}
+  const renderIntro = () => (
+    <VStack spacing={4} h="100%" justify="center">
+      <Text fontSize="4xl" color="#FF69B4">💖</Text>
+      <Box whiteSpace="pre-line" fontSize="md" color="#d72660" maxW="300px" mx="auto">
+        {typed}
+      </Box>
+      {typingDone && (
+        <Button
+          size="sm"
+          bg="#FFB3D6"
+          color="white"
+          border="2px solid #000"
+          fontFamily="'Press Start 2P'"
+          fontSize="12px"
+          boxShadow="2px 2px 0 #000"
+          _hover={{ bg: '#FF85C1' }}
+          onClick={() => setShowIntro(false)}
+        >
+          ENTER 2000s
+        </Button>
+      )}
+    </VStack>
+  )
+
+  const renderMain = () => (
+    <VStack spacing={4}>
+      <TamagotchiGif postId="24127301" width="200px" height="200px" />
       {renderHearts()}
-
-      {/* Removed Experience display */}
-
-      <div style={{ textAlign: 'center', marginTop: '15px', fontFamily: "'Press Start 2P', cursive" }}>
-        <div style={{ fontSize: '10px', color: '#666' }}>
-          Projects: {projects.length} | Total XP: {totalExperience}
-        </div>
-      </div>
-    </div>
+    </VStack>
   )
 
-  const renderFeedScreen = () => (
-    <div className="screen-content">
-      <div className="portfolio-title">Coding Timer</div>
-      {/* ...keep your existing feed screen here */}
-    </div>
+  const renderFeed = () => (
+    <VStack spacing={4} justify="center" h="100%">
+      <Text fontFamily="'Press Start 2P'" fontSize="14px" color="#FF69B4" mb={2}>
+        Start Coding! ⏳
+      </Text>
+      <Text
+        fontFamily="'VT323', monospace"
+        fontSize="48px"
+        color="#D72660"
+        textShadow="2px 2px 0 #FF85C1"
+        userSelect="none"
+      >
+        {new Date(codingTime * 1000).toISOString().substr(14, 5)}
+      </Text>
+      <Text fontFamily="'Press Start 2P'" fontSize="14px" color="#FF69B4" mt={2}>
+        Points: {points}
+      </Text>
+      <Button
+        size="sm"
+        bg={timerRunning ? '#FF69B4' : '#FFB3D6'}
+        color="white"
+        border="2px solid #000"
+        fontFamily="'Press Start 2P'"
+        fontSize="12px"
+        boxShadow="2px 2px 0 #000"
+        _hover={{ bg: timerRunning ? '#E0488B' : '#FFA0C4' }}
+        onClick={() => setTimerRunning(!timerRunning)}
+      >
+        {timerRunning ? 'STOP' : 'START'}
+      </Button>
+      <Text fontFamily="'VT323', monospace" fontSize="16px" color="#D72660" mt={6}>
+        Keep coding to make your pet happier! 💖
+      </Text>
+    </VStack>
   )
 
-  const renderGamesScreen = () => (
-    <div className="screen-content">
-      <div className="portfolio-title">Games</div>
-      {/* ...keep your existing games screen here */}
-    </div>
-  )
+  const renderGames = () => {
+    if (!currentQuestion) {
+      return (
+        <VStack spacing={4} justify="center" h="100%">
+          <Text fontFamily="'Press Start 2P'" fontSize="14px" color="#FF69B4">
+            🎉 You completed all Blind 75 questions!
+          </Text>
+        </VStack>
+      )
+    }
 
-  const renderPortfolioScreen = () => (
-    <div className="screen-content">
-      <div className="portfolio-title">Portfolio</div>
-      {/* ...keep your existing portfolio screen here */}
-    </div>
-  )
+    const completed = completedQuestions.includes(currentQuestion.id)
 
-  const renderStatsScreen = () => (
-    <div className="screen-content">
-      <div className="portfolio-title">Statistics</div>
-      {/* ...keep your existing stats screen here */}
-    </div>
-  )
-
-  const renderIntroScreen = () => {
-    const lines = typed.split('\n')
     return (
-      <div style={{
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        height: '100%', minHeight: 520, width: '100%', background: '#fff0fa', borderRadius: 24, border: '2px solid #ffb3d6', boxShadow: 'none', position: 'relative', padding: 0, fontFamily: 'VT323, monospace',
-      }}>
-        <div style={{ fontSize: 44, marginBottom: 16, color: '#ff69b4', textShadow: 'none' }}>💖</div>
-        <div style={{
-          fontSize: 15,
-          color: '#d72660',
-          marginBottom: 18,
-          textAlign: 'center',
-          maxWidth: 340,
-          fontFamily: 'inherit',
-          whiteSpace: 'pre-line',
-          minHeight: 120,
-          letterSpacing: 1
-        }}>
-          <div style={{ fontSize: 20, color: '#ff69b4', fontWeight: 700, marginBottom: 14, textAlign: 'center' }}>{lines[0]}</div>
-          {lines.length > 1 && <div style={{ fontSize: 14, color: '#00bcd4', fontWeight: 700, marginBottom: 16, textAlign: 'center' }}>{lines[1]}</div>}
-          {lines.length > 2 && <div style={{ fontSize: 11, color: '#d72660', fontWeight: 400, marginTop: 8, textAlign: 'center' }}>{lines.slice(2).join('\n')}</div>}
-        </div>
-        {typingDone && (
-          <button
-            className="tamagotchi-button"
-            style={{ fontSize: 15, padding: '10px 28px', background: '#ff69b4', color: '#fff', borderRadius: 12, boxShadow: 'none', marginTop: 8, fontFamily: 'inherit', border: 'none' }}
-            onClick={() => setShowIntro(false)}
-          >
-            Start
-          </button>
-        )}
-        <div style={{ position: 'absolute', bottom: 12, right: 0, left: 0, textAlign: 'center', fontSize: 9, color: '#bbb', letterSpacing: 1, fontFamily: 'inherit' }}>
-          © 2024 Yuli's Portfolio
-        </div>
-      </div>
+      <VStack spacing={4} justify="center" h="100%" px={4}>
+        <Text fontFamily="'Press Start 2P'" fontSize="16px" color="#FF69B4" mb={2}>
+          LeetCode Blind 75 Question of the Day
+        </Text>
+        <Box
+          fontFamily="'VT323', monospace"
+          fontSize="18px"
+          color="#D72660"
+          bg="#FFF0FB"
+          p={4}
+          border="2px solid #FF69B4"
+          borderRadius="md"
+          textAlign="center"
+        >
+          <a href={currentQuestion.link} target="_blank" rel="noopener noreferrer" style={{ color: '#d72660', textDecoration: 'underline' }}>
+            {currentQuestion.title}
+          </a>
+          <Text fontSize="14px" mt={1} color="#FF85C1">Difficulty: {currentQuestion.difficulty}</Text>
+        </Box>
+        <Button
+          size="sm"
+          bg={completed ? '#AAA' : '#FF69B4'}
+          color="white"
+          border="2px solid #000"
+          fontFamily="'Press Start 2P'"
+          fontSize="12px"
+          boxShadow="2px 2px 0 #000"
+          _hover={{ bg: completed ? '#AAA' : '#E0488B' }}
+          onClick={() => {
+            if (!completed) {
+              setPoints((p) => p + 25)
+              setPetHappiness((h) => Math.min(100, h + 25))
+              setCompletedQuestions([...completedQuestions, currentQuestion.id])
+              setCurrentQuestion(null)
+            }
+          }}
+          isDisabled={completed}
+        >
+          {completed ? 'COMPLETED ✅' : 'Mark as Completed'}
+        </Button>
+      </VStack>
     )
+  }
+
+  const renderStats = () => (
+    <VStack spacing={4} justify="center" h="100%">
+      <Text fontFamily="'Press Start 2P'" fontSize="16px" color="#FF69B4">
+        📬 Contact Me
+      </Text>
+      <Box
+        fontFamily="'VT323', monospace"
+        fontSize="18px"
+        color="#D72660"
+        bg="#FFF0FB"
+        p={4}
+        border="2px solid #FF69B4"
+        borderRadius="md"
+        textAlign="left"
+      >
+        <Text fontSize="20px" mb={1}>Yuliana Jasso</Text>
+        <Text fontSize="16px" mb={2} color="#FF85C1">Software / AI Engineer</Text>
+        <Text fontSize="12px">📧 <a href="mailto:yulianadenissejasso@gmail.com" style={{ color: '#d72660', textDecoration: 'underline' }}>yulianadenissejasso@gmail.com</a></Text>
+        <Text fontSize="12px" mt={2}>🎀 <a href="https://www.linkedin.com/in/yuliana-jasso/" target="_blank" style={{ color: '#d72660', textDecoration: 'underline' }}>LinkedIn</a></Text>
+        <Text fontSize="12px" mt={1}>💻 <a href="https://github.com/yuyi444" target="_blank" style={{ color: '#d72660', textDecoration: 'underline' }}>GitHub</a></Text>
+        <Text fontSize="12px" mt={1}>📟 <a href="https://yjasso.tech" target="_blank" style={{ color: '#d72660', textDecoration: 'underline' }}>Website</a></Text>
+      </Box>
+    </VStack>
+  )
+
+  const getScreen = () => {
+    if (currentScreen === 'main') return renderMain()
+    if (currentScreen === 'feed') return renderFeed()
+    if (currentScreen === 'games') return renderGames()
+    if (currentScreen === 'stats') return renderStats()
+    return <Text fontSize="14px" mt="100px">🚧 Screen "{currentScreen}" coming soon...</Text>
   }
 
   return (
-    <div className="min-h-screen p-4" style={{ fontFamily: "'Press Start 2P', cursive" }}>
-      {/* Notification */}
-      <div className={`notification ${showNotification ? 'show' : ''}`}>
-        {notificationMessage}
-      </div>
-
-      {/* Tamagotchi Device */}
-      <div className="tamagotchi-device">
-        {/* Screen */}
-        <div className="tamagotchi-screen">
-          {showIntro ? renderIntroScreen() : (
-            <>
-              {currentScreen === 'main' && renderMainScreen()}
-              {currentScreen === 'feed' && renderFeedScreen()}
-              {currentScreen === 'games' && renderGamesScreen()}
-              {currentScreen === 'portfolio' && renderPortfolioScreen()}
-              {currentScreen === 'stats' && renderStatsScreen()}
-            </>
-          )}
-        </div>
-
-        {/* Buttons */}
-        <div className="button-container">
-          <button
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('feed')}
-            title="Feed"
-          >
-            🍽️
-          </button>
-          <button
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('games')}
-            title="Games"
-          >
-            😊
-          </button>
-          <button
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('main')}
-            title="Home"
-          >
-            🏠
-          </button>
-          <button
-            className="tamagotchi-button"
-            onClick={() => router.push('/portfolio')}
-            title="Portfolio"
-          >
-            📁
-          </button>
-          <button
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('stats')}
-            title="Stats"
-          >
-            ✉️
-          </button>
-        </div>
-      </div>
-
-      {/* Instructions */}
-      <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '12px', color: '#666' }}>
-        <div>🎮 Use the buttons to navigate and interact with your career pet!</div>
-        <div>🍽️ Feed it projects to help it grow and evolve</div>
-        <div>📁 View Yuli's portfolio and skills</div>
-        <div>📊 Check your career statistics</div>
-      </div>
-    </div>
+    <Flex minH="100vh" align="center" justify="center" bg="#FFF5FD" py={10}>
+      <DeviceWrapper>
+        <DeviceScreen>{showIntro ? renderIntro() : getScreen()}</DeviceScreen>
+        <DeviceButtons />
+      </DeviceWrapper>
+    </Flex>
   )
 }
