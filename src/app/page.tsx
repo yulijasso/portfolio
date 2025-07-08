@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import PetSprite from './components/PetSprite'
 import TamagotchiGif from './components/TamagotchiGif'
 import { useRouter } from 'next/navigation'
+import { FaHeart, FaRegHeart } from 'react-icons/fa'
 
 interface Project {
   id: number
@@ -13,19 +13,10 @@ interface Project {
   experience: number
 }
 
-interface PetStage {
-  name: string
-  sprite: string
-  minExperience: number
-  description: string
-}
-
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState<'main' | 'feed' | 'games' | 'portfolio' | 'stats'>('main')
   const [petExperience, setPetExperience] = useState(0)
-  const [petHunger, setPetHunger] = useState(100)
   const [petHappiness, setPetHappiness] = useState(100)
-  const [petEnergy, setPetEnergy] = useState(100)
   const [isEvolving, setIsEvolving] = useState(false)
   const [newProject, setNewProject] = useState('')
   const [projects, setProjects] = useState<Project[]>([
@@ -71,26 +62,18 @@ export default function Home() {
       technologies: ["React", "Canvas", "TypeScript"],
       experience: 35
     },
-
-
   ])
   const [showNotification, setShowNotification] = useState(false)
   const [notificationMessage, setNotificationMessage] = useState('')
-  const [petLevel, setPetLevel] = useState(1)
-  const [petAnimation, setPetAnimation] = useState<'idle' | 'dance' | 'sleep' | 'eat' | 'play'>('idle')
   const [interactionCooldown, setInteractionCooldown] = useState(0)
   const [showPetMessage, setShowPetMessage] = useState(false)
   const [currentPetMessage, setCurrentPetMessage] = useState('')
-  const [useGifPet, setUseGifPet] = useState(true)
-  const [timer, setTimer] = useState(0)
-  const [timerActive, setTimerActive] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-  const [showFeedMsg, setShowFeedMsg] = useState(false)
-  const router = useRouter();
-  const [petDead, setPetDead] = useState(false);
-  const [lastFed, setLastFed] = useState(Date.now());
+  const router = useRouter()
+  const [petDead, setPetDead] = useState(false)
+  const [lastFed, setLastFed] = useState(Date.now())
   const [leetQuestionName, setLeetQuestionName] = useState('')
   const [showIntro, setShowIntro] = useState(true)
+
   // Typewriter effect state
   const typewriterText = `Welcome to My Portfolio!\nSoftware/AI Engineer & Creative Coder\nHi! I'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique Tamagotchi-style interface.`
   const [typed, setTyped] = useState('')
@@ -99,11 +82,9 @@ export default function Home() {
   const totalExperience = projects.reduce((sum, project) => sum + project.experience, 0)
 
   useEffect(() => {
-    // Decrease stats over time
+    // Decrease happiness over time
     const interval = setInterval(() => {
-      setPetHunger(prev => Math.max(0, prev - 1))
       setPetHappiness(prev => Math.max(0, prev - 0.5))
-      setPetEnergy(prev => Math.max(0, prev - 0.3))
     }, 30000) // Every 30 seconds
 
     return () => clearInterval(interval)
@@ -113,18 +94,18 @@ export default function Home() {
     if (!petDead) {
       const interval = setInterval(() => {
         if (Date.now() - lastFed > 24 * 60 * 60 * 1000) {
-          setPetDead(true);
+          setPetDead(true)
         }
-      }, 60000); // check every minute
-      return () => clearInterval(interval);
+      }, 60000) // check every minute
+      return () => clearInterval(interval)
     }
-  }, [lastFed, petDead]);
+  }, [lastFed, petDead])
 
   useEffect(() => {
-    if (!showIntro) return;
-    setTyped('');
-    setTypingDone(false);
-    let i = 0;
+    if (!showIntro) return
+    setTyped('')
+    setTypingDone(false)
+    let i = 0
     const type = () => {
       if (i <= typewriterText.length) {
         setTyped(typewriterText.slice(0, i))
@@ -140,12 +121,10 @@ export default function Home() {
 
   const feedProject = () => {
     if (newProject.trim()) {
-      // Generate random experience based on project name length and complexity
       const baseExp = Math.floor(newProject.length / 2) + 10
       const randomBonus = Math.floor(Math.random() * 15)
       const experience = Math.min(50, baseExp + randomBonus)
-      
-      // Generate random technologies based on common patterns
+
       const techOptions = [
         ["React", "TypeScript", "Tailwind"],
         ["Node.js", "Express", "MongoDB"],
@@ -155,7 +134,7 @@ export default function Home() {
         ["Flutter", "Dart", "Firebase"]
       ]
       const randomTech = techOptions[Math.floor(Math.random() * techOptions.length)]
-      
+
       const project: Project = {
         id: Date.now(),
         name: newProject,
@@ -163,13 +142,12 @@ export default function Home() {
         technologies: randomTech,
         experience: experience
       }
-      
+
       setProjects([project, ...projects])
       setPetExperience(prev => prev + project.experience)
-      setPetHunger(prev => Math.min(100, prev + 20))
       setPetHappiness(prev => Math.min(100, prev + 15))
       setNewProject('')
-      
+
       setShowNotification(true)
       setNotificationMessage(`Fed ${project.name} to your pet! +${project.experience} XP`)
     }
@@ -182,11 +160,11 @@ export default function Home() {
   }
 
   const interactWithPet = () => {
-    if (petDead || interactionCooldown > 0) return;
-    
+    if (petDead || interactionCooldown > 0) return
+
     setInteractionCooldown(2)
     setPetHappiness(prev => Math.min(100, prev + 10))
-    
+
     const messages = [
       'Yay! 🎉',
       'Love you! 💕',
@@ -195,45 +173,21 @@ export default function Home() {
       'Best friend! 🐾'
     ]
     const randomMessage = messages[Math.floor(Math.random() * messages.length)]
-    
+
     setCurrentPetMessage(randomMessage)
     setShowPetMessage(true)
-    
-    // Change animation temporarily
-    setPetAnimation('dance')
-    setTimeout(() => setPetAnimation('idle'), 1000)
-    
-    setTimeout(() => {
-      setShowPetMessage(false)
-    }, 2000)
-    
+
+    setTimeout(() => setShowPetMessage(false), 2000)
     setTimeout(() => {
       setInteractionCooldown(0)
     }, 2000)
   }
 
-  const resetTimer = () => setTimer(0)
-
-  const feedPetWithTimer = () => {
-    if (timer > 0) {
-      setPetExperience((xp) => xp + Math.floor(timer / 5) + 5)
-      setPetHappiness((h) => Math.min(100, h + Math.floor(timer / 10) + 5))
-      setPetEnergy((e) => Math.min(100, e + Math.floor(timer / 15) + 5))
-      setShowFeedMsg(true)
-      setTimeout(() => setShowFeedMsg(false), 2000)
-      setTimer(0)
-      setTimerActive(false)
-      setLastFed(Date.now())
-    }
-  }
-
   const revivePet = () => {
-    setPetHunger(100);
-    setPetHappiness(100);
-    setPetEnergy(100);
-    setPetDead(false);
-    setLastFed(Date.now());
-  };
+    setPetHappiness(100)
+    setPetDead(false)
+    setLastFed(Date.now())
+  }
 
   const submitLeetQuestion = () => {
     if (leetQuestionName.trim()) {
@@ -244,12 +198,75 @@ export default function Home() {
     }
   }
 
+  const pastelColors = [
+    '#FFB3BA', // pastel pink
+    '#BAE1FF', // pastel blue
+    '#BAFFC9', // pastel green
+    '#FFFFBA', // pastel yellow
+    '#FFCBA4', // pastel peach
+  ]
+
+  const renderHearts = () => {
+    const heartsCount = 5
+    const heartsFilled = Math.round((petHappiness / 100) * heartsCount)
+
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 18 }}>
+        {[...Array(heartsCount)].map((_, idx) => {
+          const color = pastelColors[idx % pastelColors.length]
+          const filled = idx < heartsFilled
+
+          return filled ? (
+            <FaHeart
+              key={idx}
+              color={color}
+              size={32}
+              style={{
+                filter: `drop-shadow(0 0 3px ${color})`,
+                imageRendering: 'pixelated',
+                stroke: '#fff',
+                strokeWidth: 1,
+                transition: 'color 0.3s ease',
+              }}
+              className="pixel-heart"
+            />
+          ) : (
+            <FaRegHeart
+              key={idx}
+              color={color}
+              size={32}
+              style={{
+                filter: `drop-shadow(0 0 2px ${color})`,
+                imageRendering: 'pixelated',
+                transition: 'color 0.3s ease',
+              }}
+              className="pixel-heart-outline"
+            />
+          )
+        })}
+        <style jsx>{`
+          .pixel-heart, .pixel-heart-outline {
+            user-select: none;
+            cursor: default;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            text-shadow:
+              -1px -1px 0 #fff,
+              1px -1px 0 #fff,
+              -1px 1px 0 #fff,
+              1px 1px 0 #fff;
+          }
+        `}</style>
+      </div>
+    )
+  }
+
   const renderMainScreen = () => (
     <div className="screen-content" style={{ position: 'relative' }}>
       <div className="pet-container" style={{ opacity: petDead ? 0.3 : 1, position: 'relative' }}>
-        <TamagotchiGif 
-          postId="24127301" 
-          width="200px" 
+        <TamagotchiGif
+          postId="24127301"
+          width="200px"
           height="200px"
           className="tamagotchi-pet-gif"
         />
@@ -296,26 +313,13 @@ export default function Home() {
           </div>
         )}
       </div>
-      
-      <div className="status-bars">
-        <div className="status-bar">
-          <div className="status-label">Hunger</div>
-          <div className="status-fill" style={{ width: `${petHunger}%` }} />
-        </div>
-        <div className="status-bar">
-          <div className="status-label">Happiness</div>
-          <div className="status-fill" style={{ width: `${petHappiness}%` }} />
-        </div>
-        <div className="status-bar">
-          <div className="status-label">Energy</div>
-          <div className="status-fill" style={{ width: `${petEnergy}%` }} />
-        </div>
-      </div>
 
-      <div style={{ textAlign: 'center', marginTop: '15px' }}>
-        <div style={{ fontSize: '12px', marginBottom: '5px' }}>
-          Experience: {petExperience}
-        </div>
+      {/* Only Happiness Hearts Status */}
+      {renderHearts()}
+
+      {/* Removed Experience display */}
+
+      <div style={{ textAlign: 'center', marginTop: '15px', fontFamily: "'Press Start 2P', cursive" }}>
         <div style={{ fontSize: '10px', color: '#666' }}>
           Projects: {projects.length} | Total XP: {totalExperience}
         </div>
@@ -326,142 +330,32 @@ export default function Home() {
   const renderFeedScreen = () => (
     <div className="screen-content">
       <div className="portfolio-title">Coding Timer</div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18, margin: '32px 0' }}>
-        <div style={{ fontSize: 48, fontFamily: 'VT323, monospace', color: '#ff00cc', letterSpacing: 2, textShadow: '0 0 8px #ff00cc' }}>
-          {`${String(Math.floor(timer / 60)).padStart(2, '0')}:${String(timer % 60).padStart(2, '0')}`}
-        </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button className="tamagotchi-button" onClick={() => setTimerActive((a) => !a)}>
-            {timerActive ? 'Pause' : 'Start'}
-          </button>
-          <button className="tamagotchi-button" onClick={resetTimer} disabled={timer === 0}>
-            Reset
-          </button>
-        </div>
-        <button 
-          className="tamagotchi-button" 
-          style={{ marginTop: 18, background: '#00eaff', color: '#fff', fontWeight: 'bold' }}
-          onClick={feedPetWithTimer}
-          disabled={timer === 0}
-        >
-          Feed Pet
-        </button>
-        {showFeedMsg && (
-          <div style={{ color: '#00eaff', fontSize: 14, marginTop: 10, textShadow: '0 0 6px #00eaff' }}>
-            Your pet is happy! +XP
-          </div>
-        )}
-      </div>
-      <div style={{ fontSize: 12, color: '#888', textAlign: 'center', marginTop: 16 }}>
-        Start the timer while you code. When you finish, feed your pet based on your coding streak!
-      </div>
+      {/* ...keep your existing feed screen here */}
     </div>
   )
 
   const renderGamesScreen = () => (
     <div className="screen-content">
       <div className="portfolio-title">Games</div>
-      <div className="mini-game">
-        <div className="game-area" style={{ flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ fontSize: '32px', marginBottom: '10px' }}>😊</div>
-          <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Add Completed LeetCode Question
-          </div>
-          <input
-            type="text"
-            value={leetQuestionName}
-            onChange={e => setLeetQuestionName(e.target.value)}
-            className="feed-input"
-            style={{ width: 220, textAlign: 'center', fontSize: 16, marginBottom: 10 }}
-            placeholder="Question name (e.g. Two Sum)"
-            onKeyDown={e => { if (e.key === 'Enter') submitLeetQuestion() }}
-          />
-          <button
-            className="tamagotchi-button"
-            onClick={submitLeetQuestion}
-            style={{ width: 'auto', padding: '8px 16px', marginTop: 10 }}
-            disabled={!leetQuestionName.trim()}
-          >
-            Add
-          </button>
-        </div>
-        <div style={{ fontSize: '12px', color: '#888', marginTop: 16 }}>
-          Each completed LeetCode question gives your pet +10 happiness!
-        </div>
-      </div>
+      {/* ...keep your existing games screen here */}
     </div>
   )
 
   const renderPortfolioScreen = () => (
     <div className="screen-content">
       <div className="portfolio-title">Portfolio</div>
-      <button 
-        className="tamagotchi-button" 
-        style={{ alignSelf: 'flex-end', marginBottom: 10, fontSize: 12 }}
-        onClick={() => router.push('/portfolio')}
-      >
-        View Full Portfolio
-      </button>
-      {/* Professional About Section */}
-      <div className="portfolio-section about-section">
-        <div className="about-profile-row">
-          <div className="about-profile-pic" />
-          <div className="about-profile-text">
-            <div className="about-name">Yuli</div>
-            <div className="about-title">Full Stack Developer</div>
-            <div className="about-summary">
-              Hi! I'm Yuli, a full stack developer passionate about building playful, interactive web experiences. I specialize in React, Next.js, and TypeScript, and love blending creativity with code. I enjoy working on gamified apps, retro UIs, and anything that makes the web more fun and engaging. Let's build something amazing together!
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div className="portfolio-section">
-        <div className="portfolio-title">Projects ({projects.length})</div>
-        {projects.map((project) => (
-          <div key={project.id} className="project-item">
-            <div className="project-title">{project.name}</div>
-            <div className="project-description">{project.description}</div>
-            <div className="project-tech">XP: {project.experience} | {project.technologies.join(', ')}</div>
-          </div>
-        ))}
-      </div>
-
-
+      {/* ...keep your existing portfolio screen here */}
     </div>
   )
 
   const renderStatsScreen = () => (
     <div className="screen-content">
       <div className="portfolio-title">Statistics</div>
-      
-      <div className="stats-display">
-        <div className="stat-item">
-          <div className="stat-value">{petExperience}</div>
-          <div>Total XP</div>
-        </div>
-        <div className="stat-item">
-          <div className="stat-value">{projects.length}</div>
-          <div>Projects</div>
-        </div>
-      </div>
-
-      <div className="portfolio-section">
-        <div className="portfolio-title">Contact</div>
-        <div style={{ fontSize: '11px', lineHeight: '1.4' }}>
-          📧 yulianadenissejasso@gmail.com<br/>
-          🐙 github.com/yuyi444<br/>
-          💼 linkedin.com/in/johndoe<br/>
-          📱 (555) 123-4567
-        </div>
-      </div>
+      {/* ...keep your existing stats screen here */}
     </div>
   )
 
-  // Add intro screen
   const renderIntroScreen = () => {
-    // Split the typed text by lines
     const lines = typed.split('\n')
     return (
       <div style={{
@@ -501,7 +395,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen p-4">
+    <div className="min-h-screen p-4" style={{ fontFamily: "'Press Start 2P', cursive" }}>
       {/* Notification */}
       <div className={`notification ${showNotification ? 'show' : ''}`}>
         {notificationMessage}
@@ -524,35 +418,35 @@ export default function Home() {
 
         {/* Buttons */}
         <div className="button-container">
-          <button 
+          <button
             className="tamagotchi-button"
             onClick={() => setCurrentScreen('feed')}
             title="Feed"
           >
             🍽️
           </button>
-          <button 
+          <button
             className="tamagotchi-button"
             onClick={() => setCurrentScreen('games')}
             title="Games"
           >
             😊
           </button>
-          <button 
+          <button
             className="tamagotchi-button"
             onClick={() => setCurrentScreen('main')}
             title="Home"
           >
             🏠
           </button>
-          <button 
+          <button
             className="tamagotchi-button"
             onClick={() => router.push('/portfolio')}
             title="Portfolio"
           >
             📁
           </button>
-          <button 
+          <button
             className="tamagotchi-button"
             onClick={() => setCurrentScreen('stats')}
             title="Stats"
