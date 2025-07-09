@@ -15,6 +15,8 @@ import {
 import { useRouter } from 'next/navigation';
 import { FaGithub } from 'react-icons/fa';
 
+
+
 const projects = [
   {
     id: 1,
@@ -45,29 +47,49 @@ const projects = [
 function ProjectCard({ project }) {
   return (
     <Box
-      bg="#fff0f5"
-      border="3px solid #000"
-      borderRadius="xl"
-      boxShadow="6px 6px 0 #000"
-      p={5}
-      fontFamily="'VT323', monospace"
+      bg="#E0E0E0"
+      border="2px solid #808080"
+      boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+      p={4}
+      fontFamily="'Press Start 2P', monospace"
       transition="transform 0.2s"
-      _hover={{ transform: 'translateY(-4px)', bg: '#ffe6f0' }}
+      _hover={{
+        transform: 'translateY(-3px)',
+        bg: '#F0F0F0'
+      }}
     >
-      <Heading fontSize="lg" mb={2} fontFamily="'Press Start 2P', monospace">
+      <Heading fontSize="md" mb={2} color="#000">
         {project.name}
       </Heading>
-      <Text mb={3} fontSize="sm">{project.description}</Text>
+      <Text mb={3} fontSize="xs" color="#333">{project.description}</Text>
       <HStack spacing={2} wrap="wrap" mb={3}>
         {project.technologies.map((tech, idx) => (
-          <Tag key={idx} size="sm" colorScheme="pink">
+          <Tag
+            key={idx}
+            size="sm"
+            bg="#C0C0C0"
+            border="2px outset #FFFFFF"
+            color="#000"
+            fontFamily="'Press Start 2P', monospace"
+          >
             {tech}
           </Tag>
         ))}
       </HStack>
       <HStack spacing={2}>
         <Link href={project.demoUrl} isExternal>
-          <Button size="xs" bg="#ff69b4" color="white" _hover={{ bg: "#ff1493" }}>
+          <Button
+            size="xs"
+            bg="#C0C0C0"
+            color="#000"
+            border="2px outset #FFFFFF"
+            fontSize="10px"
+            fontFamily="'Press Start 2P', monospace"
+            _hover={{
+              border: '2px inset #FFFFFF',
+              bg: '#D0D0D0'
+            }}
+          >
             ▶️ Demo
           </Button>
         </Link>
@@ -75,9 +97,11 @@ function ProjectCard({ project }) {
           <Button
             size="xs"
             leftIcon={<FaGithub />}
-            bg="black"
-            color="white"
-            _hover={{ bg: "gray.800" }}
+            bg="#000"
+            color="#FFF"
+            fontSize="10px"
+            fontFamily="'Press Start 2P', monospace"
+            _hover={{ bg: "#333" }}
           >
             GitHub
           </Button>
@@ -92,81 +116,126 @@ export default function PortfolioPage() {
 
   return (
     <Box
-      bg="#fef6ff"
-      color="#111"
-      fontFamily="'VT323', monospace"
+      bg="#BFBFBF"
+      color="#000"
+      fontFamily="'Press Start 2P', monospace"
       minH="100vh"
-      py={12}
+      py={8}
       px={[4, 8, 16]}
     >
-      {/* Window container */}
       <Box
-        bg="#fff"
-        border="3px solid #000"
-        borderRadius="xl"
-        boxShadow="8px 8px 0 #000"
+        bg="#C0C0C0"
+        border="3px solid #808080"
+        boxShadow="inset -3px -3px 0 #808080, inset 3px 3px 0 #FFFFFF"
         maxW="6xl"
         mx="auto"
-        p={6}
       >
-        {/* Header */}
-        <Flex justify="space-between" align="center" mb={4}>
-          <HStack spacing={2}>
-            <Box w={4} h={4} bg="#ffe25b" border="2px solid #000" borderRadius="full" />
-            <Box w={4} h={4} bg="#b3e5fc" border="2px solid #000" borderRadius="full" />
-            <Box w={4} h={4} bg="#ff9bd6" border="2px solid #000" borderRadius="full" />
-          </HStack>
-          <Text fontFamily="'Press Start 2P'" fontSize="sm">Yuli.exe</Text>
-          <Box fontFamily="'Press Start 2P'" fontSize="sm">✖</Box>
-        </Flex>
-
-        {/* Profile */}
-        <Flex gap={6} wrap="wrap" mb={6}>
-          <Box boxSize="100px" bg="#ffe0f0" border="2px solid #000" borderRadius="md" />
-          <Box>
-            <Text fontSize="xl" fontWeight="bold">Yuli</Text>
-            <Text fontSize="lg">Full Stack Developer</Text>
-            <Text maxW="500px">
-              👾 Hi! I'm Yuli — I code fun, retro-style UIs, AI tools, and gamified apps.
-              I love mixing nostalgia with next-gen tech!
-            </Text>
+        {/* Title bar */}
+        <Flex
+          bg="linear-gradient(to bottom, #FF99CC, #FF69B4)"
+          px={4}
+          py={2}
+          borderBottom="2px solid #808080"
+          justify="space-between"
+          align="center"
+        >
+          <Text color="#FFF" fontSize="md" fontStyle="italic">
+            💖 Yuli.exe
+          </Text>
+          <Box
+            bg="#FF85C1"
+            border="2px outset #fff"
+            color="#fff"
+            px={2}
+            cursor="pointer"
+            fontSize="12px"
+            fontWeight="bold"
+            _hover={{ bg: '#FF99CC' }}
+          >
+            ✖
           </Box>
         </Flex>
 
-        {/* Skills */}
-        <Box mb={6}>
-          <Heading fontSize="md" fontFamily="'Press Start 2P'" mb={2}>
-            Skills
-          </Heading>
-          <HStack spacing={3} wrap="wrap">
-            {["React", "TypeScript", "Node.js", "Python", "MongoDB", "PostgreSQL"].map((skill) => (
-              <Tag key={skill} colorScheme="purple">{skill}</Tag>
-            ))}
-          </HStack>
-        </Box>
+        {/* Content */}
+        <Box p={8}>
+          {/* Profile */}
+          <Flex gap={6} wrap="wrap" mb={6}>
+            <Box boxSize="100px" bg="#FFE0F0" border="2px solid #808080" />
+            <Box>
+              <Text fontSize="20px" fontWeight="bold" mb={1}>
+                Yuli
+              </Text>
+              <Text fontSize="14px" mb={3}>
+                Full Stack Developer
+              </Text>
+              <Text maxW="500px" fontSize="12px">
+                👾 Hi! I'm Yuli — I code fun, retro-style UIs, AI tools, and gamified apps.
+                I love mixing nostalgia with next-gen tech!
+              </Text>
+            </Box>
+          </Flex>
 
-        {/* Projects */}
-        <Box>
-          <Heading fontSize="md" fontFamily="'Press Start 2P'" mb={4}>
-            Projects ({projects.length})
-          </Heading>
-          <SimpleGrid columns={[1, 2, 3]} spacing={6}>
-            {projects.map(project => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </SimpleGrid>
-        </Box>
+          {/* Skills */}
+          <Box mb={6}>
+            <Heading
+              fontSize="14px"
+              mb={2}
+              borderBottom="2px solid #808080"
+              display="inline-block"
+              pb={1}
+            >
+              Skills
+            </Heading>
+            <HStack spacing={2} wrap="wrap">
+              {["React", "TypeScript", "Node.js", "Python", "MongoDB", "PostgreSQL"].map((skill) => (
+                <Tag
+                  key={skill}
+                  bg="#C0C0C0"
+                  border="2px outset #FFFFFF"
+                  color="#000"
+                  fontSize="10px"
+                  fontFamily="'Press Start 2P', monospace"
+                >
+                  {skill}
+                </Tag>
+              ))}
+            </HStack>
+          </Box>
 
-        <Button
-          onClick={() => router.push('/')}
-          mt={8}
-          bg="black"
-          color="white"
-          _hover={{ bg: "gray.800" }}
-          fontSize="sm"
-        >
-          ← Back to Tamagotchi
-        </Button>
+          {/* Projects */}
+          <Box>
+            <Heading
+              fontSize="14px"
+              mb={4}
+              borderBottom="2px solid #808080"
+              display="inline-block"
+              pb={1}
+            >
+              Projects ({projects.length})
+            </Heading>
+            <SimpleGrid columns={[1, 2, 3]} spacing={6}>
+              {projects.map(project => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </SimpleGrid>
+          </Box>
+
+          <Button
+            onClick={() => router.push('/')}
+            mt={8}
+            bg="#C0C0C0"
+            color="#000"
+            border="2px outset #FFFFFF"
+            fontSize="10px"
+            fontFamily="'Press Start 2P', monospace"
+            _hover={{
+              border: '2px inset #FFFFFF',
+              bg: '#D0D0D0'
+            }}
+          >
+            ← Back to Tamagotchi
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
