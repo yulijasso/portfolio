@@ -36,8 +36,6 @@ const blind75Questions = [
   },
 ];
 
-/* ---------- Device Components ---------- */
-
 const DeviceWrapper = ({ children }) => (
   <Box
     w="420px"
@@ -146,7 +144,7 @@ const DesktopIcon = ({ icon, label, onClick }) => (
       <Text
         fontFamily="'Microsoft Sans Serif', sans-serif"
         fontSize="10px"
-        color="#d72660"
+        color="#FFFFFF"
         textAlign="center"
       >
         {label}
@@ -190,8 +188,6 @@ const GrayTaskbar = ({ toggleStart }) => (
     </Box>
   </Flex>
 );
-
-/* ---------- Main App ---------- */
 
 export default function Home() {
   const [showIntro, setShowIntro] = useState(true);
@@ -336,7 +332,6 @@ export default function Home() {
     </Box>
   );
 
-  // Helper to update recent items
   const addRecentItem = (label, action) => {
     setRecentItems(prev => [
       { label, action },
@@ -410,7 +405,11 @@ export default function Home() {
   return (
     <Box
       minH="100vh"
-      bgGradient="linear(to-b, #FFB3D6, #FF85C1)"
+      bg="#E0218A"
+      bgImage="url('/images/wallpaper.png')"
+      bgRepeat="no-repeat"
+      bgSize="cover"
+      bgPosition="center"
       fontFamily="'Microsoft Sans Serif', sans-serif"
       position="relative"
       pb="80px"
