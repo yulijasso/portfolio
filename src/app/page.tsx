@@ -65,17 +65,24 @@ const DeviceScreen = ({ children }: { children: React.ReactNode }) => (
 )
 
 const DesktopIcon = ({ emoji, label, onClick }: { emoji: string; label: string; onClick?: () => void }) => (
-  <VStack
-    spacing={1}
-    cursor="pointer"
-    onClick={onClick}
-    userSelect="none"
-    w="60px"
-    _hover={{ bg: '#FFB3D6', borderRadius: '6px' }}
+  <motion.div
+    drag
+    dragMomentum={false}
+    dragConstraints={{ top: -500, bottom: 500, left: -800, right: 800 }}
+    style={{ display: "inline-block" }}
   >
-    <Box fontSize="28px" lineHeight="1" textShadow="1px 1px 0 #FF69B4">{emoji}</Box>
-    <Text fontFamily="'Press Start 2P'" fontSize="10px" color="#d72660" textAlign="center">{label}</Text>
-  </VStack>
+    <VStack
+      spacing={1}
+      cursor="pointer"
+      onClick={onClick}
+      userSelect="none"
+      w="60px"
+      _hover={{ bg: '#FFB3D6', borderRadius: '6px' }}
+    >
+      <Box fontSize="28px" lineHeight="1" textShadow="1px 1px 0 #FF69B4">{emoji}</Box>
+      <Text fontFamily="'Press Start 2P'" fontSize="10px" color="#d72660" textAlign="center">{label}</Text>
+    </VStack>
+  </motion.div>
 )
 
 const Taskbar = () => (
