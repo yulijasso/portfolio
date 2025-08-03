@@ -1,576 +1,550 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useRef } from 'react'
-import PetSprite from './components/PetSprite'
-import TamagotchiGif from './components/TamagotchiGif'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
+import {
+  Box,
+  Button,
+  Flex,
+  VStack,
+  HStack,
+  Text,
+} from '@chakra-ui/react';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import TamagotchiGif from './components/TamagotchiGif';
+import MinesweeperWindow from './components/MinesweeperWindow';
 
-interface Project {
-  id: number
-  name: string
-  description: string
-  technologies: string[]
-  experience: number
-}
+const blind75Questions = [
+  {
+    id: 1,
+    title: "Two Sum",
+    difficulty: "Easy",
+    link: "https://leetcode.com/problems/two-sum/",
+  },
+  {
+    id: 2,
+    title: "Longest Substring Without Repeating Characters",
+    difficulty: "Medium",
+    link: "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+  },
+  {
+    id: 3,
+    title: "Median of Two Sorted Arrays",
+    difficulty: "Hard",
+    link: "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+  },
+];
 
-interface PetStage {
-  name: string
-  sprite: string
-  minExperience: number
-  description: string
-}
+const DeviceWrapper = ({ children }) => (
+  <Box
+    w="420px"
+    bg="#C0C0C0"
+    border="2px solid #808080"
+    boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+    fontFamily="'Microsoft Sans Serif', sans-serif"
+  >
+    <Flex
+      bg="#FF69B4"
+      color="#fff"
+      px={3}
+      py={1}
+      justify="space-between"
+      align="center"
+      borderBottom="2px solid #808080"
+      boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
+    >
+      <Text
+        fontSize="14px"
+        fontWeight="bold"
+        textShadow="1px 1px #000"
+      >
+        💖 Welcome to Nostalgia
+      </Text>
+      <Box
+        bg="#FF85C1"
+        border="2px outset #808080"
+        color="#fff"
+        px={2}
+        cursor="pointer"
+        fontSize="12px"
+        fontWeight="bold"
+        _hover={{ bg: '#FF99CC' }}
+      >
+        ✖
+      </Box>
+    </Flex>
+    {children}
+  </Box>
+);
+
+const DeviceScreen = ({ children }) => (
+  <Box
+    h="380px"
+    bg="#FFF0FB"
+    border="2px inset #808080"
+    p={4}
+    textAlign="center"
+    overflowY="auto"
+    fontSize="12px"
+    color="#000"
+  >
+    {children}
+  </Box>
+);
+
+const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }) => (
+  <HStack spacing={2} mt={2} justify="center">
+    {['feed', 'games', 'main', 'portfolio', 'stats'].map((btn) => (
+      <Button
+        key={btn}
+        size="sm"
+        bg="#E0E0E0"
+        color="#000"
+        border="2px outset #808080"
+        borderRadius="0"
+        fontFamily="'Microsoft Sans Serif', sans-serif"
+        fontSize="10px"
+        h="24px"
+        minW="50px"
+        _hover={{
+          border: '2px inset #808080',
+          bg: '#D0D0D0'
+        }}
+        onClick={() => {
+          if (btn === 'portfolio') window.location.href = '/portfolio';
+          else {
+            setCurrentScreen(btn);
+            if (btn !== 'games') setCurrentQuestion(null);
+          }
+        }}
+      >
+        {btn.toUpperCase()}
+      </Button>
+    ))}
+  </HStack>
+);
+
+const DesktopIcon = ({ icon, label, onClick }) => (
+  <motion.div
+    drag
+    dragMomentum={false}
+    dragConstraints={{ top: -500, bottom: 500, left: -800, right: 800 }}
+    style={{ display: "inline-block" }}
+  >
+    <VStack
+      spacing={1}
+      cursor="pointer"
+      onClick={onClick}
+      userSelect="none"
+      w="60px"
+      _hover={{ bg: '#FFB3D6', borderRadius: '6px' }}
+    >
+      {icon}
+      <Text
+        fontFamily="'Microsoft Sans Serif', sans-serif"
+        fontSize="10px"
+        color="#FFFFFF"
+        textAlign="center"
+      >
+        {label}
+      </Text>
+    </VStack>
+  </motion.div>
+);
+
+const GrayTaskbar = ({ toggleStart }) => (
+  <Flex
+    position="fixed"
+    bottom={0}
+    left={0}
+    right={0}
+    h="40px"
+    bg="#C0C0C0"
+    borderTop="2px solid #FFFFFF"
+    borderBottom="2px solid #808080"
+    boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #808080"
+    align="center"
+    px={4}
+    fontFamily="'Microsoft Sans Serif', sans-serif"
+    color="#000"
+    userSelect="none"
+    zIndex={20}
+  >
+    <Box
+      bg="#E0E0E0"
+      px={3}
+      py={1}
+      border="2px outset #808080"
+      fontWeight="bold"
+      fontSize="10px"
+      cursor="pointer"
+      _hover={{
+        bg: '#D0D0D0'
+      }}
+      onClick={toggleStart}
+    >
+      START
+    </Box>
+  </Flex>
+);
 
 export default function Home() {
-  const [currentScreen, setCurrentScreen] = useState<'main' | 'feed' | 'games' | 'portfolio' | 'stats'>('main')
-  const [petExperience, setPetExperience] = useState(0)
-  const [petHunger, setPetHunger] = useState(100)
-  const [petHappiness, setPetHappiness] = useState(100)
-  const [petEnergy, setPetEnergy] = useState(100)
-  const [isEvolving, setIsEvolving] = useState(false)
-  const [newProject, setNewProject] = useState('')
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: 1,
-      name: "Grow Up",
-      description: "A gamified career tracker with Tamagotchi mechanics.",
-      technologies: ["React", "Next.js", "TypeScript", "Vercel", "MongoDB"],
-      experience: 60
-    },
-    {
-      id: 2,
-      name: "Portfolio v2",
-      description: "Personal portfolio with Y2K/retro vibes.",
-      technologies: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-      experience: 50
-    },
-    {
-      id: 3,
-      name: "DevDeck",
-      description: "Flashcard app for developers.",
-      technologies: ["React", "Next.js", "TypeScript", "MongoDB"],
-      experience: 45
-    },
-    {
-      id: 4,
-      name: "LeetHub",
-      description: "Chrome extension to sync LeetCode with GitHub.",
-      technologies: ["JavaScript", "Chrome Extension", "GitHub API"],
-      experience: 40
-    },
-    {
-      id: 5,
-      name: "CodeConnect",
-      description: "Social platform for developers to share code.",
-      technologies: ["React", "Node.js", "Express", "MongoDB"],
-      experience: 38
-    },
-    {
-      id: 6,
-      name: "Pixel Pets",
-      description: "Virtual pet game with pixel art.",
-      technologies: ["React", "Canvas", "TypeScript"],
-      experience: 35
-    },
-    {
-      id: 7,
-      name: "Y2K Blog",
-      description: "Blog with Y2K/retro design.",
-      technologies: ["Next.js", "MDX", "Tailwind"],
-      experience: 32
-    },
-    {
-      id: 8,
-      name: "OpenResume",
-      description: "Free resume builder.",
-      technologies: ["React", "Next.js", "Chakra UI"],
-      experience: 30
-    },
-    {
-      id: 9,
-      name: "Tamagotchi CLI",
-      description: "Tamagotchi game in the terminal.",
-      technologies: ["Node.js", "Inquirer.js"],
-      experience: 28
-    },
-    {
-      id: 10,
-      name: "Neon Notes",
-      description: "Minimal note-taking app.",
-      technologies: ["React", "TypeScript", "Firebase"],
-      experience: 25
-    },
-    {
-      id: 11,
-      name: "Retro Weather",
-      description: "Weather app with retro UI.",
-      technologies: ["React", "OpenWeatherMap API"],
-      experience: 22
-    },
-    {
-      id: 12,
-      name: "Synthwave Timer",
-      description: "Pomodoro timer with synthwave theme.",
-      technologies: ["React", "Styled Components"],
-      experience: 20
-    }
-  ])
-  const [gameScore, setGameScore] = useState(0)
-  const [showNotification, setShowNotification] = useState(false)
-  const [notificationMessage, setNotificationMessage] = useState('')
-  const [petLevel, setPetLevel] = useState(1)
-  const [petAnimation, setPetAnimation] = useState<'idle' | 'dance' | 'sleep' | 'eat' | 'play'>('idle')
-  const [interactionCooldown, setInteractionCooldown] = useState(0)
-  const [showPetMessage, setShowPetMessage] = useState(false)
-  const [currentPetMessage, setCurrentPetMessage] = useState('')
-  const [useGifPet, setUseGifPet] = useState(true)
-  const [timer, setTimer] = useState(0)
-  const [timerActive, setTimerActive] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-  const [showFeedMsg, setShowFeedMsg] = useState(false)
-  const router = useRouter();
-  const [petDead, setPetDead] = useState(false);
-  const [lastFed, setLastFed] = useState(Date.now());
+  const [showIntro, setShowIntro] = useState(true);
+  const [showTamagotchi, setShowTamagotchi] = useState(false);
+  const [showMinesweeper, setShowMinesweeper] = useState(false);
+  const [showResume, setShowResume] = useState(false);
+  const [showContact, setShowContact] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState('main');
+  const [petHappiness, setPetHappiness] = useState(100);
+  const [typed, setTyped] = useState('');
+  const [typingDone, setTypingDone] = useState(false);
+  const [codingTime, setCodingTime] = useState(0);
+  const [points, setPoints] = useState(0);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [completedQuestions, setCompletedQuestions] = useState([]);
+  const [startMenuOpen, setStartMenuOpen] = useState(false);
+  const [recentItems, setRecentItems] = useState([]);
 
-  const totalExperience = projects.reduce((sum, project) => sum + project.experience, 0)
+  const timerRef = useRef(null);
+
+  const typewriterText = `Welcome to My Portfolio\n\nI’m Yuli — Full‑Stack/AI Developer & Creative Coder\n\nI'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique Tamagotchi-style interface.`;
 
   useEffect(() => {
-    // Decrease stats over time
-    const interval = setInterval(() => {
-      setPetHunger(prev => Math.max(0, prev - 1))
-      setPetHappiness(prev => Math.max(0, prev - 0.5))
-      setPetEnergy(prev => Math.max(0, prev - 0.3))
-    }, 30000) // Every 30 seconds
-
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    if (!petDead) {
-      const interval = setInterval(() => {
-        if (Date.now() - lastFed > 24 * 60 * 60 * 1000) {
-          setPetDead(true);
-        }
-      }, 60000); // check every minute
-      return () => clearInterval(interval);
-    }
-  }, [lastFed, petDead]);
-
-  const feedProject = () => {
-    if (newProject.trim()) {
-      // Generate random experience based on project name length and complexity
-      const baseExp = Math.floor(newProject.length / 2) + 10
-      const randomBonus = Math.floor(Math.random() * 15)
-      const experience = Math.min(50, baseExp + randomBonus)
-      
-      // Generate random technologies based on common patterns
-      const techOptions = [
-        ["React", "TypeScript", "Tailwind"],
-        ["Node.js", "Express", "MongoDB"],
-        ["Python", "Django", "PostgreSQL"],
-        ["Vue.js", "Vite", "Pinia"],
-        ["Next.js", "Prisma", "Vercel"],
-        ["Flutter", "Dart", "Firebase"]
-      ]
-      const randomTech = techOptions[Math.floor(Math.random() * techOptions.length)]
-      
-      const project: Project = {
-        id: Date.now(),
-        name: newProject,
-        description: `A ${newProject.toLowerCase()} project!`,
-        technologies: randomTech,
-        experience: experience
+    let i = 0;
+    const type = () => {
+      if (i <= typewriterText.length) {
+        setTyped(typewriterText.slice(0, i));
+        i++;
+        setTimeout(type, 20);
+      } else {
+        setTypingDone(true);
       }
-      
-      setProjects([project, ...projects])
-      setPetExperience(prev => prev + project.experience)
-      setPetHunger(prev => Math.min(100, prev + 20))
-      setPetHappiness(prev => Math.min(100, prev + 15))
-      setNewProject('')
-      
-      setShowNotification(true)
-      setNotificationMessage(`Fed ${project.name} to your pet! +${project.experience} XP`)
+    };
+    if (showIntro) type();
+  }, [showIntro]);
+
+  useEffect(() => {
+    if (currentScreen === 'feed' && timerRunning) {
+      if (!timerRef.current) {
+        timerRef.current = setInterval(() => {
+          setCodingTime((time) => {
+            const newTime = time + 1;
+            if (newTime % 60 === 0) {
+              setPoints((p) => p + 60);
+              setPetHappiness((h) => Math.min(100, h + 5));
+            }
+            return newTime;
+          });
+        }, 1000);
+      }
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      if (currentScreen !== 'feed') {
+        setCodingTime(0);
+        setPoints(0);
+        setTimerRunning(false);
+      }
     }
-  }
+  }, [currentScreen, timerRunning]);
 
-  const playGame = () => {
-    const newScore = Math.floor(Math.random() * 50) + 10
-    setGameScore(prev => prev + newScore)
-    setPetHappiness(prev => Math.min(100, prev + 25))
-    setPetEnergy(prev => Math.max(0, prev - 10))
-    
-    setShowNotification(true)
-    setNotificationMessage(`Game score: ${newScore}! Happiness +25`)
-  }
+  useEffect(() => {
+    const decay = setInterval(() => {
+      setPetHappiness((h) => Math.max(0, h - 1));
+    }, 30000);
+    return () => clearInterval(decay);
+  }, []);
 
-  const showNotificationMessage = (message: string) => {
-    setNotificationMessage(message)
-    setShowNotification(true)
-    setTimeout(() => setShowNotification(false), 3000)
-  }
-
-  const interactWithPet = () => {
-    if (petDead || interactionCooldown > 0) return;
-    
-    setInteractionCooldown(2)
-    setPetHappiness(prev => Math.min(100, prev + 10))
-    
-    const messages = [
-      'Yay! 🎉',
-      'Love you! 💕',
-      'Play time! 🎮',
-      'So happy! 😊',
-      'Best friend! 🐾'
-    ]
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)]
-    
-    setCurrentPetMessage(randomMessage)
-    setShowPetMessage(true)
-    
-    // Change animation temporarily
-    setPetAnimation('dance')
-    setTimeout(() => setPetAnimation('idle'), 1000)
-    
-    setTimeout(() => {
-      setShowPetMessage(false)
-    }, 2000)
-    
-    setTimeout(() => {
-      setInteractionCooldown(0)
-    }, 2000)
-  }
-
-  const resetTimer = () => setTimer(0)
-
-  const feedPetWithTimer = () => {
-    if (timer > 0) {
-      setPetExperience((xp) => xp + Math.floor(timer / 5) + 5)
-      setPetHappiness((h) => Math.min(100, h + Math.floor(timer / 10) + 5))
-      setPetEnergy((e) => Math.min(100, e + Math.floor(timer / 15) + 5))
-      setShowFeedMsg(true)
-      setTimeout(() => setShowFeedMsg(false), 2000)
-      setTimer(0)
-      setTimerActive(false)
-      setLastFed(Date.now())
+  useEffect(() => {
+    if (currentScreen === 'games' && !currentQuestion) {
+      const unanswered = blind75Questions.filter(q => !completedQuestions.includes(q.id));
+      const random = unanswered[Math.floor(Math.random() * unanswered.length)];
+      setCurrentQuestion(random || null);
     }
-  }
+  }, [currentScreen, currentQuestion, completedQuestions]);
 
-  const revivePet = () => {
-    setPetHunger(100);
-    setPetHappiness(100);
-    setPetEnergy(100);
-    setPetDead(false);
-    setLastFed(Date.now());
+  const pastelColors = ['#FFB3BA', '#BAE1FF', '#BAFFC9', '#FFFFBA', '#FFCBA4'];
+
+  const renderHearts = () => {
+    const heartsCount = 5;
+    const filled = Math.round((petHappiness / 100) * heartsCount);
+    return (
+      <HStack spacing={2} mt={4} justify="center">
+        {Array.from({ length: heartsCount }).map((_, i) =>
+          i < filled ? (
+            <FaHeart key={i} color={pastelColors[i]} size={32} />
+          ) : (
+            <FaRegHeart key={i} color={pastelColors[i]} size={32} />
+          )
+        )}
+      </HStack>
+    );
   };
 
-  const renderMainScreen = () => (
-    <div className="screen-content" style={{ position: 'relative' }}>
-      <div className="pet-container" style={{ opacity: petDead ? 0.3 : 1, position: 'relative' }}>
-        <TamagotchiGif 
-          postId="24127301" 
-          width="200px" 
-          height="200px"
-          className="tamagotchi-pet-gif"
-        />
-        {showPetMessage && (
-          <div className="pet-message" style={{
-            position: 'absolute',
-            top: '-30px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: '#ff69b4',
-            color: '#fff',
-            padding: '4px 8px',
-            borderRadius: '8px',
-            fontSize: '8px',
-            whiteSpace: 'nowrap',
-            zIndex: 10,
-            animation: 'bounce 0.5s ease-in-out'
-          }}>
-            {currentPetMessage}
-          </div>
-        )}
-        {petDead && (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'rgba(0,0,0,0.7)',
-            color: '#fff',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '16px',
-            textAlign: 'center',
-            fontSize: 20,
-            zIndex: 100
-          }}>
-            <div style={{ marginBottom: 16 }}>💀 Your pet has died.</div>
-            <button className="tamagotchi-button" onClick={revivePet} style={{ fontSize: 16, background: '#ff00cc' }}>
-              Revive Pet
-            </button>
-          </div>
-        )}
-      </div>
-      
-      <div className="status-bars">
-        <div className="status-bar">
-          <div className="status-label">Hunger</div>
-          <div className="status-fill" style={{ width: `${petHunger}%` }} />
-        </div>
-        <div className="status-bar">
-          <div className="status-label">Happiness</div>
-          <div className="status-fill" style={{ width: `${petHappiness}%` }} />
-        </div>
-        <div className="status-bar">
-          <div className="status-label">Energy</div>
-          <div className="status-fill" style={{ width: `${petEnergy}%` }} />
-        </div>
-      </div>
-
-      <div style={{ textAlign: 'center', marginTop: '15px' }}>
-        <div style={{ fontSize: '12px', marginBottom: '5px' }}>
-          Experience: {petExperience}
-        </div>
-        <div style={{ fontSize: '10px', color: '#666' }}>
-          Projects: {projects.length} | Total XP: {totalExperience}
-        </div>
-      </div>
-    </div>
-  )
-
-  const renderFeedScreen = () => (
-    <div className="screen-content">
-      <div className="portfolio-title">Coding Timer</div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18, margin: '32px 0' }}>
-        <div style={{ fontSize: 48, fontFamily: 'VT323, monospace', color: '#ff00cc', letterSpacing: 2, textShadow: '0 0 8px #ff00cc' }}>
-          {`${String(Math.floor(timer / 60)).padStart(2, '0')}:${String(timer % 60).padStart(2, '0')}`}
-        </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button className="tamagotchi-button" onClick={() => setTimerActive((a) => !a)}>
-            {timerActive ? 'Pause' : 'Start'}
-          </button>
-          <button className="tamagotchi-button" onClick={resetTimer} disabled={timer === 0}>
-            Reset
-          </button>
-        </div>
-        <button 
-          className="tamagotchi-button" 
-          style={{ marginTop: 18, background: '#00eaff', color: '#fff', fontWeight: 'bold' }}
-          onClick={feedPetWithTimer}
-          disabled={timer === 0}
+  const renderIntro = () => (
+    <Box
+      bg="#C0C0C0"
+      border="2px inset #808080"
+      boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+      p={4}
+      w="100%"
+      h="100%"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <VStack spacing={6} maxW="400px">
+        <Text fontSize="28px" color="#FF69B4">💖</Text>
+        <Box
+          whiteSpace="pre-line"
+          fontSize="14px"
+          color="#000"
+          fontFamily="'Microsoft Sans Serif', sans-serif"
+          textAlign="center"
         >
-          Feed Pet
-        </button>
-        {showFeedMsg && (
-          <div style={{ color: '#00eaff', fontSize: 14, marginTop: 10, textShadow: '0 0 6px #00eaff' }}>
-            Your pet is happy! +XP
-          </div>
-        )}
-      </div>
-      <div style={{ fontSize: 12, color: '#888', textAlign: 'center', marginTop: 16 }}>
-        Start the timer while you code. When you finish, feed your pet based on your coding streak!
-      </div>
-    </div>
-  )
-
-  const renderGamesScreen = () => (
-    <div className="screen-content">
-      <div className="portfolio-title">Mini Games</div>
-      
-      <div className="mini-game">
-        <div className="game-area">
-          <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Skill Challenge
-          </div>
-          <div style={{ fontSize: '24px', marginBottom: '10px' }}>
-            🎯
-          </div>
-          <div style={{ fontSize: '12px' }}>
-            Test your coding skills!
-          </div>
-        </div>
-        
-        <div className="game-controls">
-          <button 
-            className="tamagotchi-button" 
-            onClick={playGame}
-            style={{ width: 'auto', padding: '8px 16px' }}
+          {typed}
+        </Box>
+        {typingDone && (
+          <Button
+            size="md"
+            bg="#E0E0E0"
+            color="#000"
+            border="2px outset #808080"
+            borderRadius="0"
+            fontFamily="'Microsoft Sans Serif', sans-serif"
+            fontSize="12px"
+            px={4}
+            py={2}
+            _hover={{
+              border: '2px inset #808080',
+              bg: '#D0D0D0'
+            }}
+            onClick={() => setShowIntro(false)}
           >
-            Play Game
-          </button>
-        </div>
-        
-        <div style={{ textAlign: 'center', marginTop: '15px' }}>
-          <div style={{ fontSize: '12px' }}>High Score: {gameScore}</div>
-        </div>
-      </div>
-    </div>
-  )
+            ENTER 2000s
+          </Button>
+        )}
+      </VStack>
+    </Box>
+  );
 
-  const renderPortfolioScreen = () => (
-    <div className="screen-content">
-      <div className="portfolio-title">Portfolio</div>
-      <button 
-        className="tamagotchi-button" 
-        style={{ alignSelf: 'flex-end', marginBottom: 10, fontSize: 12 }}
-        onClick={() => router.push('/portfolio')}
-      >
-        View Full Portfolio
-      </button>
-      {/* Professional About Section */}
-      <div className="portfolio-section about-section">
-        <div className="about-profile-row">
-          <div className="about-profile-pic" />
-          <div className="about-profile-text">
-            <div className="about-name">Yuli</div>
-            <div className="about-title">Full Stack Developer</div>
-            <div className="about-summary">
-              Hi! I'm Yuli, a full stack developer passionate about building playful, interactive web experiences. I specialize in React, Next.js, and TypeScript, and love blending creativity with code. I enjoy working on gamified apps, retro UIs, and anything that makes the web more fun and engaging. Let's build something amazing together!
-            </div>
-          </div>
-        </div>
-      </div>
+  const addRecentItem = (label, action) => {
+    setRecentItems(prev => [
+      { label, action },
+      ...prev.filter(item => item.label !== label)
+    ]);
+  };
 
-      <div className="portfolio-section">
-        <div className="portfolio-title">Skills</div>
-        <div>
-          <span className="skill-item">React</span>
-          <span className="skill-item">TypeScript</span>
-          <span className="skill-item">Node.js</span>
-          <span className="skill-item">Python</span>
-          <span className="skill-item">MongoDB</span>
-          <span className="skill-item">PostgreSQL</span>
-        </div>
-      </div>
+  const openResume = () => {
+    setShowResume(true);
+    addRecentItem('Resume.pdf', openResume);
+  };
 
-      <div className="portfolio-section">
-        <div className="portfolio-title">Projects ({projects.length})</div>
-        {projects.map((project) => (
-          <div key={project.id} className="project-item">
-            <div className="project-title">{project.name}</div>
-            <div className="project-description">{project.description}</div>
-            <div className="project-tech">XP: {project.experience} | {project.technologies.join(', ')}</div>
-          </div>
-        ))}
-      </div>
+  const openContact = () => {
+    setShowContact(true);
+    addRecentItem('Contact', openContact);
+  };
 
-      <div className="portfolio-section">
-        <div className="portfolio-title">About</div>
-        <div style={{ fontSize: '11px', lineHeight: '1.4' }}>
-          Full Stack Developer with {totalExperience} years of experience.
-          Specializing in React, Node.js, and modern web technologies.
-          Available for hire and always learning new skills!
-        </div>
-      </div>
-    </div>
-  )
+  const openTamagotchi = () => {
+    setShowTamagotchi(true);
+    addRecentItem('Tamagotchi', openTamagotchi);
+  };
 
-  const renderStatsScreen = () => (
-    <div className="screen-content">
-      <div className="portfolio-title">Statistics</div>
-      
-      <div className="stats-display">
-        <div className="stat-item">
-          <div className="stat-value">{petExperience}</div>
-          <div>Total XP</div>
-        </div>
-        <div className="stat-item">
-          <div className="stat-value">{projects.length}</div>
-          <div>Projects</div>
-        </div>
-        <div className="stat-item">
-          <div className="stat-value">{gameScore}</div>
-          <div>Game Score</div>
-        </div>
-      </div>
+  const openMinesweeper = () => {
+    setShowMinesweeper(true);
+    addRecentItem('Minesweeper', openMinesweeper);
+  };
 
-      <div className="portfolio-section">
-        <div className="portfolio-title">Contact</div>
-        <div style={{ fontSize: '11px', lineHeight: '1.4' }}>
-          📧 john.doe@email.com<br/>
-          🐙 github.com/johndoe<br/>
-          💼 linkedin.com/in/johndoe<br/>
-          📱 (555) 123-4567
-        </div>
-      </div>
-    </div>
-  )
+  const getScreen = () => {
+    if (currentScreen === 'main') {
+      return (
+        <>
+          <Box display="inline-block">
+            <TamagotchiGif postId="24127301" width="200px" height="200px" />
+          </Box>
+          <Box mt={4}>
+            {renderHearts()}
+          </Box>
+        </>
+      );
+    }
+    if (currentScreen === 'feed') {
+      return (
+        <VStack spacing={4}>
+          <Text>Start Coding! ⏳</Text>
+          <Text>{new Date(codingTime * 1000).toISOString().substr(14, 5)}</Text>
+          <Text>Points: {points}</Text>
+          <Button
+            size="sm"
+            bg="#E0E0E0"
+            color="#000"
+            border="2px outset #808080"
+            borderRadius="0"
+            fontFamily="'Microsoft Sans Serif', sans-serif"
+            fontSize="10px"
+            _hover={{
+              border: '2px inset #808080',
+              bg: '#D0D0D0'
+            }}
+            onClick={() => setTimerRunning(!timerRunning)}
+          >
+            {timerRunning ? 'STOP' : 'START'}
+          </Button>
+        </VStack>
+      );
+    }
+    if (currentScreen === 'games') return <Text>🎮 Games screen</Text>;
+    if (currentScreen === 'stats') return <Text>📬 Contact screen</Text>;
+    return <Text>🚧 Coming soon...</Text>;
+  };
 
   return (
-    <div className="min-h-screen p-4">
-      {/* Notification */}
-      <div className={`notification ${showNotification ? 'show' : ''}`}>
-        {notificationMessage}
-      </div>
+    <Box
+      minH="100vh"
+      bg="#E0218A"
+      bgImage="url('/images/wallpaper.png')"
+      bgRepeat="no-repeat"
+      bgSize="cover"
+      bgPosition="center"
+      fontFamily="'Microsoft Sans Serif', sans-serif"
+      position="relative"
+      pb="80px"
+    >
+      <VStack spacing={8} position="fixed" top={8} left={8} zIndex={15}>
+        <DesktopIcon
+          icon={<Image src="/images/tamagotchi-icon.png" alt="Tamagotchi Icon" width={40} height={40} />}
+          label="Tamagotchi"
+          onClick={openTamagotchi}
+        />
+        <DesktopIcon
+          icon={<Image src="/images/resume-pdf.png" alt="Resume PDF Icon" width={40} height={40} />}
+          label="Resume.pdf"
+          onClick={openResume}
+        />
+        <DesktopIcon
+          icon={<Image src="/images/portfolio-icon.png" alt="Portfolio Icon" width={40} height={40} />}
+          label="Portfolio"
+          onClick={() => window.location.href = '/portfolio'}
+        />
+        <DesktopIcon
+          icon={<Image src="/images/contact-icon.png" alt="Contact Icon" width={40} height={40} />}
+          label="Contact"
+          onClick={openContact}
+        />
+        <DesktopIcon
+          icon={<Image src="/images/minesweeper-icon.png" alt="Minesweeper Icon" width={40} height={40} />}
+          label="Minesweeper"
+          onClick={openMinesweeper}
+        />
+      </VStack>
 
-      {/* Tamagotchi Device */}
-      <div className="tamagotchi-device">
-        {/* Screen */}
-        <div className="tamagotchi-screen">
-          {currentScreen === 'main' && renderMainScreen()}
-          {currentScreen === 'feed' && renderFeedScreen()}
-          {currentScreen === 'games' && renderGamesScreen()}
-          {currentScreen === 'portfolio' && renderPortfolioScreen()}
-          {currentScreen === 'stats' && renderStatsScreen()}
-        </div>
+      {showIntro && (
+        <Box position="absolute" top="20%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+          <motion.div drag>
+            <DeviceWrapper>
+              <DeviceScreen>{renderIntro()}</DeviceScreen>
+            </DeviceWrapper>
+          </motion.div>
+        </Box>
+      )}
 
-        {/* Buttons */}
-        <div className="button-container">
-          <button 
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('feed')}
-            title="Feed"
-          >
-            🍽️
-          </button>
-          <button 
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('games')}
-            title="Games"
-          >
-            🎮
-          </button>
-          <button 
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('portfolio')}
-            title="Portfolio"
-          >
-            📁
-          </button>
-          <button 
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('stats')}
-            title="Stats"
-          >
-            📊
-          </button>
-          <button 
-            className="tamagotchi-button"
-            onClick={() => setCurrentScreen('main')}
-            title="Home"
-          >
-            🏠
-          </button>
-          <button 
-            className="tamagotchi-button"
-            onClick={() => showNotificationMessage('Pet is sleeping... Zzz')}
-            title="Sleep"
-          >
-            😴
-          </button>
-        </div>
-      </div>
+      {showTamagotchi && (
+        <Box position="absolute" top="20%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+          <motion.div drag>
+            <DeviceWrapper>
+              <DeviceScreen>{getScreen()}</DeviceScreen>
+              <DeviceButtons setCurrentScreen={setCurrentScreen} setCurrentQuestion={setCurrentQuestion} />
+            </DeviceWrapper>
+          </motion.div>
+        </Box>
+      )}
 
-      {/* Instructions */}
-      <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '12px', color: '#666' }}>
-        <div>🎮 Use the buttons to navigate and interact with your career pet!</div>
-        <div>🍽️ Feed it projects to help it grow and evolve</div>
-        <div>📁 View your portfolio and skills</div>
-        <div>📊 Check your career statistics</div>
-      </div>
-    </div>
-  )
+      {showResume && (
+        <Box position="absolute" top="30%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+          <motion.div drag>
+            <Box w="900px" h="700px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
+              <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
+                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💖 Resume.pdf</Text>
+                <Box bg="#FF85C1" border="2px outset #808080" color="#fff" px={2} cursor="pointer" fontSize="12px" fontWeight="bold" _hover={{ bg: '#FF99CC' }} onClick={() => setShowResume(false)}>✖</Box>
+              </Flex>
+              <Box flex="1" bg="#FFF0FB" border="2px inset #808080" p={4} overflow="hidden">
+                <Button size="sm" bg="#E0E0E0" color="#000" border="2px outset #808080" borderRadius="0" fontFamily="'Microsoft Sans Serif', sans-serif" fontSize="10px" mb={2} _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }} onClick={() => window.open('/Resume.pdf', '_blank')}>View in New Tab</Button>
+                <iframe src="/Resume.pdf" width="100%" height="100%" style={{ border: "none" }} />
+              </Box>
+            </Box>
+          </motion.div>
+        </Box>
+      )}
+
+      {showContact && (
+        <Box position="absolute" top="30%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+          <motion.div drag>
+            <Box w="400px" h="300px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
+              <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
+                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💌 Contact</Text>
+                <Box bg="#FF85C1" border="2px outset #808080" color="#fff" px={2} cursor="pointer" fontSize="12px" fontWeight="bold" _hover={{ bg: '#FF99CC' }} onClick={() => setShowContact(false)}>✖</Box>
+              </Flex>
+              <Box flex="1" bg="#FFF0FB" border="2px inset #808080" p={4} display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={4}>
+                <Button size="md" bg="#E0E0E0" color="#000" border="2px outset #808080" borderRadius="0" fontFamily="'Microsoft Sans Serif', sans-serif" fontSize="12px" _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }} onClick={() => window.location.href = "mailto:yulianadenissejasso@gmail.com"}>Email me!</Button>
+                <Button size="md" bg="#E0E0E0" color="#000" border="2px outset #808080" borderRadius="0" fontFamily="'Microsoft Sans Serif', sans-serif" fontSize="12px" _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }} onClick={() => window.open("https://www.linkedin.com/in/yuliana-jasso/", "_blank")}>Connect on LinkedIn</Button>
+              </Box>
+            </Box>
+          </motion.div>
+        </Box>
+      )}
+
+      {showMinesweeper && (
+        <MinesweeperWindow onClose={() => setShowMinesweeper(false)} addPoints={(p) => setPoints(prev => prev + p)} />
+      )}
+
+      <GrayTaskbar toggleStart={() => setStartMenuOpen(!startMenuOpen)} />
+
+      {startMenuOpen && (
+        <Box
+          position="fixed"
+          bottom="40px"
+          left="0"
+          bg="#C0C0C0"
+          w="200px"
+          border="2px solid #808080"
+          boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+          zIndex={50}
+        >
+          <VStack align="stretch" spacing={0}>
+            {recentItems.length === 0 ? (
+              <Box
+                px={3}
+                py={2}
+                fontSize="10px"
+                borderBottom="1px solid #808080"
+                color="#000"
+              >
+                No recent items
+              </Box>
+            ) : recentItems.map(item => (
+              <Box
+                key={item.label}
+                px={3}
+                py={2}
+                fontSize="10px"
+                color="#000"
+                cursor="pointer"
+                _hover={{ bg: '#FFB3D6' }}
+                onClick={() => {
+                  item.action();
+                  setStartMenuOpen(false);
+                }}
+              >
+                {item.label}
+              </Box>
+            ))}
+          </VStack>
+        </Box>
+      )}
+    </Box>
+  );
 }

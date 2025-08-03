@@ -1,200 +1,242 @@
 'use client';
-import React from 'react';
+
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  VStack,
+  HStack,
+  Tag,
+  Link,
+  SimpleGrid,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { FaGithub } from 'react-icons/fa';
 
-type Project = {
-  id: number;
-  name: string;
-  description: string;
-  technologies: string[];
-  experience: number;
-  demoUrl: string;
-  githubUrl: string;
-};
 
-const projects: Project[] = [
+
+const projects = [
   {
     id: 1,
-    name: "Grow Up",
-    description: "A gamified career tracker with Tamagotchi mechanics.",
-    technologies: ["React", "Next.js", "TypeScript", "Vercel", "MongoDB"],
-    experience: 60,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/grow-up"
+    name: "Pixel Pets",
+    description: "Tamagotchi-style pet game w/ pixel art",
+    technologies: ["React", "Canvas", "TypeScript"],
+    demoUrl: "#",
+    githubUrl: "#",
   },
   {
     id: 2,
-    name: "Portfolio v2",
-    description: "Personal portfolio with Y2K/retro vibes.",
-    technologies: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-    experience: 50,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/portfolio-v2"
+    name: "Y2K Portfolio",
+    description: "Retro-themed portfolio with custom styling",
+    technologies: ["Next.js", "TypeScript", "Framer Motion"],
+    demoUrl: "#",
+    githubUrl: "#",
   },
   {
     id: 3,
-    name: "DevDeck",
-    description: "Flashcard app for developers.",
-    technologies: ["React", "Next.js", "TypeScript", "MongoDB"],
-    experience: 45,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/devdeck"
+    name: "AI Tutor",
+    description: "GPT-4 RAG app for medical learning",
+    technologies: ["Next.js", "Python", "LangChain"],
+    demoUrl: "#",
+    githubUrl: "#",
   },
-  {
-    id: 4,
-    name: "LeetHub",
-    description: "Chrome extension to sync LeetCode with GitHub.",
-    technologies: ["JavaScript", "Chrome Extension", "GitHub API"],
-    experience: 40,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/LeetHub"
-  },
-  {
-    id: 5,
-    name: "CodeConnect",
-    description: "Social platform for developers to share code.",
-    technologies: ["React", "Node.js", "Express", "MongoDB"],
-    experience: 38,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/codeconnect"
-  },
-  {
-    id: 6,
-    name: "Pixel Pets",
-    description: "Virtual pet game with pixel art.",
-    technologies: ["React", "Canvas", "TypeScript"],
-    experience: 35,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/pixel-pets"
-  },
-  {
-    id: 7,
-    name: "Y2K Blog",
-    description: "Blog with Y2K/retro design.",
-    technologies: ["Next.js", "MDX", "Tailwind"],
-    experience: 32,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/y2k-blog"
-  },
-  {
-    id: 8,
-    name: "OpenResume",
-    description: "Free resume builder.",
-    technologies: ["React", "Next.js", "Chakra UI"],
-    experience: 30,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/openresume"
-  },
-  {
-    id: 9,
-    name: "Tamagotchi CLI",
-    description: "Tamagotchi game in the terminal.",
-    technologies: ["Node.js", "Inquirer.js"],
-    experience: 28,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/tamagotchi-cli"
-  },
-  {
-    id: 10,
-    name: "Neon Notes",
-    description: "Minimal note-taking app.",
-    technologies: ["React", "TypeScript", "Firebase"],
-    experience: 25,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/neon-notes"
-  },
-  {
-    id: 11,
-    name: "Retro Weather",
-    description: "Weather app with retro UI.",
-    technologies: ["React", "OpenWeatherMap API"],
-    experience: 22,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/retro-weather"
-  },
-  {
-    id: 12,
-    name: "Synthwave Timer",
-    description: "Pomodoro timer with synthwave theme.",
-    technologies: ["React", "Styled Components"],
-    experience: 20,
-    demoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    githubUrl: "https://github.com/yjasso/synthwave-timer"
-  }
 ];
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project }) {
   return (
-    <div className="project-item" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <div className="project-title">{project.name}</div>
-      <div className="project-description">{project.description}</div>
-      <div className="project-tech">{project.technologies.join(', ')}</div>
-      <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-        <a
-          href={project.demoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="project-demo-btn"
-          style={{ background: '#ffb3d6', color: '#fff', borderRadius: 6, padding: '4px 10px', fontSize: 12, textDecoration: 'none' }}
-        >
-          ▶️ Demo
-        </a>
-        <a
-          href={project.githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="project-github-btn"
-          style={{ background: '#222', color: '#fff', borderRadius: 6, padding: '4px 10px', fontSize: 12, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}
-        >
-          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
-      </div>
-    </div>
+    <Box
+      bg="#E0E0E0"
+      border="2px solid #808080"
+      boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+      p={4}
+      fontFamily="'Press Start 2P', monospace"
+      transition="transform 0.2s"
+      _hover={{
+        transform: 'translateY(-3px)',
+        bg: '#F0F0F0'
+      }}
+    >
+      <Heading fontSize="md" mb={2} color="#000">
+        {project.name}
+      </Heading>
+      <Text mb={3} fontSize="xs" color="#333">{project.description}</Text>
+      <HStack spacing={2} wrap="wrap" mb={3}>
+        {project.technologies.map((tech, idx) => (
+          <Tag
+            key={idx}
+            size="sm"
+            bg="#C0C0C0"
+            border="2px outset #FFFFFF"
+            color="#000"
+            fontFamily="'Press Start 2P', monospace"
+          >
+            {tech}
+          </Tag>
+        ))}
+      </HStack>
+      <HStack spacing={2}>
+        <Link href={project.demoUrl} isExternal>
+          <Button
+            size="xs"
+            bg="#C0C0C0"
+            color="#000"
+            border="2px outset #FFFFFF"
+            fontSize="10px"
+            fontFamily="'Press Start 2P', monospace"
+            _hover={{
+              border: '2px inset #FFFFFF',
+              bg: '#D0D0D0'
+            }}
+          >
+            ▶️ Demo
+          </Button>
+        </Link>
+        <Link href={project.githubUrl} isExternal>
+          <Button
+            size="xs"
+            leftIcon={<FaGithub />}
+            bg="#000"
+            color="#FFF"
+            fontSize="10px"
+            fontFamily="'Press Start 2P', monospace"
+            _hover={{ bg: "#333" }}
+          >
+            GitHub
+          </Button>
+        </Link>
+      </HStack>
+    </Box>
   );
 }
 
 export default function PortfolioPage() {
   const router = useRouter();
+
   return (
-    <div className="screen-content" style={{ minHeight: '100vh', width: '100vw', margin: 0, borderRadius: 0, boxShadow: 'none', padding: '32px 0 32px 0', background: 'none' }}>
-      <button 
-        className="tamagotchi-button" 
-        style={{ alignSelf: 'flex-start', marginBottom: 18, fontSize: 12 }}
-        onClick={() => router.push('/')}
+    <Box
+      bg="#BFBFBF"
+      color="#000"
+      fontFamily="'Press Start 2P', monospace"
+      minH="100vh"
+      py={8}
+      px={[4, 8, 16]}
+    >
+      <Box
+        bg="#C0C0C0"
+        border="3px solid #808080"
+        boxShadow="inset -3px -3px 0 #808080, inset 3px 3px 0 #FFFFFF"
+        maxW="6xl"
+        mx="auto"
       >
-        ← Back to Tamagotchi
-      </button>
-      <div className="portfolio-title">Full Portfolio</div>
-      <div className="portfolio-section about-section">
-        <div className="about-profile-row">
-          <div className="about-profile-pic" />
-          <div className="about-profile-text">
-            <div className="about-name">Yuli</div>
-            <div className="about-title">Full Stack Developer</div>
-            <div className="about-summary">
-              Hi! I'm Yuli, a full stack developer passionate about building playful, interactive web experiences. I specialize in React, Next.js, and TypeScript, and love blending creativity with code. I enjoy working on gamified apps, retro UIs, and anything that makes the web more fun and engaging. Let's build something amazing together!
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="portfolio-section">
-        <div className="portfolio-title">Skills</div>
-        <div>
-          <span className="skill-item">React</span>
-          <span className="skill-item">TypeScript</span>
-          <span className="skill-item">Node.js</span>
-          <span className="skill-item">Python</span>
-          <span className="skill-item">MongoDB</span>
-          <span className="skill-item">PostgreSQL</span>
-        </div>
-      </div>
-      <div className="portfolio-section">
-        <div className="portfolio-title">Projects ({projects.length})</div>
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-      </div>
-    </div>
+        {/* Title bar */}
+        <Flex
+          bg="linear-gradient(to bottom, #FF99CC, #FF69B4)"
+          px={4}
+          py={2}
+          borderBottom="2px solid #808080"
+          justify="space-between"
+          align="center"
+        >
+          <Text color="#FFF" fontSize="md" fontStyle="italic">
+            💖 Yuli.exe
+          </Text>
+          <Box
+            bg="#FF85C1"
+            border="2px outset #fff"
+            color="#fff"
+            px={2}
+            cursor="pointer"
+            fontSize="12px"
+            fontWeight="bold"
+            _hover={{ bg: '#FF99CC' }}
+          >
+            ✖
+          </Box>
+        </Flex>
+
+        {/* Content */}
+        <Box p={8}>
+          {/* Profile */}
+          <Flex gap={6} wrap="wrap" mb={6}>
+            <Box boxSize="100px" bg="#FFE0F0" border="2px solid #808080" />
+            <Box>
+              <Text fontSize="20px" fontWeight="bold" mb={1}>
+                Yuli
+              </Text>
+              <Text fontSize="14px" mb={3}>
+                Full Stack Developer
+              </Text>
+              <Text maxW="500px" fontSize="12px">
+                👾 Hi! I'm Yuli — I code fun, retro-style UIs, AI tools, and gamified apps.
+                I love mixing nostalgia with next-gen tech!
+              </Text>
+            </Box>
+          </Flex>
+
+          {/* Skills */}
+          <Box mb={6}>
+            <Heading
+              fontSize="14px"
+              mb={2}
+              borderBottom="2px solid #808080"
+              display="inline-block"
+              pb={1}
+            >
+              Skills
+            </Heading>
+            <HStack spacing={2} wrap="wrap">
+              {["React", "TypeScript", "Node.js", "Python", "MongoDB", "PostgreSQL"].map((skill) => (
+                <Tag
+                  key={skill}
+                  bg="#C0C0C0"
+                  border="2px outset #FFFFFF"
+                  color="#000"
+                  fontSize="10px"
+                  fontFamily="'Press Start 2P', monospace"
+                >
+                  {skill}
+                </Tag>
+              ))}
+            </HStack>
+          </Box>
+
+          {/* Projects */}
+          <Box>
+            <Heading
+              fontSize="14px"
+              mb={4}
+              borderBottom="2px solid #808080"
+              display="inline-block"
+              pb={1}
+            >
+              Projects ({projects.length})
+            </Heading>
+            <SimpleGrid columns={[1, 2, 3]} spacing={6}>
+              {projects.map(project => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </SimpleGrid>
+          </Box>
+
+          <Button
+            onClick={() => router.push('/')}
+            mt={8}
+            bg="#C0C0C0"
+            color="#000"
+            border="2px outset #FFFFFF"
+            fontSize="10px"
+            fontFamily="'Press Start 2P', monospace"
+            _hover={{
+              border: '2px inset #FFFFFF',
+              bg: '#D0D0D0'
+            }}
+          >
+            ← Back to Tamagotchi
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
-} 
+}
