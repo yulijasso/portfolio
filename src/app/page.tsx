@@ -12,7 +12,6 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { motion } from 'framer-motion';
 import TamagotchiGif from './components/TamagotchiGif';
 import MinesweeperWindow from './components/MinesweeperWindow';
 
@@ -133,33 +132,55 @@ const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }: { setCurrentScr
   </HStack>
 );
 
-const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) => (
-  <motion.div
-    drag
-    dragMomentum={false}
-    dragConstraints={{ top: -500, bottom: 500, left: -800, right: 800 }}
-    style={{ display: "inline-block" }}
-  >
-    <VStack
-      spacing={1}
+const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) => {
+  const handleClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Desktop icon clicked:', label);
+    onClick();
+  };
+
+  return (
+    <Box
+      display="inline-block"
       cursor="pointer"
-      onClick={onClick}
       userSelect="none"
-      w="60px"
       _hover={{ bg: '#FFB3D6', borderRadius: '6px' }}
+      p={1}
+      onClick={handleClick}
+      onMouseDown={handleClick}
+      onTouchStart={handleClick}
+      bg="transparent"
+      border="none"
+      outline="none"
+      fontSize="inherit"
+      fontFamily="inherit"
+      lineHeight="inherit"
+      _focus={{
+        outline: '2px solid #FF69B4',
+        outlineOffset: '2px'
+      }}
+      style={{
+        WebkitTapHighlightColor: 'transparent',
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        userSelect: 'none'
+      }}
     >
-      {icon}
-      <Text
-        fontFamily="'Microsoft Sans Serif', sans-serif"
-        fontSize="10px"
-        color="#FFFFFF"
-        textAlign="center"
-      >
-        {label}
-      </Text>
-    </VStack>
-  </motion.div>
-);
+      <VStack spacing={1} w="60px">
+        {icon}
+        <Text
+          fontFamily="'Microsoft Sans Serif', sans-serif"
+          fontSize="10px"
+          color="#FFFFFF"
+          textAlign="center"
+        >
+          {label}
+        </Text>
+      </VStack>
+    </Box>
+  );
+};
 
 const GrayTaskbar = ({ toggleStart }: { toggleStart: () => void }) => (
   <Flex
@@ -458,28 +479,28 @@ export default function Home() {
 
       {showIntro && (
         <Box position="absolute" top="20%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
-          <motion.div drag>
+          <Box>
             <DeviceWrapper>
               <DeviceScreen>{renderIntro()}</DeviceScreen>
             </DeviceWrapper>
-          </motion.div>
+          </Box>
         </Box>
       )}
 
       {showTamagotchi && (
         <Box position="absolute" top="20%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
-          <motion.div drag>
+          <Box>
             <DeviceWrapper>
               <DeviceScreen>{getScreen()}</DeviceScreen>
               <DeviceButtons setCurrentScreen={setCurrentScreen} setCurrentQuestion={setCurrentQuestion} />
             </DeviceWrapper>
-          </motion.div>
+          </Box>
         </Box>
       )}
 
       {showResume && (
         <Box position="absolute" top="30%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
-          <motion.div drag>
+          <Box>
             <Box w="900px" h="700px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
                 <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💖 Resume.pdf</Text>
@@ -490,13 +511,13 @@ export default function Home() {
                 <iframe src="/Resume.pdf" width="100%" height="100%" style={{ border: "none" }} />
               </Box>
             </Box>
-          </motion.div>
+          </Box>
         </Box>
       )}
 
       {showContact && (
         <Box position="absolute" top="30%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
-          <motion.div drag>
+          <Box>
             <Box w="400px" h="300px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
                 <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💌 Contact</Text>
@@ -507,13 +528,13 @@ export default function Home() {
                 <Button size="md" bg="#E0E0E0" color="#000" border="2px outset #808080" borderRadius="0" fontFamily="'Microsoft Sans Serif', sans-serif" fontSize="12px" _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }} onClick={() => window.open("https://www.linkedin.com/in/yuliana-jasso/", "_blank")}>Connect on LinkedIn</Button>
               </Box>
             </Box>
-          </motion.div>
+          </Box>
         </Box>
       )}
 
       {showPortfolio && (
         <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
-          <motion.div drag>
+          <Box>
             <Box w="800px" h="600px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
                 <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💻 Portfolio</Text>
@@ -654,7 +675,7 @@ export default function Home() {
                 </VStack>
               </Box>
             </Box>
-          </motion.div>
+          </Box>
         </Box>
       )}
 
