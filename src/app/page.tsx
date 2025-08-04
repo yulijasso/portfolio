@@ -256,6 +256,7 @@ export default function Home() {
   const [completedQuestions] = useState<number[]>([]);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [recentItems, setRecentItems] = useState<Array<{ label: string; action: () => void }>>([]);
+  const [testPopup, setTestPopup] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -474,6 +475,32 @@ export default function Home() {
       position="relative"
       pb="80px"
     >
+      <button
+        style={{ position: "fixed", top: 10, right: 10, zIndex: 1000, padding: 10, background: '#FF69B4', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 'bold', cursor: 'pointer' }}
+        onClick={() => setTestPopup(true)}
+      >
+        Test Popup
+      </button>
+      {testPopup && (
+        <div
+          style={{
+            position: "fixed",
+            top: "40%",
+            left: "40%",
+            background: "#fff",
+            color: "#000",
+            padding: 40,
+            zIndex: 2000,
+            border: "2px solid #000",
+            borderRadius: 8,
+            boxShadow: '0 4px 24px rgba(0,0,0,0.2)'
+          }}
+        >
+          <b>Test Popup Works!</b>
+          <br />
+          <button style={{ marginTop: 20, padding: 8, background: '#FF69B4', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setTestPopup(false)}>Close</button>
+        </div>
+      )}
       <VStack spacing={8} position="fixed" top={8} left={8} zIndex={15}>
         <DesktopIcon
           icon={<Image src="/images/tamagotchi-icon.png" alt="Tamagotchi Icon" width={40} height={40} />}
