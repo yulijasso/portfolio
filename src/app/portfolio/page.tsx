@@ -6,7 +6,6 @@ import {
   Flex,
   Heading,
   Text,
-  VStack,
   HStack,
   Tag,
   Link,
@@ -44,7 +43,16 @@ const projects = [
   },
 ];
 
-function ProjectCard({ project }) {
+interface Project {
+  id: number;
+  name: string;
+  description: string;
+  technologies: string[];
+  demoUrl: string;
+  githubUrl: string;
+}
+
+function ProjectCard({ project }: { project: Project }) {
   return (
     <Box
       bg="#E0E0E0"
@@ -169,7 +177,7 @@ export default function PortfolioPage() {
                 Full Stack Developer
               </Text>
               <Text maxW="500px" fontSize="12px">
-                👾 Hi! I'm Yuli — I code fun, retro-style UIs, AI tools, and gamified apps.
+                👾 Hi! I&apos;m Yuli — I code fun, retro-style UIs, AI tools, and gamified apps.
                 I love mixing nostalgia with next-gen tech!
               </Text>
             </Box>

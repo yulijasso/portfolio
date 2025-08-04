@@ -9,13 +9,21 @@ import {
   VStack,
   HStack,
   Text,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import TamagotchiGif from './components/TamagotchiGif';
 import MinesweeperWindow from './components/MinesweeperWindow';
 
-const blind75Questions = [
+interface Question {
+  id: number;
+  title: string;
+  difficulty: string;
+  link: string;
+}
+
+const blind75Questions: Question[] = [
   {
     id: 1,
     title: "Two Sum",
@@ -36,7 +44,7 @@ const blind75Questions = [
   },
 ];
 
-const DeviceWrapper = ({ children }) => (
+const DeviceWrapper = ({ children }: { children: React.ReactNode }) => (
   <Box
     w="420px"
     bg="#C0C0C0"
@@ -78,7 +86,7 @@ const DeviceWrapper = ({ children }) => (
   </Box>
 );
 
-const DeviceScreen = ({ children }) => (
+const DeviceScreen = ({ children }: { children: React.ReactNode }) => (
   <Box
     h="380px"
     bg="#FFF0FB"
@@ -93,7 +101,7 @@ const DeviceScreen = ({ children }) => (
   </Box>
 );
 
-const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }) => (
+const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }: { setCurrentScreen: (screen: string) => void; setCurrentQuestion: (question: Question | null) => void }) => (
   <HStack spacing={2} mt={2} justify="center">
     {['feed', 'games', 'main', 'portfolio', 'stats'].map((btn) => (
       <Button
@@ -125,7 +133,7 @@ const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }) => (
   </HStack>
 );
 
-const DesktopIcon = ({ icon, label, onClick }) => (
+const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) => (
   <motion.div
     drag
     dragMomentum={false}
@@ -153,7 +161,7 @@ const DesktopIcon = ({ icon, label, onClick }) => (
   </motion.div>
 );
 
-const GrayTaskbar = ({ toggleStart }) => (
+const GrayTaskbar = ({ toggleStart }: { toggleStart: () => void }) => (
   <Flex
     position="fixed"
     bottom={0}
@@ -195,6 +203,7 @@ export default function Home() {
   const [showMinesweeper, setShowMinesweeper] = useState(false);
   const [showResume, setShowResume] = useState(false);
   const [showContact, setShowContact] = useState(false);
+  const [showPortfolio, setShowPortfolio] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('main');
   const [petHappiness, setPetHappiness] = useState(100);
   const [typed, setTyped] = useState('');
@@ -202,12 +211,12 @@ export default function Home() {
   const [codingTime, setCodingTime] = useState(0);
   const [points, setPoints] = useState(0);
   const [timerRunning, setTimerRunning] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(null);
-  const [completedQuestions, setCompletedQuestions] = useState([]);
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [completedQuestions] = useState<number[]>([]);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
-  const [recentItems, setRecentItems] = useState([]);
+  const [recentItems, setRecentItems] = useState<Array<{ label: string; action: () => void }>>([]);
 
-  const timerRef = useRef(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const typewriterText = `Welcome to My Portfolio\n\nI’m Yuli — Full‑Stack/AI Developer & Creative Coder\n\nI'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique Tamagotchi-style interface.`;
 
@@ -332,7 +341,7 @@ export default function Home() {
     </Box>
   );
 
-  const addRecentItem = (label, action) => {
+  const addRecentItem = (label: string, action: () => void) => {
     setRecentItems(prev => [
       { label, action },
       ...prev.filter(item => item.label !== label)
@@ -357,6 +366,11 @@ export default function Home() {
   const openMinesweeper = () => {
     setShowMinesweeper(true);
     addRecentItem('Minesweeper', openMinesweeper);
+  };
+
+  const openPortfolio = () => {
+    setShowPortfolio(true);
+    addRecentItem('Portfolio', openPortfolio);
   };
 
   const getScreen = () => {
@@ -426,9 +440,9 @@ export default function Home() {
           onClick={openResume}
         />
         <DesktopIcon
-          icon={<Image src="/images/portfolio-icon.png" alt="Portfolio Icon" width={40} height={40} />}
-          label="Portfolio"
-          onClick={() => window.location.href = '/portfolio'}
+          icon={<Image src="/images/portfolio-icon.png" alt="Projects Icon" width={40} height={40} />}
+          label="Projects"
+          onClick={openPortfolio}
         />
         <DesktopIcon
           icon={<Image src="/images/contact-icon.png" alt="Contact Icon" width={40} height={40} />}
@@ -496,6 +510,155 @@ export default function Home() {
           </motion.div>
         </Box>
       )}
+
+      {showPortfolio && (
+        <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+          <motion.div drag>
+            <Box w="800px" h="600px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
+              <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
+                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💻 Portfolio</Text>
+                <Box bg="#FF85C1" border="2px outset #808080" color="#fff" px={2} cursor="pointer" fontSize="12px" fontWeight="bold" _hover={{ bg: '#FF99CC' }} onClick={() => setShowPortfolio(false)}>✖</Box>
+              </Flex>
+              <Box flex="1" bg="#FFF0FB" border="2px inset #808080" p={4} overflowY="auto">
+                <VStack spacing={4} align="stretch">
+                  <Box>
+                    <Text fontSize="16px" fontWeight="bold" mb={2}>
+                      Welcome to My Portfolio Desktop
+                    </Text>
+                    <Text fontSize="12px" color="#666" mb={4}>
+                      Click on any project icon to view details
+                    </Text>
+                  </Box>
+                  
+                  <SimpleGrid columns={[1, 2, 3]} spacing={4}>
+                    {[
+                      { 
+                        name: "AI Autotab Chrome Extension", 
+                        emoji: "🔧",
+                        description: "Created an AI Autotab chrome extension that autocompletes phrases and sentences, improving productivity",
+                        technologies: ["Chrome Extension", "AI", "Productivity", "JavaScript"],
+                        demo_link: "https://github.com/yuyi444/ai-autotab-extension",
+                        source_code_link: "https://github.com/yuyi444/ai-autotab-extension"
+                      },
+                      { 
+                        name: "AI Code Editor", 
+                        emoji: "💻",
+                        description: "Integrated an AI tutor that improves user productivity and promotes in-platform learning in code editor app, Judge00. Integrated key features, such as OpenRouter API key input, line explanations, and automatic changes from AI tutor to IDE",
+                        technologies: ["AI Tutor", "Code Editor", "OpenRouter API", "IDE Integration"],
+                        demo_link: "https://github.com/yuyi444/ai-code-editor",
+                        source_code_link: "https://github.com/yuyi444/ai-code-editor"
+                      },
+                      { 
+                        name: "AI Search Engine", 
+                        emoji: "🔍",
+                        description: "Created a tool that scrapes web content and provides AI-generated answers with reliable source citations. Implemented Groq LLM, web scraping with Cheerio and Puppeteer, and optimized performance with rate limiting",
+                        technologies: ["Groq LLM", "Web Scraping", "Cheerio", "Puppeteer", "AI Search"],
+                        demo_link: "https://github.com/yuyi444/ai-search-engine",
+                        source_code_link: "https://github.com/yuyi444/ai-search-engine"
+                      },
+                      { 
+                        name: "We R Cooked", 
+                        emoji: "🍗",
+                        description: "Implemented a creative simulation of Don Pollo incoming calls using ElevenLabs AI conversation widget integration. Integrated a Google T-rex replica game into application. Won Memenome Best Don Pollo Integration Hack, winning grand prize of 1k at jia.seed brainrot hackathon(1k+ participants)",
+                        technologies: ["ElevenLabs AI", "Game Integration", "Hackathon Winner", "AI Conversation"],
+                        demo_link: "https://github.com/yuyi444/we-r-cooked",
+                        source_code_link: "https://github.com/yuyi444/we-r-cooked"
+                      },
+                      { 
+                        name: "AI Tutoring System", 
+                        emoji: "/images/project-icons/aitutor.png",
+                        description: "AI Tutoring System, developed during Hack Research 2023 and took the 1st place win in AI Healthcare, is an innovative app that uses GPT-4 and advanced data extraction techniques to enhance healthcare education. By combining web scraping, embeddings, and retrieval-augmented generation, it sets a new standard for AI-driven learning tools in the medical field.",
+                        technologies: ["GPT-4", "Web Scraping", "Embeddings", "RAG", "Healthcare AI"],
+                        demo_link: "https://youtu.be/ReinaBoNaWo",
+                        source_code_link: "https://github.com/yuyi444/hack-research-proj.git"
+                      },
+                      { 
+                        name: "Bin Fiesta", 
+                        emoji: "/images/project-icons/binfiesta.png",
+                        description: "In Bin Fiesta, I developed a Google Gemini AI-powered chatbot that provides users with personalized recycling guidance, contributing to our 1st place win in Sustainability at Frontera Hacks. The project combines real-time AI interaction with a user-friendly interface built in Next.js, encouraging eco-friendly practices through accessible recycling information.",
+                        technologies: ["Google Gemini AI", "Next.js", "Chatbot", "Sustainability"],
+                        demo_link: "https://youtu.be/tXxWyIuusXI",
+                        source_code_link: "https://github.com/yuyi444/binfiesta.git"
+                      },
+                      { 
+                        name: "Balanced Perspective", 
+                        emoji: "/images/project-icons/newspaper.png",
+                        description: "The project, Balanced Perspective, aims to use deep learning for unbiased news summarization. By leveraging a CNN classifier to detect political bias and the PEGASUS transformer model for abstractive summarization, it produces summaries intended to present balanced perspectives across articles from different political spectrums.",
+                        technologies: ["Deep Learning", "CNN", "PEGASUS", "NLP", "News Analysis"],
+                        demo_link: "https://github.com/yuyi444/deep-learning-proj.git",
+                        source_code_link: "https://github.com/yuyi444/deep-learning-proj.git"
+                      },
+                      { 
+                        name: "Album Database", 
+                        emoji: "/images/project-icons/albumdatabase.png",
+                        description: "This project focuses on transferring data from an original SQLite database to a new relational schema. It involves creating tables for musicians, albums, and instruments, importing data from a CSV, and setting up relationships between these tables to support efficient data retrieval and reporting.",
+                        technologies: ["SQLite", "Relational Database", "Data Migration", "CSV Import"],
+                        demo_link: "https://github.com/yuyi444/album-database.git",
+                        source_code_link: "https://github.com/yuyi444/album-database.git"
+                      },
+                      { 
+                        name: "Image Analysis and Interpolation with Fourier Transforms", 
+                        emoji: "/images/project-icons/ct_scan.png",
+                        description: "This project utilizes Fourier transforms to analyze and process a lung CT scan, extracting magnitude and phase spectrums and downsampling the image. Linear interpolation and zero-padding techniques are then applied to upsample the image, with mean squared error calculated to evaluate the quality of the interpolated images.",
+                        technologies: ["Fourier Transforms", "Image Processing", "CT Scan Analysis", "Interpolation"],
+                        demo_link: "https://github.com/yuyi444/digital-image-processing-proj.git",
+                        source_code_link: "https://github.com/yuyi444/digital-image-processing-proj.git"
+                      },
+                      { 
+                        name: "Rails Book System", 
+                        emoji: "/images/project-icons/booksystem.png",
+                        description: "I developed a book club management app providing the organizer, with full CRUD functionality to manage book suggestions, track reading status, and approve or reject recommendations from members. The app allows members to sign up, suggest books, and view read/unread lists, while the organizer can control the visibility of suggestions to maintain a high-quality selection process.",
+                        technologies: ["Ruby on Rails", "CRUD", "Book Management", "User Authentication"],
+                        demo_link: "https://youtu.be/Tg-l2x3FodU",
+                        source_code_link: "https://github.com/yuyi444/rails-book-system.git"
+                      },
+
+                    ].map((project, idx) => (
+                      <VStack
+                        key={idx}
+                        spacing={2}
+                        cursor="pointer"
+                        onClick={() => {
+                          const projectRoutes = {
+                            "AI Autotab Chrome Extension": "/projects/ai-autotab-chrome-extension",
+                            "AI Code Editor": "/projects/ai-code-editor",
+                            "AI Search Engine": "/projects/ai-search-engine",
+                            "We R Cooked": "/projects/we-r-cooked",
+                            "AI Tutoring System": "/projects/ai-tutoring-system",
+                            "Bin Fiesta": "/projects/bin-fiesta",
+                            "Balanced Perspective": "/projects/balanced-perspective",
+                            "Album Database": "/projects/album-database",
+                            "Image Analysis and Interpolation with Fourier Transforms": "/projects/image-analysis",
+                            "Rails Book System": "/projects/rails-book-system",
+                            "Discord Bot": "/projects/discord-bot"
+                          };
+                          const route = projectRoutes[project.name as keyof typeof projectRoutes];
+                          if (route) {
+                            window.open(route, '_blank');
+                          }
+                        }}
+                        _hover={{ transform: 'scale(1.05)' }}
+                        transition="transform 0.2s"
+                      >
+                        {project.emoji.startsWith('/') ? (
+                          <Image src={project.emoji} alt={`${project.name} Icon`} width={48} height={48} />
+                        ) : (
+                          <Text fontSize="48px">{project.emoji}</Text>
+                        )}
+                        <Text fontSize="12px" fontWeight="bold" textAlign="center" color="#000">
+                          {project.name}
+                        </Text>
+                      </VStack>
+                    ))}
+                  </SimpleGrid>
+                </VStack>
+              </Box>
+            </Box>
+          </motion.div>
+        </Box>
+      )}
+
+
 
       {showMinesweeper && (
         <MinesweeperWindow onClose={() => setShowMinesweeper(false)} addPoints={(p) => setPoints(prev => prev + p)} />

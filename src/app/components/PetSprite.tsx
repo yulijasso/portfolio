@@ -19,7 +19,7 @@ const PetSprite: React.FC<PetSpriteProps> = ({
   const getSpriteStyle = () => {
     const spriteWidth = 32; // Assuming each sprite frame is 32px wide
     const spriteHeight = 32; // Assuming each sprite frame is 32px tall
-    const framesPerRow = 4; // Assuming 4 frames per row in the sprite sheet
+    // const framesPerRow = 4; // Assuming 4 frames per row in the sprite sheet
     
     // Map stage to sprite position (adjust based on your sprite sheet layout)
     const stagePositions = {

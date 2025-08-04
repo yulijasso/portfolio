@@ -4,7 +4,18 @@ import { useState, useEffect } from 'react'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 
-export default function MinesweeperWindow({ onClose, addPoints }) {
+interface MinesweeperWindowProps {
+  onClose: () => void;
+  addPoints: (points: number) => void;
+}
+
+interface Tile {
+  revealed: boolean;
+  bomb: boolean;
+  adjacent: number;
+}
+
+export default function MinesweeperWindow({ onClose, addPoints }: MinesweeperWindowProps) {
   const rows = 9
   const cols = 9
   const bombsCount = 10
@@ -62,14 +73,14 @@ export default function MinesweeperWindow({ onClose, addPoints }) {
     setWon(false)
   }
 
-  const revealTile = (r, c) => {
+  const revealTile = (r: number, c: number) => {
     if (gameOver || board[r][c].revealed) return
 
     const newBoard = JSON.parse(JSON.stringify(board))
     const queue = [[r, c]]
 
     while (queue.length) {
-      const [curR, curC] = queue.pop()
+      const [curR, curC] = queue.pop()!
       if (newBoard[curR][curC].revealed) continue
 
       newBoard[curR][curC].revealed = true
@@ -101,8 +112,8 @@ export default function MinesweeperWindow({ onClose, addPoints }) {
       }
     }
 
-    const allSafeRevealed = newBoard.every(row =>
-      row.every(tile => tile.bomb || tile.revealed)
+    const allSafeRevealed = newBoard.every((row: Tile[]) =>
+      row.every((tile: Tile) => tile.bomb || tile.revealed)
     )
     if (allSafeRevealed) {
       setGameOver(true)
@@ -112,7 +123,7 @@ export default function MinesweeperWindow({ onClose, addPoints }) {
     setBoard(newBoard)
   }
 
-  const revealAllBombs = (newBoard) => {
+  const revealAllBombs = (newBoard: Tile[][]) => {
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         if (newBoard[r][c].bomb) {
@@ -133,7 +144,7 @@ export default function MinesweeperWindow({ onClose, addPoints }) {
           fontFamily="'VT323', monospace"
         >
           <Flex
-            bg="#000080"
+            bg="#FF69B4"
             color="#fff"
             px={2}
             py={1}
