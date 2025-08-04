@@ -133,23 +133,43 @@ const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }: { setCurrentScr
 );
 
 const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) => {
-  const handleClick = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('Desktop icon clicked:', label);
-    onClick();
-  };
+  const iconRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = iconRef.current;
+    if (!element) return;
+
+    const handleClick = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Desktop icon clicked:', label);
+      onClick();
+    };
+
+    const handleTouch = (e: TouchEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Desktop icon touched:', label);
+      onClick();
+    };
+
+    element.addEventListener('click', handleClick);
+    element.addEventListener('touchstart', handleTouch);
+
+    return () => {
+      element.removeEventListener('click', handleClick);
+      element.removeEventListener('touchstart', handleTouch);
+    };
+  }, [label, onClick]);
 
   return (
     <Box
+      ref={iconRef}
       display="inline-block"
       cursor="pointer"
       userSelect="none"
       _hover={{ bg: '#FFB3D6', borderRadius: '6px' }}
       p={1}
-      onClick={handleClick}
-      onMouseDown={handleClick}
-      onTouchStart={handleClick}
       bg="transparent"
       border="none"
       outline="none"
@@ -370,26 +390,31 @@ export default function Home() {
   };
 
   const openResume = () => {
+    console.log('openResume called');
     setShowResume(true);
     addRecentItem('Resume.pdf', openResume);
   };
 
   const openContact = () => {
+    console.log('openContact called');
     setShowContact(true);
     addRecentItem('Contact', openContact);
   };
 
   const openTamagotchi = () => {
+    console.log('openTamagotchi called');
     setShowTamagotchi(true);
     addRecentItem('Tamagotchi', openTamagotchi);
   };
 
   const openMinesweeper = () => {
+    console.log('openMinesweeper called');
     setShowMinesweeper(true);
     addRecentItem('Minesweeper', openMinesweeper);
   };
 
   const openPortfolio = () => {
+    console.log('openPortfolio called');
     setShowPortfolio(true);
     addRecentItem('Portfolio', openPortfolio);
   };
