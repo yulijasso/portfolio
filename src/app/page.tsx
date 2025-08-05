@@ -631,7 +631,7 @@ export default function Home() {
                       },
                       { 
                         name: "We R Cooked", 
-                        emoji: "🍗",
+                        emoji: "/images/project-icons/wercooked.png", // use the correct icon path
                         description: "Implemented a creative simulation of Don Pollo incoming calls using ElevenLabs AI conversation widget integration. Integrated a Google T-rex replica game into application. Won Memenome Best Don Pollo Integration Hack, winning grand prize of 1k at jia.seed brainrot hackathon(1k+ participants)",
                         technologies: ["ElevenLabs AI", "Game Integration", "Hackathon Winner", "AI Conversation"],
                         demo_link: "https://github.com/yuyi444/we-r-cooked",
