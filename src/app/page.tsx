@@ -14,6 +14,7 @@ import {
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import TamagotchiGif from './components/TamagotchiGif';
 import MinesweeperWindow from './components/MinesweeperWindow';
+import { motion } from 'framer-motion';
 
 interface Question {
   id: number;
@@ -247,7 +248,7 @@ export default function Home() {
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const typewriterText = `Welcome to My Portfolio\n\nI’m Yuli — Full‑Stack/AI Developer & Creative Coder\n\nI'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique Tamagotchi-style interface.`;
+  const typewriterText = `Welcome to My Portfolio\n\nI’m Yuli — AI Software Engineer & Creative Coder\n\nI'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique 2000s-style desktop interface.`;
 
   useEffect(() => {
     let i = 0;
@@ -463,31 +464,41 @@ export default function Home() {
       pb="80px"
     >
       <VStack spacing={8} position="fixed" top={8} left={8} zIndex={15}>
-        <DesktopIcon
-          icon={<Image src="/images/tamagotchi-icon.png" alt="Tamagotchi Icon" width={40} height={40} />}
-          label="Tamagotchi"
-          onClick={openTamagotchi}
-        />
-        <DesktopIcon
-          icon={<Image src="/images/resume-pdf.png" alt="Resume PDF Icon" width={40} height={40} />}
-          label="Resume.pdf"
-          onClick={openResume}
-        />
-        <DesktopIcon
-          icon={<Image src="/images/portfolio-icon.png" alt="Projects Icon" width={40} height={40} />}
-          label="Projects"
-          onClick={openPortfolio}
-        />
-        <DesktopIcon
-          icon={<Image src="/images/contact-icon.png" alt="Contact Icon" width={40} height={40} />}
-          label="Contact"
-          onClick={openContact}
-        />
-        <DesktopIcon
-          icon={<Image src="/images/minesweeper-icon.png" alt="Minesweeper Icon" width={40} height={40} />}
-          label="Minesweeper"
-          onClick={openMinesweeper}
-        />
+        <motion.div drag style={{ display: 'inline-block' }}>
+          <DesktopIcon
+            icon={<Image src="/images/tamagotchi-icon.png" alt="Tamagotchi Icon" width={40} height={40} />}
+            label="Tamagotchi"
+            onClick={openTamagotchi}
+          />
+        </motion.div>
+        <motion.div drag style={{ display: 'inline-block' }}>
+          <DesktopIcon
+            icon={<Image src="/images/resume-pdf.png" alt="Resume PDF Icon" width={40} height={40} />}
+            label="Resume.pdf"
+            onClick={openResume}
+          />
+        </motion.div>
+        <motion.div drag style={{ display: 'inline-block' }}>
+          <DesktopIcon
+            icon={<Image src="/images/portfolio-icon.png" alt="Projects Icon" width={40} height={40} />}
+            label="Projects"
+            onClick={openPortfolio}
+          />
+        </motion.div>
+        <motion.div drag style={{ display: 'inline-block' }}>
+          <DesktopIcon
+            icon={<Image src="/images/contact-icon.png" alt="Contact Icon" width={40} height={40} />}
+            label="Contact"
+            onClick={openContact}
+          />
+        </motion.div>
+        <motion.div drag style={{ display: 'inline-block' }}>
+          <DesktopIcon
+            icon={<Image src="/images/minesweeper-icon.png" alt="Minesweeper Icon" width={40} height={40} />}
+            label="Minesweeper"
+            onClick={openMinesweeper}
+          />
+        </motion.div>
       </VStack>
 
       {showIntro && (
@@ -628,7 +639,7 @@ export default function Home() {
                       },
                       { 
                         name: "We R Cooked", 
-                        emoji: "/images/project-icons/wercooked.png", // use the correct icon path
+                        emoji: "/images/project-icons/wercooked.png",
                         description: "Implemented a creative simulation of Don Pollo incoming calls using ElevenLabs AI conversation widget integration. Integrated a Google T-rex replica game into application. Won Memenome Best Don Pollo Integration Hack, winning grand prize of 1k at jia.seed brainrot hackathon(1k+ participants)",
                         technologies: ["ElevenLabs AI", "Game Integration", "Hackathon Winner", "AI Conversation"],
                         demo_link: "https://github.com/yuyi444/we-r-cooked",
