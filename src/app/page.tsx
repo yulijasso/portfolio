@@ -68,18 +68,6 @@ const DeviceWrapper = ({ children }: { children: React.ReactNode }) => (
       >
         💖 Welcome to Nostalgia
       </Text>
-      <Box
-        bg="#FF85C1"
-        border="2px outset #808080"
-        color="#fff"
-        px={2}
-        cursor="pointer"
-        fontSize="12px"
-        fontWeight="bold"
-        _hover={{ bg: '#FF99CC' }}
-      >
-        ✖
-      </Box>
     </Flex>
     {children}
   </Box>
@@ -188,18 +176,18 @@ const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: s
       }}
     >
       <VStack spacing={1} w="60px">
-        {icon}
-        <Text
-          fontFamily="'Microsoft Sans Serif', sans-serif"
-          fontSize="10px"
-          color="#FFFFFF"
-          textAlign="center"
-        >
-          {label}
-        </Text>
-      </VStack>
+      {icon}
+      <Text
+        fontFamily="'Microsoft Sans Serif', sans-serif"
+        fontSize="10px"
+        color="#FFFFFF"
+        textAlign="center"
+      >
+        {label}
+      </Text>
+    </VStack>
     </Box>
-  );
+);
 };
 
 const GrayTaskbar = ({ toggleStart }: { toggleStart: () => void }) => (
@@ -256,7 +244,6 @@ export default function Home() {
   const [completedQuestions] = useState<number[]>([]);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [recentItems, setRecentItems] = useState<Array<{ label: string; action: () => void }>>([]);
-  const [testPopup, setTestPopup] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -357,7 +344,7 @@ export default function Home() {
           fontFamily="'Microsoft Sans Serif', sans-serif"
           textAlign="center"
         >
-          {typed}
+          {`Welcome to My Portfolio\n\nI’m Yuli — Software Engineer & Creative Coder\n\nI'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique 2000s-style desktop interface.`}
         </Box>
         {typingDone && (
           <Button
@@ -475,32 +462,6 @@ export default function Home() {
       position="relative"
       pb="80px"
     >
-      <button
-        style={{ position: "fixed", top: 10, right: 10, zIndex: 1000, padding: 10, background: '#FF69B4', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 'bold', cursor: 'pointer' }}
-        onClick={() => setTestPopup(true)}
-      >
-        Test Popup
-      </button>
-      {testPopup && (
-        <div
-          style={{
-            position: "fixed",
-            top: "40%",
-            left: "40%",
-            background: "#fff",
-            color: "#000",
-            padding: 40,
-            zIndex: 2000,
-            border: "2px solid #000",
-            borderRadius: 8,
-            boxShadow: '0 4px 24px rgba(0,0,0,0.2)'
-          }}
-        >
-          <b>Test Popup Works!</b>
-          <br />
-          <button style={{ marginTop: 20, padding: 8, background: '#FF69B4', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setTestPopup(false)}>Close</button>
-        </div>
-      )}
       <VStack spacing={8} position="fixed" top={8} left={8} zIndex={15}>
         <DesktopIcon
           icon={<Image src="/images/tamagotchi-icon.png" alt="Tamagotchi Icon" width={40} height={40} />}
@@ -556,7 +517,19 @@ export default function Home() {
             <Box w="900px" h="700px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
                 <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💖 Resume.pdf</Text>
-                <Box bg="#FF85C1" border="2px outset #808080" color="#fff" px={2} cursor="pointer" fontSize="12px" fontWeight="bold" _hover={{ bg: '#FF99CC' }} onClick={() => setShowResume(false)}>✖</Box>
+                <Box
+                  bg="#C0C0C0"
+                  border="2px outset #fff"
+                  color="#000"
+                  px={2}
+                  cursor="pointer"
+                  fontSize="12px"
+                  fontWeight="bold"
+                  onClick={() => setShowResume(false)}
+                  _hover={{ bg: '#D0D0D0' }}
+                >
+                  ✖
+                </Box>
               </Flex>
               <Box flex="1" bg="#FFF0FB" border="2px inset #808080" p={4} overflow="hidden">
                 <Button size="sm" bg="#E0E0E0" color="#000" border="2px outset #808080" borderRadius="0" fontFamily="'Microsoft Sans Serif', sans-serif" fontSize="10px" mb={2} _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }} onClick={() => window.open('/Resume.pdf', '_blank')}>View in New Tab</Button>
@@ -573,7 +546,19 @@ export default function Home() {
             <Box w="400px" h="300px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
                 <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💌 Contact</Text>
-                <Box bg="#FF85C1" border="2px outset #808080" color="#fff" px={2} cursor="pointer" fontSize="12px" fontWeight="bold" _hover={{ bg: '#FF99CC' }} onClick={() => setShowContact(false)}>✖</Box>
+                <Box
+                  bg="#C0C0C0"
+                  border="2px outset #fff"
+                  color="#000"
+                  px={2}
+                  cursor="pointer"
+                  fontSize="12px"
+                  fontWeight="bold"
+                  onClick={() => setShowContact(false)}
+                  _hover={{ bg: '#D0D0D0' }}
+                >
+                  ✖
+                </Box>
               </Flex>
               <Box flex="1" bg="#FFF0FB" border="2px inset #808080" p={4} display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={4}>
                 <Button size="md" bg="#E0E0E0" color="#000" border="2px outset #808080" borderRadius="0" fontFamily="'Microsoft Sans Serif', sans-serif" fontSize="12px" _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }} onClick={() => window.location.href = "mailto:yulianadenissejasso@gmail.com"}>Email me!</Button>
@@ -590,7 +575,19 @@ export default function Home() {
             <Box w="800px" h="600px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
                 <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💻 Portfolio</Text>
-                <Box bg="#FF85C1" border="2px outset #808080" color="#fff" px={2} cursor="pointer" fontSize="12px" fontWeight="bold" _hover={{ bg: '#FF99CC' }} onClick={() => setShowPortfolio(false)}>✖</Box>
+                <Box
+                  bg="#C0C0C0"
+                  border="2px outset #fff"
+                  color="#000"
+                  px={2}
+                  cursor="pointer"
+                  fontSize="12px"
+                  fontWeight="bold"
+                  onClick={() => setShowPortfolio(false)}
+                  _hover={{ bg: '#D0D0D0' }}
+                >
+                  ✖
+                </Box>
               </Flex>
               <Box flex="1" bg="#FFF0FB" border="2px inset #808080" p={4} overflowY="auto">
                 <VStack spacing={4} align="stretch">
@@ -607,7 +604,7 @@ export default function Home() {
                     {[
                       { 
                         name: "AI Autotab Chrome Extension", 
-                        emoji: "🔧",
+                        emoji: "/images/project-icons/chromext.png",
                         description: "Created an AI Autotab chrome extension that autocompletes phrases and sentences, improving productivity",
                         technologies: ["Chrome Extension", "AI", "Productivity", "JavaScript"],
                         demo_link: "https://github.com/yuyi444/ai-autotab-extension",
@@ -615,7 +612,7 @@ export default function Home() {
                       },
                       { 
                         name: "AI Code Editor", 
-                        emoji: "💻",
+                        emoji: "/images/project-icons/aicodeditor.png",
                         description: "Integrated an AI tutor that improves user productivity and promotes in-platform learning in code editor app, Judge00. Integrated key features, such as OpenRouter API key input, line explanations, and automatic changes from AI tutor to IDE",
                         technologies: ["AI Tutor", "Code Editor", "OpenRouter API", "IDE Integration"],
                         demo_link: "https://github.com/yuyi444/ai-code-editor",
@@ -623,7 +620,7 @@ export default function Home() {
                       },
                       { 
                         name: "AI Search Engine", 
-                        emoji: "🔍",
+                        emoji: "/images/project-icons/searchengine.png",
                         description: "Created a tool that scrapes web content and provides AI-generated answers with reliable source citations. Implemented Groq LLM, web scraping with Cheerio and Puppeteer, and optimized performance with rate limiting",
                         technologies: ["Groq LLM", "Web Scraping", "Cheerio", "Puppeteer", "AI Search"],
                         demo_link: "https://github.com/yuyi444/ai-search-engine",

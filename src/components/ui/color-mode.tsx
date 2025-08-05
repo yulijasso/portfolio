@@ -54,22 +54,22 @@ export const ColorModeButton = React.forwardRef<
 >(function ColorModeButton(props, ref) {
   const { toggleColorMode } = useColorMode()
   return (
-    <IconButton
-      onClick={toggleColorMode}
-      variant="ghost"
-      aria-label="Toggle color mode"
-      size="sm"
-      ref={ref}
-      {...props}
-      css={{
-        _icon: {
-          width: "5",
-          height: "5",
-        },
-      }}
-    >
-      <ColorModeIcon />
-    </IconButton>
+      <IconButton
+        onClick={toggleColorMode}
+        variant="ghost"
+        aria-label="Toggle color mode"
+        size="sm"
+        ref={ref}
+        {...props}
+        css={{
+          _icon: {
+            width: "5",
+            height: "5",
+          },
+        }}
+      >
+        <ColorModeIcon />
+      </IconButton>
   )
 })
 

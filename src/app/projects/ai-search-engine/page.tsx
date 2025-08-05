@@ -53,15 +53,15 @@ export default function AISearchEngine() {
                 </Text>
               </HStack>
               <Box
-                bg="#FF85C1"
-                border="2px outset #808080"
-                color="#fff"
+                bg="#C0C0C0"
+                border="2px outset #fff"
+                color="#000"
                 px={2}
                 cursor="pointer"
                 fontSize="12px"
                 fontWeight="bold"
-                _hover={{ bg: '#FF99CC' }}
                 onClick={() => router.push('/')}
+                _hover={{ bg: '#D0D0D0' }}
               >
                 ✖
               </Box>
