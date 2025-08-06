@@ -345,7 +345,7 @@ export default function Home() {
   const renderIntro = () => (
     <RetroWindow title="Welcome to Nostalgia" onClose={() => setShowIntro(false)}>
       <VStack spacing={6} maxW="400px" mx="auto">
-        <Text fontSize="28px" color="#FF69B4">💖</Text>
+        <Image src="/images/other/pixel-heart.png" alt="Pixel Heart" width={48} height={48} style={{ margin: '0 auto' }} />
         <Box
           whiteSpace="pre-line"
           fontSize="14px"
@@ -418,11 +418,11 @@ export default function Home() {
       return <Text>Loading...</Text>;
     }
     return (
-      <VStack spacing={4}>
-        <Box display="inline-block">
+      <VStack spacing={2}>
+        <Box mt={2} mb={2}>{renderHearts()}</Box>
+        <Box mt={0} mb={2} display="inline-block">
           <TamagotchiGif postId="24127301" width="200px" height="200px" />
         </Box>
-        <Box mt={4}>{renderHearts()}</Box>
         <Button
           size="md"
           bg="#E0E0E0"
