@@ -15,6 +15,11 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import TamagotchiGif from './components/TamagotchiGif';
 import MinesweeperWindow from './components/MinesweeperWindow';
 import { motion } from 'framer-motion';
+import AIAutotabWindow from './projects/ai-autotab-chrome-extension/page';
+import BinFiestaWindow from './projects/bin-fiesta/page';
+import WeRCookedWindow from './projects/we-r-cooked/page';
+import AICodeEditorWindow from './projects/ai-code-editor/page';
+import AlbumDatabaseWindow from './projects/album-database/page';
 
 interface Question {
   id: number;
@@ -245,6 +250,11 @@ export default function Home() {
   const [completedQuestions] = useState<number[]>([]);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [recentItems, setRecentItems] = useState<Array<{ label: string; action: () => void }>>([]);
+  const [showAIAutotab, setShowAIAutotab] = useState(false);
+  const [showBinFiesta, setShowBinFiesta] = useState(false);
+  const [showWeRCooked, setShowWeRCooked] = useState(false);
+  const [showAICodeEditor, setShowAICodeEditor] = useState(false);
+  const [showAlbumDatabase, setShowAlbumDatabase] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -345,7 +355,7 @@ export default function Home() {
           fontFamily="'Microsoft Sans Serif', sans-serif"
           textAlign="center"
         >
-          {`Welcome to My Portfolio\n\nI’m Yuli — Software Engineer & Creative Coder\n\nI'm a passionate software engineer who loves building innovative web applications. This portfolio showcases my journey through a unique 2000s-style desktop interface.`}
+          {typed}
         </Box>
         {typingDone && (
           <Button
@@ -463,67 +473,67 @@ export default function Home() {
       position="relative"
       pb="80px"
     >
-      <VStack spacing={8} position="fixed" top={8} left={8} zIndex={15}>
-        <motion.div drag style={{ display: 'inline-block' }}>
+      <Box position="relative" width="100vw" height="100vh" zIndex={15}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 40, left: 20 }}>
           <DesktopIcon
             icon={<Image src="/images/tamagotchi-icon.png" alt="Tamagotchi Icon" width={40} height={40} />}
             label="Tamagotchi"
             onClick={openTamagotchi}
           />
         </motion.div>
-        <motion.div drag style={{ display: 'inline-block' }}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 120, left: 20 }}>
           <DesktopIcon
             icon={<Image src="/images/resume-pdf.png" alt="Resume PDF Icon" width={40} height={40} />}
             label="Resume.pdf"
             onClick={openResume}
           />
         </motion.div>
-        <motion.div drag style={{ display: 'inline-block' }}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 200, left: 20 }}>
           <DesktopIcon
-            icon={<Image src="/images/portfolio-icon.png" alt="Projects Icon" width={40} height={40} />}
-            label="Projects"
-            onClick={openPortfolio}
-          />
+              icon={<Image src="/images/portfolio-icon.png" alt="Projects Icon" width={40} height={40} />}
+              label="Projects"
+              onClick={openPortfolio}
+            />
         </motion.div>
-        <motion.div drag style={{ display: 'inline-block' }}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 280, left: 20 }}>
           <DesktopIcon
             icon={<Image src="/images/contact-icon.png" alt="Contact Icon" width={40} height={40} />}
             label="Contact"
             onClick={openContact}
           />
         </motion.div>
-        <motion.div drag style={{ display: 'inline-block' }}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 360, left: 20 }}>
           <DesktopIcon
             icon={<Image src="/images/minesweeper-icon.png" alt="Minesweeper Icon" width={40} height={40} />}
             label="Minesweeper"
             onClick={openMinesweeper}
           />
         </motion.div>
-      </VStack>
+      </Box>
 
       {showIntro && (
-        <Box position="absolute" top="20%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 60, left: 320, zIndex: 20 }}>
           <Box>
             <DeviceWrapper>
               <DeviceScreen>{renderIntro()}</DeviceScreen>
             </DeviceWrapper>
           </Box>
-        </Box>
+        </motion.div>
       )}
 
       {showTamagotchi && (
-        <Box position="absolute" top="20%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 260, left: 440, zIndex: 20 }}>
           <Box>
             <DeviceWrapper>
               <DeviceScreen>{getScreen()}</DeviceScreen>
               <DeviceButtons setCurrentScreen={setCurrentScreen} setCurrentQuestion={setCurrentQuestion} />
             </DeviceWrapper>
           </Box>
-        </Box>
+        </motion.div>
       )}
 
       {showResume && (
-        <Box position="absolute" top="30%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 220, left: 400, zIndex: 20 }}>
           <Box>
             <Box w="900px" h="700px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
@@ -548,11 +558,11 @@ export default function Home() {
               </Box>
             </Box>
           </Box>
-        </Box>
+        </motion.div>
       )}
 
       {showContact && (
-        <Box position="absolute" top="30%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 180, left: 360, zIndex: 20 }}>
           <Box>
             <Box w="400px" h="300px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
@@ -577,11 +587,11 @@ export default function Home() {
               </Box>
             </Box>
           </Box>
-        </Box>
+        </motion.div>
       )}
 
       {showPortfolio && (
-        <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex={10}>
+        <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 120, left: 320, zIndex: 20 }}>
           <Box>
             <Box w="800px" h="600px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
@@ -736,13 +746,29 @@ export default function Home() {
               </Box>
             </Box>
           </Box>
-        </Box>
+        </motion.div>
       )}
 
 
 
       {showMinesweeper && (
         <MinesweeperWindow onClose={() => setShowMinesweeper(false)} addPoints={(p) => setPoints(prev => prev + p)} />
+      )}
+
+      {showAIAutotab && (
+        <AIAutotabWindow onClose={() => setShowAIAutotab(false)} />
+      )}
+      {showBinFiesta && (
+        <BinFiestaWindow onClose={() => setShowBinFiesta(false)} />
+      )}
+      {showWeRCooked && (
+        <WeRCookedWindow onClose={() => setShowWeRCooked(false)} />
+      )}
+      {showAICodeEditor && (
+        <AICodeEditorWindow onClose={() => setShowAICodeEditor(false)} />
+      )}
+      {showAlbumDatabase && (
+        <AlbumDatabaseWindow onClose={() => setShowAlbumDatabase(false)} />
       )}
 
       <GrayTaskbar toggleStart={() => setStartMenuOpen(!startMenuOpen)} />

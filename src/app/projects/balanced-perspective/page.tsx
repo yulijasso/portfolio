@@ -28,23 +28,16 @@ export default function BalancedPerspectivePage() {
       position="relative"
       pb="80px"
     >
-      <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        transform="translate(-50%, -50%)"
-        zIndex={10}
-      >
-        <motion.div drag>
-          <Box
-            w="800px"
-            h="600px"
-            bg="#C0C0C0"
-            border="2px solid #808080"
-            boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-            display="flex"
-            flexDirection="column"
-          >
+      <motion.div drag style={{ position: 'absolute', top: 100, left: 100, zIndex: 10 }}>
+        <Box
+          w="800px"
+          h="600px"
+          bg="#C0C0C0"
+          border="2px solid #808080"
+          boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+          display="flex"
+          flexDirection="column"
+        >
             <Flex
               bg="#FF69B4"
               color="#fff"

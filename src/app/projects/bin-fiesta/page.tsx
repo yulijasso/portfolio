@@ -15,7 +15,7 @@ import { FaGithub, FaArrowLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-export default function BinFiestaPage() {
+export default function BinFiestaPage({ onClose }: { onClose?: () => void }) {
   const router = useRouter();
   const [showContestImage1, setShowContestImage1] = useState(false);
   const [showContestImage2, setShowContestImage2] = useState(false);
@@ -39,23 +39,16 @@ export default function BinFiestaPage() {
       pb="80px"
     >
       {/* Main Project Window - Center */}
-      <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        transform="translate(-50%, -50%)"
-        zIndex={10}
-      >
-        <motion.div drag>
-          <Box
-            w="800px"
-            h="600px"
-            bg="#C0C0C0"
-            border="2px solid #808080"
-            boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-            display="flex"
-            flexDirection="column"
-          >
+      <motion.div drag style={{ position: 'absolute', top: 80, left: 80, zIndex: 10 }}>
+        <Box
+          w="800px"
+          h="600px"
+          bg="#C0C0C0"
+          border="2px solid #808080"
+          boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+          display="flex"
+          flexDirection="column"
+        >
             <Flex
               bg="#FF69B4"
               color="#fff"
@@ -81,7 +74,7 @@ export default function BinFiestaPage() {
                 fontSize="12px"
                 fontWeight="bold"
                 _hover={{ bg: '#FF99CC' }}
-                onClick={() => router.push('/')}
+                onClick={onClose}
               >
                 ✖
               </Box>
@@ -173,7 +166,7 @@ export default function BinFiestaPage() {
                     border: '2px inset #808080',
                     bg: '#D0D0D0'
                   }}
-                  onClick={() => router.push('/')}
+                  onClick={onClose}
                 >
                   Back to Portfolio
                 </Button>
@@ -181,198 +174,181 @@ export default function BinFiestaPage() {
             </Box>
           </Box>
         </motion.div>
-      </Box>
 
       {/* Contest Image Window 1 - Left */}
       {showContestImage1 && (
-        <Box
-          position="absolute"
-          top="50%"
-          left="10%"
-          transform="translate(-50%, -50%)"
-          zIndex={10}
-        >
-          <motion.div drag>
-            <Box
-              w="350px"
-              h="450px"
-              bg="#C0C0C0"
-              border="2px solid #808080"
-              boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-              display="flex"
-              flexDirection="column"
+        <motion.div drag style={{ position: 'absolute', top: 200, left: 40, zIndex: 10 }}>
+          <Box
+            w="350px"
+            h="450px"
+            bg="#C0C0C0"
+            border="2px solid #808080"
+            boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+            display="flex"
+            flexDirection="column"
+          >
+            <Flex
+              bg="#FF69B4"
+              color="#fff"
+              px={3}
+              py={1}
+              justify="space-between"
+              align="center"
+              borderBottom="2px solid #808080"
+              boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
             >
-              <Flex
-                bg="#FF69B4"
-                color="#fff"
-                px={3}
-                py={1}
-                justify="space-between"
-                align="center"
-                borderBottom="2px solid #808080"
-                boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
-              >
-                <HStack spacing={3}>
-                  <Text fontSize="20px">🏆</Text>
-                  <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
-                    Frontera Hacks
-                  </Text>
-                </HStack>
-                <Box
-                  bg="#FF85C1"
-                  border="2px outset #808080"
-                  color="#fff"
-                  px={2}
-                  cursor="pointer"
-                  fontSize="12px"
-                  fontWeight="bold"
-                  _hover={{ bg: '#FF99CC' }}
-                  onClick={() => setShowContestImage1(false)}
-                >
-                  ✖
-                </Box>
-              </Flex>
+              <HStack spacing={3}>
+                <Text fontSize="20px">🏆</Text>
+                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
+                  Frontera Hacks
+                </Text>
+              </HStack>
               <Box
-                flex="1"
-                bg="#FFF0FB"
-                border="2px inset #808080"
-                p={4}
-                overflowY="auto"
+                bg="#FF85C1"
+                border="2px outset #808080"
+                color="#fff"
+                px={2}
+                cursor="pointer"
+                fontSize="12px"
+                fontWeight="bold"
+                _hover={{ bg: '#FF99CC' }}
+                onClick={() => setShowContestImage1(false)}
               >
-                <VStack spacing={4} align="stretch">
-                  <Text fontSize="16px" fontWeight="bold" textAlign="center" color="#000">
-                    🏆 1st Place Winner
-                  </Text>
-                  <Text fontSize="14px" fontWeight="bold" textAlign="center" color="#000">
-                    Sustainability Track
-                  </Text>
-                  
-                  <Box
-                    border="2px solid #808080"
-                    borderRadius="4px"
-                    overflow="hidden"
-                    boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-                    flex="1"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image
-                      src="/images/contests/fronteradevs3.jpg"
-                      alt="Frontera Hacks Contest"
-                      maxW="100%"
-                      maxH="100%"
-                      objectFit="contain"
-                    />
-                  </Box>
-                  
-                  <Text fontSize="12px" color="#666" textAlign="center">
-                    🏆 1st Place Winner in Sustainability Category
-                  </Text>
-                  <Text fontSize="11px" color="#666" textAlign="center">
-                    Frontera Hacks Competition
-                  </Text>
-                </VStack>
+                ✖
               </Box>
+            </Flex>
+            <Box
+              flex="1"
+              bg="#FFF0FB"
+              border="2px inset #808080"
+              p={4}
+              overflowY="auto"
+            >
+              <VStack spacing={4} align="stretch">
+                <Text fontSize="16px" fontWeight="bold" textAlign="center" color="#000">
+                  🏆 1st Place Winner
+                </Text>
+                <Text fontSize="14px" fontWeight="bold" textAlign="center" color="#000">
+                  Sustainability Track
+                </Text>
+                
+                <Box
+                  border="2px solid #808080"
+                  borderRadius="4px"
+                  overflow="hidden"
+                  boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+                  flex="1"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Image
+                    src="/images/contests/fronteradevs3.jpg"
+                    alt="Frontera Hacks Contest"
+                    maxW="100%"
+                    maxH="100%"
+                    objectFit="contain"
+                  />
+                </Box>
+                
+                <Text fontSize="12px" color="#666" textAlign="center">
+                  🏆 1st Place Winner in Sustainability Category
+                </Text>
+                <Text fontSize="11px" color="#666" textAlign="center">
+                  Frontera Hacks Competition
+                </Text>
+              </VStack>
             </Box>
-          </motion.div>
-        </Box>
+          </Box>
+        </motion.div>
       )}
 
       {/* Contest Image Window 2 - Right */}
       {showContestImage2 && (
-        <Box
-          position="absolute"
-          top="50%"
-          right="10%"
-          transform="translate(50%, -50%)"
-          zIndex={10}
-        >
-          <motion.div drag>
-            <Box
-              w="350px"
-              h="450px"
-              bg="#C0C0C0"
-              border="2px solid #808080"
-              boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-              display="flex"
-              flexDirection="column"
+        <motion.div drag style={{ position: 'absolute', top: 200, right: 40, zIndex: 10 }}>
+          <Box
+            w="350px"
+            h="450px"
+            bg="#C0C0C0"
+            border="2px solid #808080"
+            boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+            display="flex"
+            flexDirection="column"
+          >
+            <Flex
+              bg="#FF69B4"
+              color="#fff"
+              px={3}
+              py={1}
+              justify="space-between"
+              align="center"
+              borderBottom="2px solid #808080"
+              boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
             >
-              <Flex
-                bg="#FF69B4"
-                color="#fff"
-                px={3}
-                py={1}
-                justify="space-between"
-                align="center"
-                borderBottom="2px solid #808080"
-                boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
-              >
-                <HStack spacing={3}>
-                  <Text fontSize="20px">🏆</Text>
-                  <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
-                    Frontera Hacks
-                  </Text>
-                </HStack>
-                <Box
-                  bg="#FF85C1"
-                  border="2px outset #808080"
-                  color="#fff"
-                  px={2}
-                  cursor="pointer"
-                  fontSize="12px"
-                  fontWeight="bold"
-                  _hover={{ bg: '#FF99CC' }}
-                  onClick={() => setShowContestImage2(false)}
-                >
-                  ✖
-                </Box>
-              </Flex>
+              <HStack spacing={3}>
+                <Text fontSize="20px">🏆</Text>
+                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
+                  Frontera Hacks
+                </Text>
+              </HStack>
               <Box
-                flex="1"
-                bg="#FFF0FB"
-                border="2px inset #808080"
-                p={4}
-                overflowY="auto"
+                bg="#FF85C1"
+                border="2px outset #808080"
+                color="#fff"
+                px={2}
+                cursor="pointer"
+                fontSize="12px"
+                fontWeight="bold"
+                _hover={{ bg: '#FF99CC' }}
+                onClick={() => setShowContestImage2(false)}
               >
-                <VStack spacing={4} align="stretch">
-                  <Text fontSize="16px" fontWeight="bold" textAlign="center" color="#000">
-                    🏆 1st Place Winner
-                  </Text>
-                  <Text fontSize="14px" fontWeight="bold" textAlign="center" color="#000">
-                    Sustainability Track
-                  </Text>
-                  
-                  <Box
-                    border="2px solid #808080"
-                    borderRadius="4px"
-                    overflow="hidden"
-                    boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-                    flex="1"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image
-                      src="/images/contests/fronteradevsall.jpg"
-                      alt="Frontera Hacks Contest"
-                      maxW="100%"
-                      maxH="100%"
-                      objectFit="contain"
-                    />
-                  </Box>
-                  
-                  <Text fontSize="12px" color="#666" textAlign="center">
-                    🏆 1st Place Winner in Sustainability Category
-                  </Text>
-                  <Text fontSize="11px" color="#666" textAlign="center">
-                    Frontera Hacks Competition
-                  </Text>
-                </VStack>
+                ✖
               </Box>
+            </Flex>
+            <Box
+              flex="1"
+              bg="#FFF0FB"
+              border="2px inset #808080"
+              p={4}
+              overflowY="auto"
+            >
+              <VStack spacing={4} align="stretch">
+                <Text fontSize="16px" fontWeight="bold" textAlign="center" color="#000">
+                  🏆 1st Place Winner
+                </Text>
+                <Text fontSize="14px" fontWeight="bold" textAlign="center" color="#000">
+                  Sustainability Track
+                </Text>
+                
+                <Box
+                  border="2px solid #808080"
+                  borderRadius="4px"
+                  overflow="hidden"
+                  boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+                  flex="1"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Image
+                    src="/images/contests/fronteradevsall.jpg"
+                    alt="Frontera Hacks Contest"
+                    maxW="100%"
+                    maxH="100%"
+                    objectFit="contain"
+                  />
+                </Box>
+                
+                <Text fontSize="12px" color="#666" textAlign="center">
+                  🏆 1st Place Winner in Sustainability Category
+                </Text>
+                <Text fontSize="11px" color="#666" textAlign="center">
+                  Frontera Hacks Competition
+                </Text>
+              </VStack>
             </Box>
-          </motion.div>
-        </Box>
+          </Box>
+        </motion.div>
       )}
     </Box>
   );

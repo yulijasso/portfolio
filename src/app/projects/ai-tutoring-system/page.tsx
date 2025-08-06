@@ -34,26 +34,18 @@ export default function AITutoringSystemPage() {
       bgPosition="center"
       fontFamily="'Microsoft Sans Serif', sans-serif"
       position="relative"
-      pb="80px"
     >
       {/* Main Project Window */}
-      <Box
-        position="absolute"
-        top="50%"
-        left="30%"
-        transform="translate(-50%, -50%)"
-        zIndex={10}
-      >
-        <motion.div drag>
-          <Box
-            w="800px"
-            h="600px"
-            bg="#C0C0C0"
-            border="2px solid #808080"
-            boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-            display="flex"
-            flexDirection="column"
-          >
+      <motion.div drag style={{ position: 'absolute', top: 80, left: 80, zIndex: 10 }}>
+        <Box
+          w="800px"
+          h="600px"
+          bg="#C0C0C0"
+          border="2px solid #808080"
+          boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+          display="flex"
+          flexDirection="column"
+        >
             <Flex
               bg="#FF69B4"
               color="#fff"
@@ -179,102 +171,93 @@ export default function AITutoringSystemPage() {
             </Box>
           </Box>
         </motion.div>
-      </Box>
 
       {/* Contest Image Window */}
       {showContestImage && (
-        <Box
-          position="absolute"
-          top="50%"
-          right="20%"
-          transform="translate(50%, -50%)"
-          zIndex={10}
-        >
-          <motion.div drag>
-            <Box
-              w="400px"
-              h="500px"
-              bg="#C0C0C0"
-              border="2px solid #808080"
-              boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-              display="flex"
-              flexDirection="column"
+        <motion.div drag style={{ position: 'absolute', top: 120, right: 40, zIndex: 10 }}>
+          <Box
+            w="400px"
+            h="500px"
+            bg="#C0C0C0"
+            border="2px solid #808080"
+            boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+            display="flex"
+            flexDirection="column"
+          >
+            <Flex
+              bg="#FF69B4"
+              color="#fff"
+              px={3}
+              py={1}
+              justify="space-between"
+              align="center"
+              borderBottom="2px solid #808080"
+              boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
             >
-              <Flex
-                bg="#FF69B4"
-                color="#fff"
-                px={3}
-                py={1}
-                justify="space-between"
-                align="center"
-                borderBottom="2px solid #808080"
-                boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
-              >
-                <HStack spacing={3}>
-                  <Text fontSize="20px">🏆</Text>
-                  <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
-                    Hack Research 2023
-                  </Text>
-                </HStack>
-                <Box
-                  bg="#FF85C1"
-                  border="2px outset #808080"
-                  color="#fff"
-                  px={2}
-                  cursor="pointer"
-                  fontSize="12px"
-                  fontWeight="bold"
-                  _hover={{ bg: '#FF99CC' }}
-                  onClick={() => setShowContestImage(false)}
-                >
-                  ✖
-                </Box>
-              </Flex>
+              <HStack spacing={3}>
+                <Text fontSize="20px">🏆</Text>
+                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
+                  Hack Research 2023
+                </Text>
+              </HStack>
               <Box
-                flex="1"
-                bg="#FFF0FB"
-                border="2px inset #808080"
-                p={4}
-                overflowY="auto"
+                bg="#FF85C1"
+                border="2px outset #808080"
+                color="#fff"
+                px={2}
+                cursor="pointer"
+                fontSize="12px"
+                fontWeight="bold"
+                _hover={{ bg: '#FF99CC' }}
+                onClick={() => setShowContestImage(false)}
               >
-                <VStack spacing={4} align="stretch">
-                  <Text fontSize="16px" fontWeight="bold" textAlign="center" color="#000">
-                    🏆 1st Place Winner
-                  </Text>
-                  <Text fontSize="14px" fontWeight="bold" textAlign="center" color="#000">
-                    AI Healthcare Track
-                  </Text>
-                  
-                  <Box
-                    border="2px solid #808080"
-                    borderRadius="4px"
-                    overflow="hidden"
-                    boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-                    flex="1"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image
-                      src="/images/contests/hackresearch2023.jpg"
-                      alt="Hack Research 2023 Contest"
-                      maxW="100%"
-                      maxH="100%"
-                      objectFit="contain"
-                    />
-                  </Box>
-                  
-                  <Text fontSize="12px" color="#666" textAlign="center">
-                    🏆 1st Place Winner in AI Healthcare Category
-                  </Text>
-                  <Text fontSize="11px" color="#666" textAlign="center">
-                    Hack Research 2023 Competition
-                  </Text>
-                </VStack>
+                ✖
               </Box>
+            </Flex>
+            <Box
+              flex="1"
+              bg="#FFF0FB"
+              border="2px inset #808080"
+              p={4}
+              overflowY="auto"
+            >
+              <VStack spacing={4} align="stretch">
+                <Text fontSize="16px" fontWeight="bold" textAlign="center" color="#000">
+                  🏆 1st Place Winner
+                </Text>
+                <Text fontSize="14px" fontWeight="bold" textAlign="center" color="#000">
+                  AI Healthcare Track
+                </Text>
+                
+                <Box
+                  border="2px solid #808080"
+                  borderRadius="4px"
+                  overflow="hidden"
+                  boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+                  flex="1"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Image
+                    src="/images/contests/hackresearch2023.jpg"
+                    alt="Hack Research 2023 Contest"
+                    maxW="100%"
+                    maxH="100%"
+                    objectFit="contain"
+                  />
+                </Box>
+                
+                <Text fontSize="12px" color="#666" textAlign="center">
+                  🏆 1st Place Winner in AI Healthcare Category
+                </Text>
+                <Text fontSize="11px" color="#666" textAlign="center">
+                  Hack Research 2023 Competition
+                </Text>
+              </VStack>
             </Box>
-          </motion.div>
-        </Box>
+          </Box>
+        </motion.div>
       )}
     </Box>
   );

@@ -5,7 +5,7 @@ import { FaGithub, FaArrowLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
-export default function AIAutotabChromeExtension() {
+export default function AIAutotabChromeExtension({ onClose }: { onClose?: () => void }) {
   const router = useRouter();
 
   return (
@@ -19,23 +19,16 @@ export default function AIAutotabChromeExtension() {
       fontFamily="'Microsoft Sans Serif', sans-serif"
       position="relative"
     >
-      <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        transform="translate(-50%, -50%)"
-        zIndex={10}
-      >
-        <motion.div drag>
-          <Box
-            w="800px"
-            h="600px"
-            bg="#C0C0C0"
-            border="2px solid #808080"
-            boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-            display="flex"
-            flexDirection="column"
-          >
+      <motion.div drag style={{ position: 'absolute', top: 80, left: 80, zIndex: 10 }}>
+        <Box
+          w="800px"
+          h="600px"
+          bg="#C0C0C0"
+          border="2px solid #808080"
+          boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+          display="flex"
+          flexDirection="column"
+        >
             <Flex
               bg="#FF69B4"
               color="#fff"
@@ -61,7 +54,7 @@ export default function AIAutotabChromeExtension() {
                 fontSize="12px"
                 fontWeight="bold"
                 _hover={{ bg: '#FF99CC' }}
-                onClick={() => router.push('/')}
+                onClick={onClose}
               >
                 ✖
               </Box>
@@ -132,7 +125,7 @@ export default function AIAutotabChromeExtension() {
                     fontSize="10px"
                     _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                     leftIcon={<FaArrowLeft />}
-                    onClick={() => router.push('/')}
+                    onClick={onClose}
                   >
                     Back to Portfolio
                   </Button>
@@ -141,7 +134,6 @@ export default function AIAutotabChromeExtension() {
             </Box>
           </Box>
         </motion.div>
-      </Box>
     </Box>
   );
 } 
