@@ -46,83 +46,6 @@ const blind75Questions: Question[] = [
   },
 ];
 
-const DeviceWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Box
-    w="420px"
-    bg="#C0C0C0"
-    border="2px solid #808080"
-    boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-    fontFamily="'Microsoft Sans Serif', sans-serif"
-  >
-    <Flex
-      bg="#FF69B4"
-      color="#fff"
-      px={3}
-      py={1}
-      justify="space-between"
-      align="center"
-      borderBottom="2px solid #808080"
-      boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
-    >
-      <Text
-        fontSize="14px"
-        fontWeight="bold"
-        textShadow="1px 1px #000"
-      >
-        💖 Welcome to Nostalgia
-      </Text>
-    </Flex>
-    {children}
-  </Box>
-);
-
-const DeviceScreen = ({ children }: { children: React.ReactNode }) => (
-  <Box
-    h="380px"
-    bg="#FFF0FB"
-    border="2px inset #808080"
-    p={4}
-    textAlign="center"
-    overflowY="auto"
-    fontSize="12px"
-    color="#000"
-  >
-    {children}
-  </Box>
-);
-
-const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }: { setCurrentScreen: (screen: string) => void; setCurrentQuestion: (question: Question | null) => void }) => (
-  <HStack spacing={2} mt={2} justify="center">
-    {['feed', 'games', 'main', 'portfolio', 'stats'].map((btn) => (
-      <Button
-        key={btn}
-        size="sm"
-        bg="#E0E0E0"
-        color="#000"
-        border="2px outset #808080"
-        borderRadius="0"
-        fontFamily="'Microsoft Sans Serif', sans-serif"
-        fontSize="10px"
-        h="24px"
-        minW="50px"
-        _hover={{
-          border: '2px inset #808080',
-          bg: '#D0D0D0'
-        }}
-        onClick={() => {
-          if (btn === 'portfolio') window.location.href = '/portfolio';
-          else {
-            setCurrentScreen(btn);
-            if (btn !== 'games') setCurrentQuestion(null);
-          }
-        }}
-      >
-        {btn.toUpperCase()}
-      </Button>
-    ))}
-  </HStack>
-);
-
 const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) => {
   const iconRef = useRef<HTMLDivElement>(null);
 
@@ -236,12 +159,10 @@ export default function Home() {
   const [showResume, setShowResume] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showPortfolio, setShowPortfolio] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState('main');
   const [petHappiness, setPetHappiness] = useState(100);
   const [happinessLoading, setHappinessLoading] = useState(true);
   const [typed, setTyped] = useState('');
   const [typingDone, setTypingDone] = useState(false);
-  const [timerRunning, setTimerRunning] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [completedQuestions] = useState<number[]>([]);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
@@ -266,22 +187,15 @@ export default function Home() {
   }, [showIntro]);
 
   useEffect(() => {
-    if (currentScreen === 'feed' && timerRunning) {
-      if (!timerRef.current) {
-        timerRef.current = setInterval(() => {
-          setPetHappiness((h) => Math.min(100, h + 5));
-        }, 1000);
-      }
-    } else {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      if (currentScreen !== 'feed') {
-        setTimerRunning(false);
-      }
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-  }, [currentScreen, timerRunning]);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchHappiness() {
@@ -310,12 +224,12 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (currentScreen === 'games' && !currentQuestion) {
+    if (!currentQuestion) {
       const unanswered = blind75Questions.filter(q => !completedQuestions.includes(q.id));
       const random = unanswered[Math.floor(Math.random() * unanswered.length)];
       setCurrentQuestion(random || null);
     }
-  }, [currentScreen, currentQuestion, completedQuestions]);
+  }, [currentQuestion, completedQuestions]);
 
   const handleFeed = async () => {
     const newHappiness = Math.min(100, petHappiness + 25);
