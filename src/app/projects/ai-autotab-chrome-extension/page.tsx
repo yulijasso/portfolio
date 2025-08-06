@@ -5,7 +5,7 @@ import { FaGithub, FaArrowLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
-export default function AIAutotabChromeExtension({ onClose }: { onClose?: () => void }) {
+export default function AIAutotabPage() {
   const router = useRouter();
 
   return (
@@ -54,7 +54,7 @@ export default function AIAutotabChromeExtension({ onClose }: { onClose?: () => 
                 fontSize="12px"
                 fontWeight="bold"
                 _hover={{ bg: '#FF99CC' }}
-                onClick={onClose}
+                onClick={() => router.push('/')}
               >
                 ✖
               </Box>
@@ -125,7 +125,7 @@ export default function AIAutotabChromeExtension({ onClose }: { onClose?: () => 
                     fontSize="10px"
                     _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                     leftIcon={<FaArrowLeft />}
-                    onClick={onClose}
+                    onClick={() => router.push('/')}
                   >
                     Back to Portfolio
                   </Button>

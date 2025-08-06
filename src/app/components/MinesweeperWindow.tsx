@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 
 interface MinesweeperWindowProps {
   onClose: () => void;
-  addPoints: (points: number) => void;
+  addPoints?: (points: number) => void;
 }
 
 interface Tile {
@@ -84,7 +84,9 @@ export default function MinesweeperWindow({ onClose, addPoints }: MinesweeperWin
       if (newBoard[curR][curC].revealed) continue
 
       newBoard[curR][curC].revealed = true
-      addPoints(1)
+      if (addPoints) {
+        addPoints(1)
+      }
 
       if (newBoard[curR][curC].bomb) {
         setGameOver(true)
@@ -118,6 +120,9 @@ export default function MinesweeperWindow({ onClose, addPoints }: MinesweeperWin
     if (allSafeRevealed) {
       setGameOver(true)
       setWon(true)
+      if (addPoints) {
+        addPoints(100)
+      }
     }
 
     setBoard(newBoard)
@@ -168,7 +173,6 @@ export default function MinesweeperWindow({ onClose, addPoints }: MinesweeperWin
               ✖
             </Box>
           </Flex>
-
           <Box p={3}>
             <Flex justify="space-between" mb={2}>
               <Box
@@ -210,7 +214,6 @@ export default function MinesweeperWindow({ onClose, addPoints }: MinesweeperWin
                 {gameOver ? (won ? "WIN" : "BOOM") : "000"}
               </Box>
             </Flex>
-
             <Box
               mx="auto"
               display="grid"

@@ -5,7 +5,7 @@ import { FaGithub, FaArrowLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
-export default function WeRCooked({ onClose }: { onClose?: () => void }) {
+export default function WeRCookedPage() {
   const router = useRouter();
 
   return (
@@ -53,7 +53,7 @@ export default function WeRCooked({ onClose }: { onClose?: () => void }) {
                 cursor="pointer"
                 fontSize="12px"
                 fontWeight="bold"
-                onClick={onClose}
+                onClick={() => router.push('/')}
                 _hover={{ bg: '#D0D0D0' }}
               >
                 ✖
@@ -126,7 +126,7 @@ export default function WeRCooked({ onClose }: { onClose?: () => void }) {
                     fontSize="10px"
                     _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                     leftIcon={<FaArrowLeft />}
-                    onClick={onClose}
+                    onClick={() => router.push('/')}
                   >
                     Back to Portfolio
                   </Button>

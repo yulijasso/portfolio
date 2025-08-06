@@ -21,8 +21,8 @@
   --font-mono: "Courier New", monospace;
 }
 
-* {
-  cursor: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAgMEw4IDhMMyAxM0w1IDE1TDEwIDEwTDE2IDE2TDE2IDE2TDEwIDEwTDE1IDVMMTMgM0w4IDhMMCAwWiIgZmlsbD0iIzFhM2QwZiIvPgo8L3N2Zz4K'), auto;
+body, html, * {
+  cursor: url('/images/other/windows-cursor.cur'), url('/images/other/windows-cursor.png'), default;
 }
 
 /* Y2K/Retro Animated Gradient Background */
@@ -1161,4 +1161,31 @@ input, .feed-input {
   margin-top: 2px;
   line-height: 1.5;
   max-width: 320px;
+}
+
+.retro-scrollbar::-webkit-scrollbar {
+  width: 28px;
+  background: #e0e0e0;
+}
+.retro-scrollbar::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 0;
+  border: 2px solid #e0e0e0;
+}
+.retro-scrollbar::-webkit-scrollbar-button:single-button {
+  display: block;
+  background-color: #d0d0d0;
+  height: 28px;
+  width: 28px;
+  border: 1px solid #b0b0b0;
+}
+.retro-scrollbar::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background: url('data:image/svg+xml;utf8,<svg width="28" height="28" xmlns="http://www.w3.org/2000/svg"><polygon points="14,8 24,22 4,22" fill="%23666"/></svg>') no-repeat center center #d0d0d0;
+}
+.retro-scrollbar::-webkit-scrollbar-button:single-button:vertical:increment {
+  background: url('data:image/svg+xml;utf8,<svg width="28" height="28" xmlns="http://www.w3.org/2000/svg"><polygon points="4,8 24,8 14,22" fill="%23666"/></svg>') no-repeat center center #d0d0d0;
+}
+.retro-scrollbar {
+  scrollbar-width: thick;
+  scrollbar-color: #b0b0b0 #e0e0e0;
 }

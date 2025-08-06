@@ -11,15 +11,12 @@ import {
   Text,
   SimpleGrid,
 } from '@chakra-ui/react';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import TamagotchiGif from './components/TamagotchiGif';
 import MinesweeperWindow from './components/MinesweeperWindow';
 import { motion } from 'framer-motion';
-import AIAutotabWindow from './projects/ai-autotab-chrome-extension/page';
-import BinFiestaWindow from './projects/bin-fiesta/page';
-import WeRCookedWindow from './projects/we-r-cooked/page';
-import AICodeEditorWindow from './projects/ai-code-editor/page';
-import AlbumDatabaseWindow from './projects/album-database/page';
+import { db } from '../../firebase.js';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import RetroWindow from './components/RetroWindow';
 
 interface Question {
   id: number;
@@ -241,20 +238,14 @@ export default function Home() {
   const [showPortfolio, setShowPortfolio] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('main');
   const [petHappiness, setPetHappiness] = useState(100);
+  const [happinessLoading, setHappinessLoading] = useState(true);
   const [typed, setTyped] = useState('');
   const [typingDone, setTypingDone] = useState(false);
-  const [codingTime, setCodingTime] = useState(0);
-  const [points, setPoints] = useState(0);
   const [timerRunning, setTimerRunning] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [completedQuestions] = useState<number[]>([]);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [recentItems, setRecentItems] = useState<Array<{ label: string; action: () => void }>>([]);
-  const [showAIAutotab, setShowAIAutotab] = useState(false);
-  const [showBinFiesta, setShowBinFiesta] = useState(false);
-  const [showWeRCooked, setShowWeRCooked] = useState(false);
-  const [showAICodeEditor, setShowAICodeEditor] = useState(false);
-  const [showAlbumDatabase, setShowAlbumDatabase] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -278,14 +269,7 @@ export default function Home() {
     if (currentScreen === 'feed' && timerRunning) {
       if (!timerRef.current) {
         timerRef.current = setInterval(() => {
-          setCodingTime((time) => {
-            const newTime = time + 1;
-            if (newTime % 60 === 0) {
-              setPoints((p) => p + 60);
-              setPetHappiness((h) => Math.min(100, h + 5));
-            }
-            return newTime;
-          });
+          setPetHappiness((h) => Math.min(100, h + 5));
         }, 1000);
       }
     } else {
@@ -294,12 +278,29 @@ export default function Home() {
         timerRef.current = null;
       }
       if (currentScreen !== 'feed') {
-        setCodingTime(0);
-        setPoints(0);
         setTimerRunning(false);
       }
     }
   }, [currentScreen, timerRunning]);
+
+  useEffect(() => {
+    async function fetchHappiness() {
+      setHappinessLoading(true);
+      try {
+        const docRef = doc(db, 'tamagotchi', 'pet');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setPetHappiness(docSnap.data().happiness ?? 100);
+        } else {
+          setPetHappiness(100);
+        }
+      } catch {
+        setPetHappiness(100);
+      }
+      setHappinessLoading(false);
+    }
+    if (showTamagotchi) fetchHappiness();
+  }, [showTamagotchi]);
 
   useEffect(() => {
     const decay = setInterval(() => {
@@ -316,37 +317,34 @@ export default function Home() {
     }
   }, [currentScreen, currentQuestion, completedQuestions]);
 
-  const pastelColors = ['#FFB3BA', '#BAE1FF', '#BAFFC9', '#FFFFBA', '#FFCBA4'];
+  const handleFeed = async () => {
+    const newHappiness = Math.min(100, petHappiness + 25);
+    setPetHappiness(newHappiness);
+    await setDoc(doc(db, 'tamagotchi', 'pet'), { happiness: newHappiness });
+  };
 
   const renderHearts = () => {
-    const heartsCount = 5;
-    const filled = Math.round((petHappiness / 100) * heartsCount);
+    const maxHearts = 4;
+    const heartsToShow = Math.ceil(petHappiness / 25);
     return (
       <HStack spacing={2} mt={4} justify="center">
-        {Array.from({ length: heartsCount }).map((_, i) =>
-          i < filled ? (
-            <FaHeart key={i} color={pastelColors[i]} size={32} />
-          ) : (
-            <FaRegHeart key={i} color={pastelColors[i]} size={32} />
-          )
-        )}
+        {[...Array(maxHearts)].map((_, i) => (
+          <Image
+            key={i}
+            src="/images/other/pixel-heart.png"
+            alt="Heart"
+            width={48}
+            height={48}
+            style={{ opacity: i < heartsToShow ? 1 : 0.2, transition: 'opacity 0.3s' }}
+          />
+        ))}
       </HStack>
     );
   };
 
   const renderIntro = () => (
-    <Box
-      bg="#C0C0C0"
-      border="2px inset #808080"
-      boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-      p={4}
-      w="100%"
-      h="100%"
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <VStack spacing={6} maxW="400px">
+    <RetroWindow title="Welcome to Nostalgia" onClose={() => setShowIntro(false)}>
+      <VStack spacing={6} maxW="400px" mx="auto">
         <Text fontSize="28px" color="#FF69B4">💖</Text>
         <Box
           whiteSpace="pre-line"
@@ -368,17 +366,14 @@ export default function Home() {
             fontSize="12px"
             px={4}
             py={2}
-            _hover={{
-              border: '2px inset #808080',
-              bg: '#D0D0D0'
-            }}
+            _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
             onClick={() => setShowIntro(false)}
           >
             ENTER 2000s
           </Button>
         )}
       </VStack>
-    </Box>
+    </RetroWindow>
   );
 
   const addRecentItem = (label: string, action: () => void) => {
@@ -419,46 +414,33 @@ export default function Home() {
   };
 
   const getScreen = () => {
-    if (currentScreen === 'main') {
-      return (
-        <>
-          <Box display="inline-block">
-            <TamagotchiGif postId="24127301" width="200px" height="200px" />
-          </Box>
-          <Box mt={4}>
-            {renderHearts()}
-          </Box>
-        </>
-      );
+    if (happinessLoading) {
+      return <Text>Loading...</Text>;
     }
-    if (currentScreen === 'feed') {
-      return (
-        <VStack spacing={4}>
-          <Text>Start Coding! ⏳</Text>
-          <Text>{new Date(codingTime * 1000).toISOString().substr(14, 5)}</Text>
-          <Text>Points: {points}</Text>
-          <Button
-            size="sm"
-            bg="#E0E0E0"
-            color="#000"
-            border="2px outset #808080"
-            borderRadius="0"
-            fontFamily="'Microsoft Sans Serif', sans-serif"
-            fontSize="10px"
-            _hover={{
-              border: '2px inset #808080',
-              bg: '#D0D0D0'
-            }}
-            onClick={() => setTimerRunning(!timerRunning)}
-          >
-            {timerRunning ? 'STOP' : 'START'}
-          </Button>
-        </VStack>
-      );
-    }
-    if (currentScreen === 'games') return <Text>🎮 Games screen</Text>;
-    if (currentScreen === 'stats') return <Text>📬 Contact screen</Text>;
-    return <Text>🚧 Coming soon...</Text>;
+    return (
+      <VStack spacing={4}>
+        <Box display="inline-block">
+          <TamagotchiGif postId="24127301" width="200px" height="200px" />
+        </Box>
+        <Box mt={4}>{renderHearts()}</Box>
+        <Button
+          size="md"
+          bg="#E0E0E0"
+          color="#000"
+          border="2px outset #808080"
+          borderRadius="0"
+          fontFamily="'Microsoft Sans Serif', sans-serif"
+          fontSize="12px"
+          px={4}
+          py={2}
+          _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
+          onClick={handleFeed}
+          isDisabled={petHappiness >= 100}
+        >
+          Feed
+        </Button>
+      </VStack>
+    );
   };
 
   return (
@@ -513,50 +495,29 @@ export default function Home() {
 
       {showIntro && (
         <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 60, left: 320, zIndex: 20 }}>
-          <Box>
-            <DeviceWrapper>
-              <DeviceScreen>{renderIntro()}</DeviceScreen>
-            </DeviceWrapper>
+          <Box w="420px">
+            {renderIntro()}
           </Box>
         </motion.div>
       )}
 
       {showTamagotchi && (
         <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 260, left: 440, zIndex: 20 }}>
-          <Box>
-            <DeviceWrapper>
-              <DeviceScreen>{getScreen()}</DeviceScreen>
-              <DeviceButtons setCurrentScreen={setCurrentScreen} setCurrentQuestion={setCurrentQuestion} />
-            </DeviceWrapper>
+          <Box w="420px">
+            <RetroWindow title="Tamagotchi" onClose={() => setShowTamagotchi(false)}>
+              {getScreen()}
+            </RetroWindow>
           </Box>
         </motion.div>
       )}
 
       {showResume && (
         <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 220, left: 400, zIndex: 20 }}>
-          <Box>
-            <Box w="900px" h="700px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
-              <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
-                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💖 Resume.pdf</Text>
-                <Box
-                  bg="#C0C0C0"
-                  border="2px outset #fff"
-                  color="#000"
-                  px={2}
-                  cursor="pointer"
-                  fontSize="12px"
-                  fontWeight="bold"
-                  onClick={() => setShowResume(false)}
-                  _hover={{ bg: '#D0D0D0' }}
-                >
-                  ✖
-                </Box>
-              </Flex>
-              <Box flex="1" bg="#FFF0FB" border="2px inset #808080" p={4} overflow="hidden">
-                <Button size="sm" bg="#E0E0E0" color="#000" border="2px outset #808080" borderRadius="0" fontFamily="'Microsoft Sans Serif', sans-serif" fontSize="10px" mb={2} _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }} onClick={() => window.open('/Resume.pdf', '_blank')}>View in New Tab</Button>
-                <iframe src="/Resume.pdf" width="100%" height="100%" style={{ border: "none" }} />
-              </Box>
-            </Box>
+          <Box w="900px" h="700px">
+            <RetroWindow title="Resume.pdf" onClose={() => setShowResume(false)}>
+              <Button size="sm" bg="#E0E0E0" color="#000" border="2px outset #808080" borderRadius="0" fontFamily="'Microsoft Sans Serif', sans-serif" fontSize="10px" mb={2} _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }} onClick={() => window.open('/Resume.pdf', '_blank')}>View in New Tab</Button>
+              <iframe src="/Resume.pdf" width="100%" height="100%" style={{ border: "none" }} />
+            </RetroWindow>
           </Box>
         </motion.div>
       )}
@@ -595,7 +556,7 @@ export default function Home() {
           <Box>
             <Box w="800px" h="600px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
               <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
-                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💻 Portfolio</Text>
+                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">🗂️ Projects</Text>
                 <Box
                   bg="#C0C0C0"
                   border="2px outset #fff"
@@ -614,7 +575,7 @@ export default function Home() {
                 <VStack spacing={4} align="stretch">
                   <Box>
                     <Text fontSize="16px" fontWeight="bold" mb={2}>
-                      Welcome to My Portfolio Desktop
+                      Welcome to My Projects Desktop
                     </Text>
                     <Text fontSize="12px" color="#666" mb={4}>
                       Click on any project icon to view details
@@ -752,23 +713,7 @@ export default function Home() {
 
 
       {showMinesweeper && (
-        <MinesweeperWindow onClose={() => setShowMinesweeper(false)} addPoints={(p) => setPoints(prev => prev + p)} />
-      )}
-
-      {showAIAutotab && (
-        <AIAutotabWindow onClose={() => setShowAIAutotab(false)} />
-      )}
-      {showBinFiesta && (
-        <BinFiestaWindow onClose={() => setShowBinFiesta(false)} />
-      )}
-      {showWeRCooked && (
-        <WeRCookedWindow onClose={() => setShowWeRCooked(false)} />
-      )}
-      {showAICodeEditor && (
-        <AICodeEditorWindow onClose={() => setShowAICodeEditor(false)} />
-      )}
-      {showAlbumDatabase && (
-        <AlbumDatabaseWindow onClose={() => setShowAlbumDatabase(false)} />
+        <MinesweeperWindow onClose={() => setShowMinesweeper(false)} />
       )}
 
       <GrayTaskbar toggleStart={() => setStartMenuOpen(!startMenuOpen)} />

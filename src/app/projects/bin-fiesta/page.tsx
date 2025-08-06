@@ -10,12 +10,12 @@ import {
   Tag,
   Image,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
 import { FaGithub, FaArrowLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function BinFiestaPage({ onClose }: { onClose?: () => void }) {
+export default function BinFiestaPage() {
   const router = useRouter();
   const [showContestImage1, setShowContestImage1] = useState(false);
   const [showContestImage2, setShowContestImage2] = useState(false);
@@ -74,7 +74,7 @@ export default function BinFiestaPage({ onClose }: { onClose?: () => void }) {
                 fontSize="12px"
                 fontWeight="bold"
                 _hover={{ bg: '#FF99CC' }}
-                onClick={onClose}
+                onClick={() => router.push('/')}
               >
                 ✖
               </Box>
@@ -166,7 +166,7 @@ export default function BinFiestaPage({ onClose }: { onClose?: () => void }) {
                     border: '2px inset #808080',
                     bg: '#D0D0D0'
                   }}
-                  onClick={onClose}
+                  onClick={() => router.push('/')}
                 >
                   Back to Portfolio
                 </Button>
