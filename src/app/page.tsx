@@ -160,7 +160,6 @@ export default function Home() {
   const [showContact, setShowContact] = useState(false);
   const [showPortfolio, setShowPortfolio] = useState(false);
 
-  const [currentScreen] = useState('main');
   const [petHappiness, setPetHappiness] = useState(100);
   const [happinessLoading, setHappinessLoading] = useState(true);
   const [typed, setTyped] = useState('');
