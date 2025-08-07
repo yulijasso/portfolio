@@ -140,7 +140,7 @@ export default function PortfolioPage() {
       >
         {/* Title bar */}
         <Flex
-          bg="linear-gradient(to bottom, #FF99CC, #FF69B4)"
+          bg="linear-gradient(to bottom, #2563EB, #1A3CA7)"
           px={4}
           py={2}
           borderBottom="2px solid #808080"

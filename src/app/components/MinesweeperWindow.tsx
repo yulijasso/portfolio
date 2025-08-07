@@ -149,7 +149,7 @@ export default function MinesweeperWindow({ onClose, addPoints }: MinesweeperWin
           fontFamily="'VT323', monospace"
         >
           <Flex
-            bg="#FF69B4"
+            bg="#1A3CA7"
             color="#fff"
             px={2}
             py={1}

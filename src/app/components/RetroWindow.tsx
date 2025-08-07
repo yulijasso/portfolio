@@ -5,9 +5,10 @@ interface RetroWindowProps {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  headerBg?: string;
 }
 
-const RetroWindow: React.FC<RetroWindowProps> = ({ title, onClose, children }) => (
+const RetroWindow: React.FC<RetroWindowProps> = ({ title, onClose, children, headerBg = "#1A3CA7" }) => (
   <Box
     bg="#C0C0C0"
     border="2px solid #808080"
@@ -21,7 +22,7 @@ const RetroWindow: React.FC<RetroWindowProps> = ({ title, onClose, children }) =
     overflow="hidden"
   >
     <Flex
-      bg="#FF69B4"
+      bg={headerBg}
       color="#fff"
       px={3}
       py={1}

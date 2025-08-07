@@ -1,12 +1,10 @@
 'use client';
 
-import { Box, Button, Flex, Text, VStack, HStack, Tag } from '@chakra-ui/react';
+import { Box, Button, Text, VStack, HStack } from '@chakra-ui/react';
 import { FaGithub, FaArrowLeft } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import ResizableWindow from '../../components/ResizableWindow';
 
 export default function AICodeEditorPage() {
-  const router = useRouter();
 
   return (
     <Box
@@ -19,53 +17,17 @@ export default function AICodeEditorPage() {
       fontFamily="'Microsoft Sans Serif', sans-serif"
       position="relative"
     >
-      <motion.div drag style={{ position: 'absolute', top: 100, left: 100, zIndex: 10 }}>
-        <Box
-          w="800px"
-          h="600px"
-          bg="#C0C0C0"
-          border="2px solid #808080"
-          boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-          display="flex"
-          flexDirection="column"
-        >
-            <Flex
-              bg="#FF69B4"
-              color="#fff"
-              px={3}
-              py={1}
-              justify="space-between"
-              align="center"
-              borderBottom="2px solid #808080"
-              boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
-            >
-              <HStack spacing={2}>
-                <Text fontSize="24px">💻</Text>
-                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
-                  AI Code Editor
-                </Text>
-              </HStack>
-              <Box
-                bg="#C0C0C0"
-                border="2px outset #fff"
-                color="#000"
-                px={2}
-                cursor="pointer"
-                fontSize="12px"
-                fontWeight="bold"
-                onClick={() => router.push('/')}
-                _hover={{ bg: '#D0D0D0' }}
-              >
-                ✖
-              </Box>
-            </Flex>
-            <Box
-              flex="1"
-              bg="#FFF0FB"
-              border="2px inset #808080"
-              p={4}
-              overflowY="auto"
-            >
+      {/* Main Project Window */}
+      <ResizableWindow
+        title="AI Code Editor"
+        onClose={() => window.location.href = '/'}
+        initialWidth={500}
+        initialHeight={400}
+        initialTop={50}
+        initialLeft={50}
+        zIndex={10}
+      >
+        <Box p={4}>
               <VStack spacing={4} align="stretch">
                 <Text fontSize="16px" fontWeight="bold" color="#000">
                   AI Code Editor
@@ -74,32 +36,6 @@ export default function AICodeEditorPage() {
                 <Text fontSize="12px" color="#000" lineHeight="1.6">
                   Integrated an AI tutor that improves user productivity and promotes in-platform learning in code editor app, Judge00. Integrated key features, such as OpenRouter API key input, line explanations, and automatic changes from AI tutor to IDE.
                 </Text>
-
-                <Box>
-                  <Text fontSize="12px" fontWeight="bold" color="#000" mb={2}>
-                    Technologies Used:
-                  </Text>
-                  <HStack spacing={2} wrap="wrap">
-                    {["AI Tutor", "Code Editor", "OpenRouter API", "IDE Integration"].map((tech, idx) => (
-                      <Tag key={idx} size="sm" bg="#E0E0E0" color="#000" borderRadius="0">
-                        {tech}
-                      </Tag>
-                    ))}
-                  </HStack>
-                </Box>
-
-                <Box>
-                  <Text fontSize="12px" fontWeight="bold" color="#000" mb={2}>
-                    Key Features:
-                  </Text>
-                  <VStack spacing={1} align="stretch">
-                    <Text fontSize="11px" color="#000">• AI tutor integration for enhanced learning</Text>
-                    <Text fontSize="11px" color="#000">• OpenRouter API key input functionality</Text>
-                    <Text fontSize="11px" color="#000">• Line-by-line code explanations</Text>
-                    <Text fontSize="11px" color="#000">• Automatic AI tutor to IDE changes</Text>
-                    <Text fontSize="11px" color="#000">• In-platform learning capabilities</Text>
-                  </VStack>
-                </Box>
 
                 <HStack spacing={4} mt={4}>
                   <Button
@@ -112,7 +48,12 @@ export default function AICodeEditorPage() {
                     fontSize="10px"
                     _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                     leftIcon={<FaGithub />}
-                    onClick={() => window.open("https://github.com/yuyi444/ai-code-editor", "_blank")}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      window.open("https://github.com/yuyi444/ai-code-editor", "_blank");
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
                   >
                     Source Code
                   </Button>
@@ -126,15 +67,97 @@ export default function AICodeEditorPage() {
                     fontSize="10px"
                     _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                     leftIcon={<FaArrowLeft />}
-                    onClick={() => router.push('/')}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      window.location.href = '/';
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
                   >
                     Back to Portfolio
                   </Button>
                 </HStack>
-              </VStack>
-            </Box>
+          </VStack>
+        </Box>
+      </ResizableWindow>
+
+      {/* Demo Video Window */}
+      <ResizableWindow
+        title="Demo"
+        onClose={() => window.location.href = '/'}
+        initialWidth={900}
+        initialHeight={600}
+        initialTop={500}
+        initialLeft={100}
+        zIndex={9}
+      >
+        <Box p={4} display="flex" flexDirection="column" height="100%">
+          <video
+            width="100%"
+            height="100%"
+            controls
+            preload="metadata"
+            style={{
+              objectFit: 'contain',
+              backgroundColor: '#000',
+              borderRadius: '4px'
+            }}
+            onError={(e) => {
+              console.error('Video error:', e);
+            }}
+          >
+            <source src="/videos/AI Code Editor.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </Box>
+      </ResizableWindow>
+
+      {/* PowerPoint PDF Window */}
+      <ResizableWindow
+        title="PowerPoint"
+        onClose={() => window.location.href = '/'}
+        initialWidth={550}
+        initialHeight={450}
+        initialTop={50}
+        initialLeft={600}
+        zIndex={8}
+      >
+        <Box p={4} display="flex" flexDirection="column" height="100%">
+          {/* Open in New Tab Button */}
+          <Box mb={2}>
+            <Button
+              size="sm"
+              bg="#E0E0E0"
+              color="#000"
+              border="2px outset #808080"
+              borderRadius="0"
+              fontFamily="'Microsoft Sans Serif', sans-serif"
+              fontSize="10px"
+              _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                window.open("/pdf/AI Code Editor Demo.pdf", "_blank");
+              }}
+              onPointerDown={(e) => e.stopPropagation()}
+            >
+              Open in New Tab
+            </Button>
           </Box>
-        </motion.div>
+          
+          <iframe
+            src="/pdf/AI Code Editor Demo.pdf"
+            width="100%"
+            height="100%"
+            style={{
+              border: 'none',
+              borderRadius: '4px',
+              flex: 1
+            }}
+            title="AI Code Editor Demo PowerPoint"
+          />
+        </Box>
+      </ResizableWindow>
     </Box>
   );
 } 

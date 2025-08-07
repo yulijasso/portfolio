@@ -3,25 +3,19 @@
 import {
   Box,
   Button,
-  Flex,
   Text,
   VStack,
   HStack,
-  Tag,
-  Image,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
+
 import { FaGithub, FaArrowLeft } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import ResizableWindow from '../../components/ResizableWindow';
 
 export default function AITutoringSystemPage() {
-  const router = useRouter();
-  const [showContestImage, setShowContestImage] = useState(false);
 
   // Automatically show the contest image window when the page loads
   useEffect(() => {
-    setShowContestImage(true);
   }, []);
 
   return (
@@ -36,120 +30,41 @@ export default function AITutoringSystemPage() {
       position="relative"
     >
       {/* Main Project Window */}
-      <motion.div drag style={{ position: 'absolute', top: 80, left: 80, zIndex: 10 }}>
-        <Box
-          w="800px"
-          h="600px"
-          bg="#C0C0C0"
-          border="2px solid #808080"
-          boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-          display="flex"
-          flexDirection="column"
-        >
-            <Flex
-              bg="#FF69B4"
-              color="#fff"
-              px={3}
-              py={1}
-              justify="space-between"
-              align="center"
-              borderBottom="2px solid #808080"
-              boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
-            >
-              <HStack spacing={3}>
-                <Image src="/images/project-icons/aitutor.png" alt="AI Tutor Icon" width="24px" height="24px" />
-                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
-                  AI Tutoring System
-                </Text>
-              </HStack>
-              <Box
-                bg="#FF85C1"
-                border="2px outset #808080"
-                color="#fff"
-                px={2}
-                cursor="pointer"
-                fontSize="12px"
-                fontWeight="bold"
-                _hover={{ bg: '#FF99CC' }}
-                onClick={() => router.push('/')}
-              >
-                ✖
-              </Box>
-            </Flex>
-            <Box
-              flex="1"
-              bg="#FFF0FB"
-              border="2px inset #808080"
-              p={4}
-              overflowY="auto"
-            >
+      <ResizableWindow
+        title="Healthcare AI RAG Tutoring System"
+        onClose={() => window.location.href = '/'}
+        initialWidth={600}
+        initialHeight={450}
+        initialTop={50}
+        initialLeft={50}
+        zIndex={12}
+      >
+        <Box p={4}>
               <VStack spacing={4} align="stretch">
                 <Box>
                   <Text fontSize="16px" fontWeight="bold" mb={2}>
-                    🏆 1st Place Winner - AI Healthcare Track
+                    1st Place Winner - AI Healthcare Track
                   </Text>
                   <Text fontSize="12px" color="#666" lineHeight="1.4">
                     AI Tutoring System, developed during Hack Research 2023 and took the 1st place win in AI Healthcare, is an innovative app that uses GPT-4 and advanced data extraction techniques to enhance healthcare education. By combining web scraping, embeddings, and retrieval-augmented generation, it sets a new standard for AI-driven learning tools in the medical field.
                   </Text>
                 </Box>
-                
-                <Box>
-                  <Text fontSize="12px" fontWeight="bold" mb={2}>
-                    Technologies used:
-                  </Text>
-                  <HStack spacing={2} wrap="wrap">
-                    {["GPT-4", "Web Scraping", "Embeddings", "RAG", "Healthcare AI", "Python", "Next.js"].map((tech, techIdx) => (
-                      <Tag key={techIdx} size="sm" bg="#C0C0C0" border="2px outset #FFFFFF" color="#000" fontSize="10px">
-                        {tech}
-                      </Tag>
-                    ))}
-                  </HStack>
-                </Box>
-
-                <Box>
-                  <Text fontSize="12px" fontWeight="bold" mb={2}>
-                    Key Features:
-                  </Text>
-                  <VStack spacing={2} align="stretch">
-                    <Text fontSize="11px" color="#666">• Advanced data extraction techniques for healthcare content</Text>
-                    <Text fontSize="11px" color="#666">• GPT-4 integration for intelligent tutoring</Text>
-                    <Text fontSize="11px" color="#666">• Web scraping for comprehensive medical information</Text>
-                    <Text fontSize="11px" color="#666">• Embeddings for semantic search and retrieval</Text>
-                    <Text fontSize="11px" color="#666">• Retrieval-augmented generation (RAG) for accurate responses</Text>
-                    <Text fontSize="11px" color="#666">• Healthcare-specific AI training and validation</Text>
-                  </VStack>
-                </Box>
-
-                <HStack spacing={3} mt={4}>
+                <HStack spacing={4} mt={4}>
                   <Button
                     size="sm"
-                    bg="#C0C0C0"
+                    bg="#E0E0E0"
                     color="#000"
-                    border="2px outset #FFFFFF"
-                    fontSize="10px"
+                    border="2px outset #808080"
+                    borderRadius="0"
                     fontFamily="'Microsoft Sans Serif', sans-serif"
-                    _hover={{
-                      border: '2px inset #FFFFFF',
-                      bg: '#D0D0D0'
-                    }}
-                    onClick={() => window.open('https://youtu.be/ReinaBoNaWo', '_blank')}
-                  >
-                    ▶️ Live Demo
-                  </Button>
-                  <Button
-                    size="sm"
+                    fontSize="10px"
+                    _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                     leftIcon={<FaGithub />}
-                    bg="#000"
-                    color="#FFF"
-                    fontSize="10px"
-                    fontFamily="'Microsoft Sans Serif', sans-serif"
-                    _hover={{ bg: "#333" }}
                     onClick={() => window.open('https://github.com/yuyi444/hack-research-proj.git', '_blank')}
                   >
-                    View Code
+                    Source Code
                   </Button>
                 </HStack>
-
                 <Button
                   size="sm"
                   leftIcon={<FaArrowLeft />}
@@ -159,106 +74,104 @@ export default function AITutoringSystemPage() {
                   borderRadius="0"
                   fontFamily="'Microsoft Sans Serif', sans-serif"
                   fontSize="10px"
-                  _hover={{
-                    border: '2px inset #808080',
-                    bg: '#D0D0D0'
-                  }}
-                  onClick={() => router.push('/')}
+                  _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
+                  onClick={() => window.location.href = '/'}
                 >
                   Back to Portfolio
                 </Button>
-              </VStack>
-            </Box>
-          </Box>
-        </motion.div>
+          </VStack>
+        </Box>
+      </ResizableWindow>
 
-      {/* Contest Image Window */}
-      {showContestImage && (
-        <motion.div drag style={{ position: 'absolute', top: 120, right: 40, zIndex: 10 }}>
-          <Box
-            w="400px"
-            h="500px"
-            bg="#C0C0C0"
-            border="2px solid #808080"
-            boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-            display="flex"
-            flexDirection="column"
-          >
-            <Flex
-              bg="#FF69B4"
-              color="#fff"
-              px={3}
-              py={1}
-              justify="space-between"
-              align="center"
-              borderBottom="2px solid #808080"
-              boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
+      {/* Presentation PDF Window */}
+      <ResizableWindow
+        title="Presentation"
+        onClose={() => window.location.href = '/'}
+        initialWidth={550}
+        initialHeight={450}
+        initialTop={50}
+        initialLeft={700}
+        zIndex={11}
+      >
+        <Box p={4} display="flex" flexDirection="column" height="100%">
+          <Box mb={2}>
+            <Button
+              size="sm"
+              bg="#E0E0E0"
+              color="#000"
+              border="2px outset #808080"
+              borderRadius="0"
+              fontFamily="'Microsoft Sans Serif', sans-serif"
+              fontSize="10px"
+              _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                window.open("/pdf/HackResearch2023-Revolutionizing Medical Education.pdf", "_blank");
+              }}
+              onPointerDown={(e) => e.stopPropagation()}
             >
-              <HStack spacing={3}>
-                <Text fontSize="20px">🏆</Text>
-                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
-                  Hack Research 2023
-                </Text>
-              </HStack>
-              <Box
-                bg="#FF85C1"
-                border="2px outset #808080"
-                color="#fff"
-                px={2}
-                cursor="pointer"
-                fontSize="12px"
-                fontWeight="bold"
-                _hover={{ bg: '#FF99CC' }}
-                onClick={() => setShowContestImage(false)}
-              >
-                ✖
-              </Box>
-            </Flex>
-            <Box
-              flex="1"
-              bg="#FFF0FB"
-              border="2px inset #808080"
-              p={4}
-              overflowY="auto"
-            >
-              <VStack spacing={4} align="stretch">
-                <Text fontSize="16px" fontWeight="bold" textAlign="center" color="#000">
-                  🏆 1st Place Winner
-                </Text>
-                <Text fontSize="14px" fontWeight="bold" textAlign="center" color="#000">
-                  AI Healthcare Track
-                </Text>
-                
-                <Box
-                  border="2px solid #808080"
-                  borderRadius="4px"
-                  overflow="hidden"
-                  boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-                  flex="1"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Image
-                    src="/images/contests/hackresearch2023.jpg"
-                    alt="Hack Research 2023 Contest"
-                    maxW="100%"
-                    maxH="100%"
-                    objectFit="contain"
-                  />
-                </Box>
-                
-                <Text fontSize="12px" color="#666" textAlign="center">
-                  🏆 1st Place Winner in AI Healthcare Category
-                </Text>
-                <Text fontSize="11px" color="#666" textAlign="center">
-                  Hack Research 2023 Competition
-                </Text>
-              </VStack>
-            </Box>
+              Open in New Tab
+            </Button>
           </Box>
-        </motion.div>
-      )}
+          <iframe
+            src="/pdf/HackResearch2023-Revolutionizing Medical Education.pdf"
+            width="100%"
+            height="100%"
+            style={{ border: 'none', borderRadius: '4px', flex: 1 }}
+            title="Hack Research 2023 Presentation"
+          />
+        </Box>
+      </ResizableWindow>
+
+      {/* Recognitions Image Window */}
+      <ResizableWindow
+        title="Recognitions"
+        onClose={() => window.location.href = '/'}
+        initialWidth={350}
+        initialHeight={400}
+        initialTop={550}
+        initialLeft={50}
+        zIndex={10}
+      >
+        <Box p={4} display="flex" flexDirection="column" height="100%" alignItems="center" justifyContent="center">
+          <img
+            src="/images/contests/hackresearch2023.jpg"
+            alt="Hack Research 2023 Contest"
+            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px', border: '2px solid #808080' }}
+          />
+          <Box mt={2}>
+            <span style={{ fontSize: '12px', color: '#1A3CA7', textAlign: 'center', display: 'block' }}>
+              Awarded 1st Place in AI Healthcare Category in Hack Research 2023 at The University of Texas Rio Grande Valley
+            </span>
+          </Box>
+        </Box>
+      </ResizableWindow>
+
+      {/* Demo Video Window */}
+      <ResizableWindow
+        title="Demo"
+        onClose={() => window.location.href = '/'}
+        initialWidth={900}
+        initialHeight={600}
+        initialTop={550}
+        initialLeft={700}
+        zIndex={9}
+      >
+        <Box p={4} display="flex" flexDirection="column" height="100%">
+          <video
+            width="100%"
+            height="100%"
+            controls
+            preload="metadata"
+            style={{ objectFit: 'contain', backgroundColor: '#000', borderRadius: '4px' }}
+            onError={(e) => { console.error('Video error:', e); }}
+          >
+            <source src="/videos/tutoring-app-demo.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </Box>
+      </ResizableWindow>
     </Box>
   );
 } 

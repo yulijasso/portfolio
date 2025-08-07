@@ -1,12 +1,10 @@
 'use client';
 
-import { Box, Button, Flex, Text, VStack, HStack, Tag } from '@chakra-ui/react';
+import { Box, Button, VStack, HStack } from '@chakra-ui/react';
 import { FaGithub, FaArrowLeft } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import ResizableWindow from '../../components/ResizableWindow';
 
 export default function AIAutotabPage() {
-  const router = useRouter();
 
   return (
     <Box
@@ -19,121 +17,111 @@ export default function AIAutotabPage() {
       fontFamily="'Microsoft Sans Serif', sans-serif"
       position="relative"
     >
-      <motion.div drag style={{ position: 'absolute', top: 80, left: 80, zIndex: 10 }}>
-        <Box
-          w="800px"
-          h="600px"
-          bg="#C0C0C0"
-          border="2px solid #808080"
-          boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-          display="flex"
-          flexDirection="column"
-        >
-            <Flex
-              bg="#FF69B4"
-              color="#fff"
-              px={3}
-              py={1}
-              justify="space-between"
-              align="center"
-              borderBottom="2px solid #808080"
-              boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
-            >
-              <HStack spacing={2}>
-                <Text fontSize="24px">🔧</Text>
-                <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">
-                  AI Autotab Chrome Extension
-                </Text>
-              </HStack>
-              <Box
-                bg="#FF85C1"
-                border="2px outset #808080"
-                color="#fff"
-                px={2}
-                cursor="pointer"
-                fontSize="12px"
-                fontWeight="bold"
-                _hover={{ bg: '#FF99CC' }}
-                onClick={() => router.push('/')}
-              >
-                ✖
-              </Box>
-            </Flex>
-            <Box
-              flex="1"
-              bg="#FFF0FB"
-              border="2px inset #808080"
-              p={4}
-              overflowY="auto"
-            >
-              <VStack spacing={4} align="stretch">
-                <Text fontSize="16px" fontWeight="bold" color="#000">
-                  AI Autotab Chrome Extension
-                </Text>
-                
-                <Text fontSize="12px" color="#000" lineHeight="1.6">
-                  Created an AI Autotab chrome extension that autocompletes phrases and sentences, improving productivity.
-                </Text>
-
-                <Box>
-                  <Text fontSize="12px" fontWeight="bold" color="#000" mb={2}>
-                    Technologies Used:
-                  </Text>
-                  <HStack spacing={2} wrap="wrap">
-                    {["Chrome Extension", "AI", "Productivity", "JavaScript"].map((tech, idx) => (
-                      <Tag key={idx} size="sm" bg="#E0E0E0" color="#000" borderRadius="0">
-                        {tech}
-                      </Tag>
-                    ))}
-                  </HStack>
-                </Box>
-
-                <Box>
-                  <Text fontSize="12px" fontWeight="bold" color="#000" mb={2}>
-                    Key Features:
-                  </Text>
-                  <VStack spacing={1} align="stretch">
-                    <Text fontSize="11px" color="#000">• AI-powered autocomplete functionality</Text>
-                    <Text fontSize="11px" color="#000">• Chrome extension integration</Text>
-                    <Text fontSize="11px" color="#000">• Productivity enhancement tools</Text>
-                    <Text fontSize="11px" color="#000">• Seamless browser integration</Text>
-                  </VStack>
-                </Box>
-
-                <HStack spacing={4} mt={4}>
-                  <Button
-                    size="sm"
-                    bg="#E0E0E0"
-                    color="#000"
-                    border="2px outset #808080"
-                    borderRadius="0"
-                    fontFamily="'Microsoft Sans Serif', sans-serif"
-                    fontSize="10px"
-                    _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
-                    leftIcon={<FaGithub />}
-                    onClick={() => window.open("https://github.com/yuyi444/ai-autotab-extension", "_blank")}
-                  >
-                    Source Code
-                  </Button>
-                  <Button
-                    size="sm"
-                    bg="#E0E0E0"
-                    color="#000"
-                    border="2px outset #808080"
-                    borderRadius="0"
-                    fontFamily="'Microsoft Sans Serif', sans-serif"
-                    fontSize="10px"
-                    _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
-                    leftIcon={<FaArrowLeft />}
-                    onClick={() => router.push('/')}
-                  >
-                    Back to Portfolio
-                  </Button>
-                </HStack>
-              </VStack>
+      <ResizableWindow
+        title="AI Autotab Chrome Extension"
+        onClose={() => window.location.href = '/'}
+        initialWidth={600}
+        initialHeight={450}
+        initialTop={200}
+        initialLeft={100}
+        zIndex={10}
+      >
+        <Box p={4}>
+          <VStack spacing={4} align="stretch">
+            <Box fontSize="16px" fontWeight="bold" color="#000">
+              AI Autotab Chrome Extension
             </Box>
+            
+            <Box fontSize="12px" color="#000" lineHeight="1.6">
+              Created an AI Autotab chrome extension that autocompletes phrases and sentences, improving productivity.
+            </Box>
+
+            <HStack spacing={4} mt={4}>
+              <Button
+                size="sm"
+                bg="#E0E0E0"
+                color="#000"
+                border="2px outset #808080"
+                borderRadius="0"
+                fontFamily="'Microsoft Sans Serif', sans-serif"
+                fontSize="10px"
+                _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
+                leftIcon={<FaGithub />}
+                onClick={() => window.open("https://github.com/yuyi444/ai-autotab-extension", "_blank")}
+              >
+                Source Code
+              </Button>
+
+              <Button
+                size="sm"
+                bg="#E0E0E0"
+                color="#000"
+                border="2px outset #808080"
+                borderRadius="0"
+                fontFamily="'Microsoft Sans Serif', sans-serif"
+                fontSize="10px"
+                _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
+                leftIcon={<FaArrowLeft />}
+                                    onClick={() => window.location.href = '/'}
+              >
+                Back to Portfolio
+              </Button>
+            </HStack>
+          </VStack>
+        </Box>
+      </ResizableWindow>
+
+      <ResizableWindow
+        title="Demo"
+        onClose={() => window.location.href = '/'}
+        initialWidth={600}
+        initialHeight={450}
+        initialTop={200}
+        initialLeft={750}
+        zIndex={10}
+      >
+        <Box
+          p={4}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+        >
+          <Box
+            width="100%"
+            height="400px"
+            bg="#000"
+            border="2px inset #808080"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            position="relative"
+          >
+            <video
+              controls
+              width="100%"
+              height="100%"
+              style={{
+                objectFit: 'contain'
+              }}
+              preload="metadata"
+              onLoadStart={() => console.log('Video load started')}
+              onCanPlay={() => console.log('Video can play')}
+              onError={(e) => {
+                console.error('Video loading error:', e);
+                console.error('Error details:', e.currentTarget.error);
+              }}
+              onLoadedData={() => {
+                console.log('Video loaded successfully');
+              }}
+            >
+              <source src="/videos/demo-autotab.mp4" type="video/mp4" />
+              <source src="/videos/demo autotab.mov" type="video/quicktime" />
+              Your browser does not support this video format. Try MP4: /videos/demo-autotab.mp4
+            </video>
           </Box>
-        </motion.div>
+        </Box>
+      </ResizableWindow>
     </Box>
   );
 } 

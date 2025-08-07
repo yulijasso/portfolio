@@ -46,82 +46,82 @@ const blind75Questions: Question[] = [
   },
 ];
 
-const DeviceWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Box
-    w="420px"
-    bg="#C0C0C0"
-    border="2px solid #808080"
-    boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
-    fontFamily="'Microsoft Sans Serif', sans-serif"
-  >
-    <Flex
-      bg="#FF69B4"
-      color="#fff"
-      px={3}
-      py={1}
-      justify="space-between"
-      align="center"
-      borderBottom="2px solid #808080"
-      boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
-    >
-      <Text
-        fontSize="14px"
-        fontWeight="bold"
-        textShadow="1px 1px #000"
-      >
-        💖 Welcome to Nostalgia
-      </Text>
-    </Flex>
-    {children}
-  </Box>
-);
+// const DeviceWrapper = ({ children }: { children: React.ReactNode }) => (
+//   <Box
+//     w="420px"
+//     bg="#C0C0C0"
+//     border="2px solid #808080"
+//     boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF"
+//     fontFamily="'Microsoft Sans Serif', sans-serif"
+//   >
+//     <Flex
+//       bg="#1A3CA7"
+//       color="#fff"
+//       px={3}
+//       py={1}
+//       justify="space-between"
+//       align="center"
+//       borderBottom="2px solid #808080"
+//       boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878"
+//     >
+//       <Text
+//         fontSize="14px"
+//         fontWeight="bold"
+//         textShadow="1px 1px #000"
+//       >
+//         💖 Welcome to Nostalgia
+//       </Text>
+//     </Flex>
+//     {children}
+//   </Box>
+// );
 
-const DeviceScreen = ({ children }: { children: React.ReactNode }) => (
-  <Box
-    h="380px"
-    bg="#FFF0FB"
-    border="2px inset #808080"
-    p={4}
-    textAlign="center"
-    overflowY="auto"
-    fontSize="12px"
-    color="#000"
-  >
-    {children}
-  </Box>
-);
+// const DeviceScreen = ({ children }: { children: React.ReactNode }) => (
+//   <Box
+//     h="380px"
+//     bg="#FFF0FB"
+//     border="2px inset #808080"
+//     p={4}
+//     textAlign="center"
+//     overflowY="auto"
+//     fontSize="12px"
+//     color="#000"
+//   >
+//     {children}
+//   </Box>
+// );
 
-const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }: { setCurrentScreen: (screen: string) => void; setCurrentQuestion: (question: Question | null) => void }) => (
-  <HStack spacing={2} mt={2} justify="center">
-    {['feed', 'games', 'main', 'portfolio', 'stats'].map((btn) => (
-      <Button
-        key={btn}
-        size="sm"
-        bg="#E0E0E0"
-        color="#000"
-        border="2px outset #808080"
-        borderRadius="0"
-        fontFamily="'Microsoft Sans Serif', sans-serif"
-        fontSize="10px"
-        h="24px"
-        minW="50px"
-        _hover={{
-          border: '2px inset #808080',
-          bg: '#D0D0D0'
-        }}
-        onClick={() => {
-          if (btn === 'portfolio') window.location.href = '/portfolio';
-          else {
-            setCurrentScreen(btn);
-            if (btn !== 'games') setCurrentQuestion(null);
-          }
-        }}
-      >
-        {btn.toUpperCase()}
-      </Button>
-    ))}
-  </HStack>
-);
+// const DeviceButtons = ({ setCurrentScreen, setCurrentQuestion }: { setCurrentScreen: (screen: string) => void; setCurrentQuestion: (question: Question | null) => void }) => (
+//   <HStack spacing={2} mt={2} justify="center">
+//     {['feed', 'games', 'main', 'portfolio', 'stats'].map((btn) => (
+//       <Button
+//         key={btn}
+//         size="sm"
+//         bg="#E0E0E0"
+//         color="#000"
+//         border="2px outset #808080"
+//         borderRadius="0"
+//         fontFamily="'Microsoft Sans Serif', sans-serif"
+//         fontSize="10px"
+//         h="24px"
+//         minW="50px"
+//         _hover={{
+//           border: '2px inset #808080',
+//           bg: '#D0D0D0'
+//         }}
+//         onClick={() => {
+//           if (btn === 'portfolio') window.location.href = '/portfolio';
+//           else {
+//             setCurrentScreen(btn);
+//             if (btn !== 'games') setCurrentQuestion(null);
+//           }
+//         }}
+//       >
+//         {btn.toUpperCase()}
+//       </Button>
+//     ))}
+//   </HStack>
+// );
 
 const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) => {
   const iconRef = useRef<HTMLDivElement>(null);
@@ -168,7 +168,7 @@ const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: s
       fontFamily="inherit"
       lineHeight="inherit"
       _focus={{
-        outline: '2px solid #FF69B4',
+        outline: '2px solid #1A3CA7',
         outlineOffset: '2px'
       }}
       style={{
@@ -236,7 +236,8 @@ export default function Home() {
   const [showResume, setShowResume] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showPortfolio, setShowPortfolio] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState('main');
+
+  const [currentScreen] = useState('main');
   const [petHappiness, setPetHappiness] = useState(100);
   const [happinessLoading, setHappinessLoading] = useState(true);
   const [typed, setTyped] = useState('');
@@ -526,7 +527,7 @@ export default function Home() {
         <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 180, left: 360, zIndex: 20 }}>
           <Box>
             <Box w="400px" h="300px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
-              <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
+              <Flex bg="#1A3CA7" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
                 <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">💌 Contact</Text>
                 <Box
                   bg="#C0C0C0"
@@ -555,7 +556,7 @@ export default function Home() {
         <motion.div drag dragMomentum={false} dragElastic={0} style={{ position: 'absolute', top: 120, left: 320, zIndex: 20 }}>
           <Box>
             <Box w="800px" h="600px" bg="#C0C0C0" border="2px solid #808080" boxShadow="inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF" display="flex" flexDirection="column">
-              <Flex bg="#FF69B4" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
+              <Flex bg="#1A3CA7" color="#fff" px={3} py={1} justify="space-between" align="center" borderBottom="2px solid #808080" boxShadow="inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #B84878">
                 <Text fontSize="14px" fontWeight="bold" textShadow="1px 1px #000">🗂️ Projects</Text>
                 <Box
                   bg="#C0C0C0"
@@ -617,7 +618,7 @@ export default function Home() {
                         source_code_link: "https://github.com/yuyi444/we-r-cooked"
                       },
                       { 
-                        name: "AI Tutoring System", 
+                        name: "Healthcare AI RAG Tutoring System", 
                         emoji: "/images/project-icons/aitutor.png",
                         description: "AI Tutoring System, developed during Hack Research 2023 and took the 1st place win in AI Healthcare, is an innovative app that uses GPT-4 and advanced data extraction techniques to enhance healthcare education. By combining web scraping, embeddings, and retrieval-augmented generation, it sets a new standard for AI-driven learning tools in the medical field.",
                         technologies: ["GPT-4", "Web Scraping", "Embeddings", "RAG", "Healthcare AI"],
@@ -639,6 +640,14 @@ export default function Home() {
                         technologies: ["Deep Learning", "CNN", "PEGASUS", "NLP", "News Analysis"],
                         demo_link: "https://github.com/yuyi444/deep-learning-proj.git",
                         source_code_link: "https://github.com/yuyi444/deep-learning-proj.git"
+                      },
+                      { 
+                        name: "Mario Kart CNN Path Prediction", 
+                        emoji: "/images/project-icons/mario-kart.png",
+                        description: "I developed a Convolutional Neural Network that predicts a kart's driving path using visual inputs. Rather than going through segmentation and depth estimation, I predicted the lane boundaries in the vehicle's coordinate frame directly from the image, achieving optimal lateral and longitudinal error!",
+                        technologies: ["CNN", "Computer Vision", "Path Prediction", "Deep Learning"],
+                        demo_link: "https://github.com/yourusername/mario-kart-cnn",
+                        source_code_link: "https://github.com/yourusername/mario-kart-cnn"
                       },
                       { 
                         name: "Album Database", 
@@ -676,9 +685,10 @@ export default function Home() {
                             "AI Code Editor": "/projects/ai-code-editor",
                             "AI Search Engine": "/projects/ai-search-engine",
                             "We R Cooked": "/projects/we-r-cooked",
-                            "AI Tutoring System": "/projects/ai-tutoring-system",
+                            "Healthcare AI RAG Tutoring System": "/projects/ai-tutoring-system",
                             "Bin Fiesta": "/projects/bin-fiesta",
                             "Balanced Perspective": "/projects/balanced-perspective",
+                            "Mario Kart CNN Path Prediction": "/projects/mario-kart-cnn",
                             "Album Database": "/projects/album-database",
                             "Image Analysis and Interpolation with Fourier Transforms": "/projects/image-analysis",
                             "Rails Book System": "/projects/rails-book-system",
@@ -709,6 +719,7 @@ export default function Home() {
           </Box>
         </motion.div>
       )}
+
 
 
 
