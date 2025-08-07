@@ -92,23 +92,17 @@ export default function AICodeEditorPage() {
         zIndex={9}
       >
         <Box p={4} display="flex" flexDirection="column" height="100%">
-          <video
+          <iframe
             width="100%"
             height="100%"
-            controls
-            preload="metadata"
-            style={{
-              objectFit: 'contain',
-              backgroundColor: '#000',
-              borderRadius: '4px'
-            }}
-            onError={(e) => {
-              console.error('Video error:', e);
-            }}
-          >
-            <source src="/videos/AI Code Editor.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+            src="https://www.youtube.com/embed/ozKBfpkFnWo?si=S40jkAchfQ7iPVvs"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            style={{ borderRadius: '4px', flex: 1, minHeight: '315px' }}
+          />
         </Box>
       </ResizableWindow>
 

@@ -71,6 +71,7 @@ export default function AIAutotabPage() {
         </Box>
       </ResizableWindow>
 
+      {/* Demo Video Window */}
       <ResizableWindow
         title="Demo"
         onClose={() => window.location.href = '/'}
@@ -78,48 +79,20 @@ export default function AIAutotabPage() {
         initialHeight={450}
         initialTop={200}
         initialLeft={750}
-        zIndex={10}
+        zIndex={9}
       >
-        <Box
-          p={4}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100%"
-        >
-          <Box
+        <Box p={4} display="flex" flexDirection="column" height="100%">
+          <iframe
             width="100%"
-            height="400px"
-            bg="#000"
-            border="2px inset #808080"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            position="relative"
-          >
-            <video
-              controls
-              width="100%"
-              height="100%"
-              style={{
-                objectFit: 'contain'
-              }}
-              preload="metadata"
-              onLoadStart={() => console.log('Video load started')}
-              onCanPlay={() => console.log('Video can play')}
-              onError={(e) => {
-                console.error('Video loading error:', e);
-                console.error('Error details:', e.currentTarget.error);
-              }}
-              onLoadedData={() => {
-                console.log('Video loaded successfully');
-              }}
-            >
-              <source src="/videos/demo-autotab.mp4" type="video/mp4" />
-              <source src="/videos/demo autotab.mov" type="video/quicktime" />
-              Your browser does not support this video format. Try MP4: /videos/demo-autotab.mp4
-            </video>
-          </Box>
+            height="100%"
+            src="https://www.youtube.com/embed/1GitlfGsKZU?si=g-yo8T68QYmbZMSG"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            style={{ borderRadius: '4px', flex: 1, minHeight: '315px' }}
+          />
         </Box>
       </ResizableWindow>
     </Box>
