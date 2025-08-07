@@ -46,6 +46,7 @@ const blind75Questions: Question[] = [
   },
 ];
 
+<<<<<<< HEAD
 // const DeviceWrapper = ({ children }: { children: React.ReactNode }) => (
 //   <Box
 //     w="420px"
@@ -123,6 +124,8 @@ const blind75Questions: Question[] = [
 //   </HStack>
 // );
 
+=======
+>>>>>>> afda4d3c94f84cb3f3d63c7ac7286c3bb396f0a8
 const DesktopIcon = ({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) => {
   const iconRef = useRef<HTMLDivElement>(null);
 
@@ -236,13 +239,15 @@ export default function Home() {
   const [showResume, setShowResume] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showPortfolio, setShowPortfolio] = useState(false);
+<<<<<<< HEAD
 
   const [currentScreen] = useState('main');
+=======
+>>>>>>> afda4d3c94f84cb3f3d63c7ac7286c3bb396f0a8
   const [petHappiness, setPetHappiness] = useState(100);
   const [happinessLoading, setHappinessLoading] = useState(true);
   const [typed, setTyped] = useState('');
   const [typingDone, setTypingDone] = useState(false);
-  const [timerRunning, setTimerRunning] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [completedQuestions] = useState<number[]>([]);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
@@ -267,22 +272,15 @@ export default function Home() {
   }, [showIntro]);
 
   useEffect(() => {
-    if (currentScreen === 'feed' && timerRunning) {
-      if (!timerRef.current) {
-        timerRef.current = setInterval(() => {
-          setPetHappiness((h) => Math.min(100, h + 5));
-        }, 1000);
-      }
-    } else {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      if (currentScreen !== 'feed') {
-        setTimerRunning(false);
-      }
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-  }, [currentScreen, timerRunning]);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchHappiness() {
@@ -311,12 +309,12 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (currentScreen === 'games' && !currentQuestion) {
+    if (!currentQuestion) {
       const unanswered = blind75Questions.filter(q => !completedQuestions.includes(q.id));
       const random = unanswered[Math.floor(Math.random() * unanswered.length)];
       setCurrentQuestion(random || null);
     }
-  }, [currentScreen, currentQuestion, completedQuestions]);
+  }, [currentQuestion, completedQuestions]);
 
   const handleFeed = async () => {
     const newHappiness = Math.min(100, petHappiness + 25);
