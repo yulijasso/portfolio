@@ -57,7 +57,12 @@ export default function BalancedPerspectivePage() {
                   fontSize="10px"
                   _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                   leftIcon={<FaGithub />}
-                  onClick={() => window.open('https://github.com/yuyi444/balanced-perspective', '_blank')}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    window.open("https://github.com/yulijasso/deep-learning-proj", "_blank");
+                  }}
+                  onPointerDown={(e) => e.stopPropagation()}
                 >
                   Source Code
                 </Button>

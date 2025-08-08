@@ -51,7 +51,7 @@ export default function AICodeEditorPage() {
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
-                      window.open("https://github.com/yuyi444/ai-code-editor", "_blank");
+                      window.open("https://github.com/yulijasso/aicode-editor", "_blank");
                     }}
                     onPointerDown={(e) => e.stopPropagation()}
                   >

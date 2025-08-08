@@ -17,26 +17,6 @@ export default function AIAutotabPage() {
       fontFamily="'Microsoft Sans Serif', sans-serif"
       position="relative"
     >
-      <button
-        style={{
-          background: '#E0E0E0',
-          color: '#000',
-          border: '2px outset #808080',
-          borderRadius: 0,
-          fontFamily: "'Microsoft Sans Serif', sans-serif",
-          fontSize: '10px',
-          padding: '6px 12px',
-          cursor: 'pointer',
-          marginTop: '8px',
-          zIndex: 9999,
-          position: 'absolute',
-          left: 10,
-          top: 10
-        }}
-        onClick={() => { window.location.href = '/'; }}
-      >
-        TEST: Back to Portfolio
-      </button>
       <ResizableWindow
         title="AI Autotab Chrome Extension"
         onClose={() => window.location.href = '/'}
@@ -67,27 +47,34 @@ export default function AIAutotabPage() {
                 fontSize="10px"
                 _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                 leftIcon={<FaGithub />}
-                onClick={() => window.open("https://github.com/yuyi444/ai-autotab-extension", "_blank")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  window.open("https://github.com/yulijasso/autotab-chrome-ext", "_blank");
+                }}
+                onPointerDown={(e) => e.stopPropagation()}
               >
                 Source Code
               </Button>
 
-              <button
-                style={{
-                  background: '#E0E0E0',
-                  color: '#000',
-                  border: '2px outset #808080',
-                  borderRadius: 0,
-                  fontFamily: "'Microsoft Sans Serif', sans-serif",
-                  fontSize: '10px',
-                  padding: '6px 12px',
-                  cursor: 'pointer',
-                  marginTop: '8px'
+              <Button
+                size="sm"
+                bg="#E0E0E0"
+                color="#000"
+                border="2px outset #808080"
+                borderRadius="0"
+                fontFamily="'Microsoft Sans Serif', sans-serif"
+                fontSize="10px"
+                _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  window.location.href = '/';
                 }}
-                onClick={() => { window.location.href = '/'; }}
+                onPointerDown={(e) => e.stopPropagation()}
               >
                 Back to Portfolio
-              </button>
+              </Button>
             </HStack>
           </VStack>
         </Box>

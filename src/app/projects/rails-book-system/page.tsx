@@ -59,7 +59,12 @@ export default function RailsBookSystemPage() {
                     fontSize="10px"
                     _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                     leftIcon={<FaGithub />}
-                    onClick={() => window.open('https://github.com/yuyi444/rails-book-system.git', '_blank')}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      window.open("https://github.com/yulijasso/rails-book-system", "_blank");
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
                   >
                     Source Code
                   </Button>

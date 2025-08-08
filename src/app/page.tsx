@@ -556,7 +556,7 @@ export default function Home() {
                         source_code_link: "https://github.com/yuyi444/deep-learning-proj.git"
                       },
                       { 
-                        name: "Mario Kart CNN Path Prediction", 
+                        name: "SuperTux CNN Path Prediction", 
                         emoji: "/images/project-icons/mario-kart.png",
                         description: "I developed a Convolutional Neural Network that predicts a kart's driving path using visual inputs. Rather than going through segmentation and depth estimation, I predicted the lane boundaries in the vehicle's coordinate frame directly from the image, achieving optimal lateral and longitudinal error!",
                         technologies: ["CNN", "Computer Vision", "Path Prediction", "Deep Learning"],
@@ -602,7 +602,7 @@ export default function Home() {
                             "Healthcare AI RAG Tutoring System": "/projects/ai-tutoring-system",
                             "Bin Fiesta": "/projects/bin-fiesta",
                             "Balanced Perspective": "/projects/balanced-perspective",
-                            "Mario Kart CNN Path Prediction": "/projects/mario-kart-cnn",
+                            "SuperTux CNN Path Prediction": "/projects/mario-kart-cnn",
                             "Album Database": "/projects/album-database",
                             "Image Analysis and Interpolation with Fourier Transforms": "/projects/image-analysis",
                             "Rails Book System": "/projects/rails-book-system",

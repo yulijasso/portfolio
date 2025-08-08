@@ -24,7 +24,7 @@ export default function MarioKartCNNPage() {
       position="relative"
     >
       <ResizableWindow
-        title="Mario Kart CNN Path Prediction"
+        title="SuperTux CNN Path Prediction"
         onClose={() => window.location.href = '/'}
         initialWidth={600}
         initialHeight={450}
@@ -35,8 +35,8 @@ export default function MarioKartCNNPage() {
         <Box p={4}>
           <VStack spacing={4} align="stretch">
             <Box>
-              <Text fontSize="16px" fontWeight="bold" mb={2}>
-                CNN Driving Path Prediction
+              <Text fontSize="16px" fontWeight="bold" color="#000">
+                SuperTux CNN Path Prediction
               </Text>
               <Text fontSize="12px" color="#666" lineHeight="1.4">
                 I developed a Convolutional Neural Network that predicts a kart&apos;s driving path using visual inputs. One major limitation in this example was that they require ground truth lane boundaries as input, where the network is trained to predict the boundaries in an image space. Rather than going through segmentation and depth estimation, I predicted the lane boundaries in the vehicle&apos;s coordinate frame directly from the image! It was so satisfying to visualize how our model truly functions and successfully achieving the optimal lateral and longitudinal error!
@@ -53,22 +53,11 @@ export default function MarioKartCNNPage() {
                 fontFamily="'Microsoft Sans Serif', sans-serif"
                 fontSize="10px"
                 _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
-                leftIcon={<FaGithub />}
-                onClick={() => window.open('https://github.com/yourusername/mario-kart-cnn', '_blank')}
-              >
-                Source Code
-              </Button>
-              <Button
-                size="sm"
-                bg="#E0E0E0"
-                color="#000"
-                border="2px outset #808080"
-                borderRadius="0"
-                fontFamily="'Microsoft Sans Serif', sans-serif"
-                fontSize="10px"
-                _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
-                leftIcon={<FaArrowLeft />}
-                onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.location.href = '/'; }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  window.location.href = '/';
+                }}
                 onPointerDown={(e) => e.stopPropagation()}
               >
                 Back to Portfolio
