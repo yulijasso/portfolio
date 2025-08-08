@@ -8,7 +8,7 @@ import {
   HStack,
   Image,
 } from '@chakra-ui/react';
-import { FaGithub, FaArrowLeft } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 
 import ResizableWindow from '../../components/ResizableWindow';
@@ -78,7 +78,6 @@ export default function BinFiestaPage() {
 
                 <Button
                   size="sm"
-                  leftIcon={<FaArrowLeft />}
                   bg="#E0E0E0"
                   color="#000"
                   border="2px outset #808080"
@@ -89,7 +88,8 @@ export default function BinFiestaPage() {
                     border: '2px inset #808080',
                     bg: '#D0D0D0'
                   }}
-                  onClick={() => window.location.href = '/'}
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.location.href = '/'; }}
+                  onPointerDown={(e) => e.stopPropagation()}
                 >
                   Back to Portfolio
                 </Button>

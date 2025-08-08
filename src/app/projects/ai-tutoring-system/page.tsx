@@ -8,7 +8,7 @@ import {
   HStack,
 } from '@chakra-ui/react';
 
-import { FaGithub, FaArrowLeft } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import { useEffect } from 'react';
 import ResizableWindow from '../../components/ResizableWindow';
 
@@ -65,20 +65,22 @@ export default function AITutoringSystemPage() {
                     Source Code
                   </Button>
                 </HStack>
-                <Button
-                  size="sm"
-                  leftIcon={<FaArrowLeft />}
-                  bg="#E0E0E0"
-                  color="#000"
-                  border="2px outset #808080"
-                  borderRadius="0"
-                  fontFamily="'Microsoft Sans Serif', sans-serif"
-                  fontSize="10px"
-                  _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
-                  onClick={() => window.location.href = '/'}
+                <button
+                  style={{
+                    background: '#E0E0E0',
+                    color: '#000',
+                    border: '2px outset #808080',
+                    borderRadius: 0,
+                    fontFamily: "'Microsoft Sans Serif', sans-serif",
+                    fontSize: '10px',
+                    padding: '6px 12px',
+                    cursor: 'pointer',
+                    marginTop: '8px'
+                  }}
+                  onClick={() => { window.location.href = '/'; }}
                 >
                   Back to Portfolio
-                </Button>
+                </button>
           </VStack>
         </Box>
       </ResizableWindow>

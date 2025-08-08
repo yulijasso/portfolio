@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Button, Text, VStack, HStack } from '@chakra-ui/react';
-import { FaGithub, FaArrowLeft } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import ResizableWindow from '../../components/ResizableWindow';
 
 export default function AICodeEditorPage() {
@@ -57,25 +57,22 @@ export default function AICodeEditorPage() {
                   >
                     Source Code
                   </Button>
-                  <Button
-                    size="sm"
-                    bg="#E0E0E0"
-                    color="#000"
-                    border="2px outset #808080"
-                    borderRadius="0"
-                    fontFamily="'Microsoft Sans Serif', sans-serif"
-                    fontSize="10px"
-                    _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
-                    leftIcon={<FaArrowLeft />}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      window.location.href = '/';
+                  <button
+                    style={{
+                      background: '#E0E0E0',
+                      color: '#000',
+                      border: '2px outset #808080',
+                      borderRadius: 0,
+                      fontFamily: "'Microsoft Sans Serif', sans-serif",
+                      fontSize: '10px',
+                      padding: '6px 12px',
+                      cursor: 'pointer',
+                      marginTop: '8px'
                     }}
-                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={() => { window.location.href = '/'; }}
                   >
                     Back to Portfolio
-                  </Button>
+                  </button>
                 </HStack>
           </VStack>
         </Box>

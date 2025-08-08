@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Button, VStack, HStack } from '@chakra-ui/react';
-import { FaGithub, FaArrowLeft } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import ResizableWindow from '../../components/ResizableWindow';
 
 export default function AIAutotabPage() {
@@ -17,6 +17,26 @@ export default function AIAutotabPage() {
       fontFamily="'Microsoft Sans Serif', sans-serif"
       position="relative"
     >
+      <button
+        style={{
+          background: '#E0E0E0',
+          color: '#000',
+          border: '2px outset #808080',
+          borderRadius: 0,
+          fontFamily: "'Microsoft Sans Serif', sans-serif",
+          fontSize: '10px',
+          padding: '6px 12px',
+          cursor: 'pointer',
+          marginTop: '8px',
+          zIndex: 9999,
+          position: 'absolute',
+          left: 10,
+          top: 10
+        }}
+        onClick={() => { window.location.href = '/'; }}
+      >
+        TEST: Back to Portfolio
+      </button>
       <ResizableWindow
         title="AI Autotab Chrome Extension"
         onClose={() => window.location.href = '/'}
@@ -52,20 +72,22 @@ export default function AIAutotabPage() {
                 Source Code
               </Button>
 
-              <Button
-                size="sm"
-                bg="#E0E0E0"
-                color="#000"
-                border="2px outset #808080"
-                borderRadius="0"
-                fontFamily="'Microsoft Sans Serif', sans-serif"
-                fontSize="10px"
-                _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
-                leftIcon={<FaArrowLeft />}
-                                    onClick={() => window.location.href = '/'}
+              <button
+                style={{
+                  background: '#E0E0E0',
+                  color: '#000',
+                  border: '2px outset #808080',
+                  borderRadius: 0,
+                  fontFamily: "'Microsoft Sans Serif', sans-serif",
+                  fontSize: '10px',
+                  padding: '6px 12px',
+                  cursor: 'pointer',
+                  marginTop: '8px'
+                }}
+                onClick={() => { window.location.href = '/'; }}
               >
                 Back to Portfolio
-              </Button>
+              </button>
             </HStack>
           </VStack>
         </Box>

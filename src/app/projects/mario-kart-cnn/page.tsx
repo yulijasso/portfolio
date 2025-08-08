@@ -68,7 +68,8 @@ export default function MarioKartCNNPage() {
                 fontSize="10px"
                 _hover={{ border: '2px inset #808080', bg: '#D0D0D0' }}
                 leftIcon={<FaArrowLeft />}
-                onClick={() => window.location.href = '/'}
+                onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.location.href = '/'; }}
+                onPointerDown={(e) => e.stopPropagation()}
               >
                 Back to Portfolio
               </Button>
