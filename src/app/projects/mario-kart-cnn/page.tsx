@@ -7,7 +7,6 @@ import {
   VStack,
   HStack,
 } from '@chakra-ui/react';
-import { FaGithub, FaArrowLeft } from 'react-icons/fa';
 import ResizableWindow from '../../components/ResizableWindow';
 
 export default function MarioKartCNNPage() {
